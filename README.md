@@ -55,7 +55,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 
 *Como ya se ha indicado, estos son los requisitos mínimos que debe de cumplir el juego, todo lo que desarrollemos de forma extra será tenido en cuenta en la nota positivamente.*
 
-####Pasos a seguir para el desarrollo.
+#### Pasos a seguir para el desarrollo.
 
 1. Entregar la plantilla de animación al profesor y que le dé el visto bueno.
 
@@ -66,7 +66,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 4. Volver a repasar el apartado de “Documentación a entregar” para asegurarse que está todo: correcto, ordenado y funcionando.
 
 
-####Entregas al profesor.
+#### Entregas al profesor.
 - **Debe ser presentado parcialmente 3 veces al profesor.**
 - No se permite más de una presentación parcial por semana
 
