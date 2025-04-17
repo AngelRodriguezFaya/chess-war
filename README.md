@@ -3,7 +3,7 @@
 
 El **objetivo** es sintetizar los conocimientos adquiridos en la asignatura de Sistemas Gráficos, del Grado en Ingeniería Informática en la Universidad de Granada.
 
-Disponemos de libertad para desarrollar e implementar el juego como deseemos; no obstante, debemos de cumplir unos requisitos mínimos que detallamos en el apartado [Requisitos mínimos del juego.](###Requisitos mínimos del juego.)
+Disponemos de libertad para desarrollar e implementar el juego como deseemos; no obstante, debemos de cumplir unos requisitos mínimos que detallamos en el apartado [Requisitos mínimos del juego](#requisitos-mínimos-del-juego)
 
 ### Autores
 - :bust_in_silhouette:  Ángel Rodríguez Faya :octocat: [http://github.com/AngelRodriguezFaya](http://github.com/AngelRodriguezFaya)
@@ -42,7 +42,7 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 
 
 ### Programación de las entregas
-- Para ver más información sobre las entregas, ver el apartado [Entregas al profesor](###Entregas al profesor.) dentro de este mismo fichero.
+- Para ver más información sobre las entregas, ver el apartado [Entregas al profesor](#entregas-al-profesor) dentro de este mismo fichero.
 
 - Se presentarán al profesor en el horario de prácticas de nuestro grupo. **Lunes de 17:30h a 19:30h.**
 
