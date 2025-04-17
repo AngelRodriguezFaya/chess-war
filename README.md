@@ -3,21 +3,52 @@
 
 El **objetivo** es sintetizar los conocimientos adquiridos en la asignatura de Sistemas Gráficos, del Grado en Ingeniería Informática en la Universidad de Granada.
 
-Disponemos de libertad para desarrollar e implementar el juego como deseemos; no obstante, debemos de cumplir unos requisitos mínimos que detallamos más abajo.
+Disponemos de libertad para desarrollar e implementar el juego como deseemos; no obstante, debemos de cumplir unos requisitos mínimos que detallamos en el apartado [Requisitos mínimos del juego.](###Requisitos mínimos del juego.)
 
 ### Autores
-- :fa-user:  Ángel Rodríguez Faya :fa-github: [http://github.com/AngelRodriguezFaya](http://github.com/AngelRodriguezFaya)
-- :fa-user:  Francisco Victoriano Pérez Morales :fa-github: 
+- :bust_in_silhouette:  Ángel Rodríguez Faya :octocat: [http://github.com/AngelRodriguezFaya](http://github.com/AngelRodriguezFaya)
+- :bust_in_silhouette:  Francisco Victoriano Pérez Morales :octocat: 
+
+### Modelado 3D con Three.js (Todo lo que se necesita saber).
+
+Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
+- [ ]  Instanciación de primitivas.
+- [ ]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
+- [ ]  Extrusión y barrido
+- [x]  Revolución
+- [ ]  Extrusión y barrido
+- [ ]  Cargar un modelo en formato .obj
+- [ ]  Modelos Jerárquicos
+
+Además, necesitamos figuras con **Animaciones**.
+
+### El Ajedrez y sus Piezas
+> El **ajedrez** es un juego de tablero entre dos contrincantes en el que cada uno dispone al inicio de dieciséis piezas móviles, desiguales en importancia y valor, que se desplazan sobre un tablero capturando piezas del jugador contrario, según ciertas reglas.[...]
+
+>Se juega sobre un **tablero cuadriculado de 8×8 casillas **(también llamadas escaques), alternadas en colores blanco y negro, que constituyen las 64 posibles posiciones entre las que se mueven las piezas durante el desarrollo del juego. Al principio del juego cada jugador tiene dieciséis piezas: un rey, una dama, dos alfiles, dos caballos, dos torres y ocho peones. Se trata de un juego de estrategia en el que el objetivo es «encerrar» al rey del oponente. Esto se hace amenazando la casilla que ocupa el rey con alguna de las piezas propias sin que el otro jugador pueda proteger a su rey interponiendo una pieza entre su rey y la pieza que lo amenaza (a menos que dicha pieza sea un peón o un caballo), mover su rey a un escaque libre o capturar a la pieza que lo está amenazando, lo que trae como resultado el jaque mate y el fin de la partida.
+
+Fuente: [Wikipedia - Ajedrez](https://es.wikipedia.org/wiki/Ajedrez)
+
+A continuación detallaremos más detalles sobre las piezas y como la hemos desarrollado en nuestro juego: **(modificar esto)**
+
+|  Nombre  | Cantidad por jugador | Animación (SI/NO/NS) | Técnicas utilizadas para su modelado en 3D| Breve descripción | 
+| :------------: | :------------: | :------------: | :------------: | :------------: |
+| Rey  | 1  |  SI  |   |   |
+|  Dama |  1  | NS  |   |   |
+| Alfiles  | 2 |  NO |   |   |
+| Caballos | 2  | SI  |   |   |
+|  Torres  | 2  | NO  | Revolución. Operaciones booleanas (CSG)  |   |
+|  Peones  | 8  | NS  |   |   |   |
 
 
-#### Programación de las entregas.
-- Para ver más información sobre las entregas, ver el apartado [Entregas al profesor](####Entregas al profesor.) dentro de este mismo fichero.
+### Programación de las entregas
+- Para ver más información sobre las entregas, ver el apartado [Entregas al profesor](###Entregas al profesor.) dentro de este mismo fichero.
 
 - Se presentarán al profesor en el horario de prácticas de nuestro grupo. **Lunes de 17:30h a 19:30h.**
 
 - Las entregas se realizarán durante tres semanas seguidas, dejando una semana como libre por si vamos atrasados en alguna entrega.
 
-- El último día es el 19 de mayo, pues el 26 de mayo sólo está disponible para la defensa final, la cuál, si todas las entregas van bien no tendremos que realizar. Además, es más difícil que las otras tres, por lo que trataremos evitarla a toda costa.
+- **El último día es el 19 de mayo**, pues el 26 de mayo sólo está disponible para la defensa final, la cuál, si todas las entregas van bien no tendremos que realizar. Además, es más difícil que las otras tres, por lo que trataremos evitarla a toda costa.
 
 | Defensa nº   | Fecha de presentación  |
 | :------------: | :------------: |
@@ -25,8 +56,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 |  2 | 05/05/2025  |
 |  3  |  12/05/2025  |
 
-
-#### Requisitos mínimos del juego.
+### Requisitos mínimos del juego
 - **Geometría:**
 	- Las piezas se deben modelar usando diferentes técnicas.
 	- Al menos una debe estar articulada. Debe incluirse su modelo jerárquico en la documentación.
@@ -55,7 +85,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 
 *Como ya se ha indicado, estos son los requisitos mínimos que debe de cumplir el juego, todo lo que desarrollemos de forma extra será tenido en cuenta en la nota positivamente.*
 
-#### Pasos a seguir para el desarrollo.
+### Pasos a seguir para el desarrollo
 
 1. Entregar la plantilla de animación al profesor y que le dé el visto bueno.
 
@@ -66,7 +96,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 4. Volver a repasar el apartado de “Documentación a entregar” para asegurarse que está todo: correcto, ordenado y funcionando.
 
 
-#### Entregas al profesor.
+### Entregas al profesor
 - **Debe ser presentado parcialmente 3 veces al profesor.**
 - No se permite más de una presentación parcial por semana
 
