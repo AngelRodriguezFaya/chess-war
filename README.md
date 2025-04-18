@@ -13,7 +13,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 
 Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
 - [ ]  Instanciación de primitivas.
-- [ ]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
+- [x]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
 - [ ]  Extrusión y barrido
 - [x]  Revolución
 - [ ]  Extrusión y barrido
