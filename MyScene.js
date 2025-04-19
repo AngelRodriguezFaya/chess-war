@@ -9,6 +9,7 @@ import  Stats from '../libs/stats.module.js'
 // Clases de mi proyecto
 
 import { Torre } from './Torre.js'
+import { Alfil } from './Alfil.js'
 
  
 /// La clase fachada del modelo
@@ -49,8 +50,15 @@ class MyScene extends THREE.Scene {
     // Por último creamos el modelo.
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
-    this.model = new Torre(this.gui, "Controles de la Torre");
-    this.add (this.model);
+
+    // Torre
+    this.torre = new Torre(this.gui, "Controles de la Torre");
+    this.add (this.torre);
+
+    // Alfil
+    this.alfil = new Alfil(this.gui, "Controles del Alfil");
+    this.add (this.alfil);
+    
   }
   
   initStats() {
@@ -234,7 +242,7 @@ class MyScene extends THREE.Scene {
     this.cameraControl.update();
     
     // Se actualiza el resto del modelo
-    this.model.update();
+    this.torre.update();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render (this, this.getCamera());

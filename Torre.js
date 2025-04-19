@@ -34,7 +34,7 @@ class Torre extends THREE.Object3D {
       new THREE.Vector2(0, 0)  // De vuelta al origen
     ];
 
-    var torreGeom = new THREE.LatheGeometry(this.points, 50, 0, 6.3);
+    var torreGeom = new THREE.LatheGeometry(this.points, 50, 0, Math.PI * 2);
     
     // Se construye el objeto Brush que modela la torre
     this.torre = new CSG.Brush (torreGeom, material);
@@ -50,7 +50,7 @@ class Torre extends THREE.Object3D {
 
     // Se posicioonan y se orientan
     toro1Geom.rotateX(Math.PI / 2);
-    toro1Geom.translate(0, 1.4, 0);
+    toro1Geom.translate(0, 1.3, 0);
 
     toro2Geom.rotateX(Math.PI / 2);
     toro2Geom.translate(0, 2.8, 0);
@@ -107,50 +107,8 @@ class Torre extends THREE.Object3D {
     this.add(this.final);    
   }
 
-  createGUI(gui, titleGui){
-    this.guiControls = {
-      resolucion : 50.0,
-      angulo : 6.3,
-
-      // Un botón para dejarlo todo en su posición inicial.
-      // Cuando se pulse se ejecutará esta función
-      reset : () => {
-        this.guiControls.resolucion = 50.0;
-        this.guiControls.angulo = 6.3;
-        
-        // Llamo a mi función de crear geometría para actualizar su estado.
-        this.crearNuevaGeometria(); 
-        
-        // Forzar actualización de la GUI
-        folder.__controllers.forEach(controller => controller.updateDisplay());
-      }
-    }
-
-    // Creamos una sección para los controles del cono.
-    var folder = gui.addFolder (titleGui);
-
-    // Estas lineas son las que añaden los componentes de la interfaz
-    // Las tres cifras indican un valor mínimo, un máximo y el incremento
-    // El método   listen()   permite que si se cambia el valor de la variable en código, el deslizador de la interfaz se actualice   
-    // folder.add(this.guiControls, 'resolucion', 3.0, 20.0, 1.0)
-    //   .name('Resolución : ')
-    //   .onChange(function(value){this.crearNuevaGeometria()}.bind(this));
-    
-    // folder.add(this.guiControls, 'angulo', 0.01, 6.3, 0.01) // 6.3 es aprox. 2*Math.PI
-    //   .name('Ángulo : ')
-    //   .onChange(function(value){this.crearNuevaGeometria()}.bind(this));
-    
-    // folder.add(this.guiControls, 'reset').name('[ Reset ]');
-  }
-
-  // crearNuevaGeometria(){
-  //   // Creamos la nueva geometría con los parámetros que hemos cambiado en los controles
-  //   var towerGeom = new THREE.LatheGeometry(this.points, this.guiControls.resolucion, 0, this.guiControls.angulo);
-    
-  //   // Le indicamos al Mesh de la torre cuál es su nueva geometría
-  //   this.tower.geometry = towerGeom;
-  // }
-
+  createGUI(gui, titleGui){}
+  
   update () {}
 
 }
