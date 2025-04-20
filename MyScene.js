@@ -53,13 +53,15 @@ class MyScene extends THREE.Scene {
 
     // Torre
     this.torre = new Torre(this.gui, "Controles de la Torre");
-    // this.add (this.torre);
-    this.torre.position.x = 6;
+    this.torre.scale.set(1/2, 1/2, 1/2); // Escalamos la torre al doble de su tamaño original en los tres ejes
+    this.torre.position.set(5, 0, 0); // Posicionamos la torre en el eje X
+    this.add(this.torre); // Añadimos la torre a la escena
 
     // Alfil
     this.alfil = new Alfil(this.gui, "Controles del Alfil");
-    this.add (this.alfil);
-    
+    this.alfil.scale.set(1/2, 1/2, 1/2); // Escalamos el alfil al doble de su tamaño original en los tres ejes
+    this.alfil.position.set(-5, 0, 0); // Posicionamos el alfil en el eje X
+    this.add(this.alfil); // Añadimos el alfil a la escena
   }
   
   initStats() {

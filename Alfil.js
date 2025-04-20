@@ -13,46 +13,60 @@ class Alfil extends THREE.Object3D {
 
     // La construcción del alfil 
 
-    //------------ Definimos el cuerpo de la pieza -----------------
+    //------------ Definimos el cuerpo del alfil  -----------------
     // Lo haremos por revolución, definiendo los objetos con un Shape
     var shape = new THREE.Shape();
     shape.moveTo(0, 0);
     shape.lineTo(4, 0);
     shape.lineTo(4, 1);
-    shape.lineTo(3, 1);
-    shape.lineTo(3, 2);
-    shape.lineTo(2.5, 2);
-    shape.lineTo(2, 2.5);
-    shape.lineTo(2, 3);
-    shape.lineTo(1.5, 3.5);
-    shape.lineTo(1.4, 3.5);
-    // shape.lineTo(1.3, 3.6);
-    // shape.lineTo(1.2, 3.7);
-    // shape.lineTo(1.1, 3.8);
-    shape.lineTo(1, 4);
-    shape.lineTo(0.9, 4.5);
-    shape.lineTo(0.7, 6);
-    shape.lineTo(0.7, 7.5);
-    shape.lineTo(1.5, 7.5);
-    shape.lineTo(1.5, 8);
-    shape.lineTo(1, 8);
-    shape.lineTo(1, 8.5);
-    shape.lineTo(0.5, 8.5);
-    shape.lineTo(0.5, 9);
-    shape.lineTo(0, 9);
+    shape.lineTo(3.5, 1);
+    shape.lineTo(3.5, 2);
+    shape.lineTo(2.8, 2.5);
+    shape.lineTo(2.8, 3.5);
+    shape.lineTo(2.5, 3.8);
+    shape.quadraticCurveTo(1, 7, 1, 9);
+    shape.lineTo(2, 9);
+    shape.lineTo(2, 9.5);
+    shape.lineTo(1.5, 9.5);
+    shape.lineTo(1.5, 10);
+    shape.lineTo(1, 10);
+    shape.lineTo(1, 10.5);
+    shape.lineTo(0, 10.5);
     shape.lineTo(0, 0);
-    shape.moveTo(0, 7.5);
-    // shape.quadraticCurveTo(4, 10.5, 0, 13);
+    shape.moveTo(0, 9.5);
+    shape.quadraticCurveTo(3, 11.5, 0, 14);
 
-
-
+    // Una vez definido el shape, se crea la geometría
     var points = shape.getPoints(); (10).shape;
-    var alfilGeom = new THREE.LatheGeometry(points, 50, 0, Math.PI * 2);
-    
-    // Se construye el objeto Brush que modela el cuerpo del alfil
-    this.alfil = new CSG.Brush (alfilGeom, material);
+    var cuerpoGeom = new THREE.LatheGeometry(points, 300, 0, Math.PI * 2);
 
-    this.add(this.alfil);
+    // Se construye el objeto Brush que modela el cuerpo del alfil
+    this.cuerpo = new CSG.Brush (cuerpoGeom, material);    
+    
+    //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
+    // Se crean las geometrías necesarias
+    var esferaGeom = new THREE.SphereGeometry(0.5, 50, 50);
+    var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
+
+    // Se posicionan y se orientan
+    esferaGeom.translate(0, 14, 0);
+
+    cajaGeom.rotateX(-Math.PI / 6);
+    cajaGeom.translate(0, 13.2, -1);
+    
+
+    // Se construyen los objetos Brush
+    this.esfera = new CSG.Brush (esferaGeom, material);
+    this.caja = new CSG.Brush (cajaGeom, material);
+
+    // Se construye un Evaluator que utilizaremos para las operaciones booleanas
+    var evaluator = new CSG.Evaluator();
+
+    // Realizamos las operaciones booleanas
+    this.result1 = evaluator.evaluate(this.cuerpo, this.esfera, CSG.ADDITION);
+    this.final = evaluator.evaluate(this.result1, this.caja, CSG.SUBTRACTION);
+
+    this.add (this.final);
   }
 
   createGUI(gui, titleGui){}
