@@ -53,7 +53,8 @@ class MyScene extends THREE.Scene {
 
     // Torre
     this.torre = new Torre(this.gui, "Controles de la Torre");
-    this.add (this.torre);
+    // this.add (this.torre);
+    this.torre.position.x = 6;
 
     // Alfil
     this.alfil = new Alfil(this.gui, "Controles del Alfil");
