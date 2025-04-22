@@ -12,11 +12,11 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 ### Modelado 3D con Three.js (Todo lo que se necesita saber).
 
 Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
-- [ ]  Instanciación de primitivas.
+- [x]  Instanciación de primitivas.
 - [x]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
-- [ ]  Extrusión y barrido
+- [ ]  Extrusión
+- [ ]  Barrido
 - [x]  Revolución
-- [ ]  Extrusión y barrido
 - [ ]  Cargar un modelo en formato .obj
 - [ ]  Modelos Jerárquicos
 
@@ -35,9 +35,9 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 | :------------: | :------------: | :------------: | :------------: | :------------: |
 | Rey  | 1  |  SI  |   |   |
 |  Dama |  1  | NS  |   |   |
-| Alfiles  | 2 |  NO |   |   |
+| Alfiles  | 2 |  NO | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
 | Caballos | 2  | SI  |   |   |
-|  Torres  | 2  | NO  | Revolución. Operaciones booleanas (CSG)  |   |
+|  Torres  | 2  | NO  | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
 |  Peones  | 8  | NS  |   |   |   |
 
 
