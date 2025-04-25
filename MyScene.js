@@ -10,6 +10,7 @@ import  Stats from '../libs/stats.module.js'
 
 import { Torre } from './Torre.js'
 import { Alfil } from './Alfil.js'
+import { Dama } from './Dama.js'
 
  
 /// La clase fachada del modelo
@@ -51,17 +52,24 @@ class MyScene extends THREE.Scene {
     // El modelo puede incluir su parte de la interfaz gráfica de usuario. Le pasamos la referencia a 
     // la gui y el texto bajo el que se agruparán los controles de la interfaz que añada el modelo.
 
+    const FACTOR_ESCALA = 0.5;
+
     // Torre
     this.torre = new Torre(this.gui, "Controles de la Torre");
-    this.torre.scale.set(1/2, 1/2, 1/2); // Escalamos la torre al doble de su tamaño original en los tres ejes
+    this.torre.scale.set(FACTOR_ESCALA, FACTOR_ESCALA, FACTOR_ESCALA); // Escalamos la torre al doble de su tamaño original en los tres ejes
     this.torre.position.set(5, 0, 0); // Posicionamos la torre en el eje X
     this.add(this.torre); // Añadimos la torre a la escena
 
     // Alfil
     this.alfil = new Alfil(this.gui, "Controles del Alfil");
-    this.alfil.scale.set(1/2, 1/2, 1/2); // Escalamos el alfil al doble de su tamaño original en los tres ejes
-    this.alfil.position.set(-5, 0, 0); // Posicionamos el alfil en el eje X
+    this.alfil.scale.set(FACTOR_ESCALA, FACTOR_ESCALA, FACTOR_ESCALA); // Escalamos el alfil al doble de su tamaño original en los tres ejes
+    this.alfil.position.set(-7, 0, 0); // Posicionamos el alfil en el eje X
     this.add(this.alfil); // Añadimos el alfil a la escena
+
+    // Dama
+    this.dama = new Dama();    
+    this.dama.scale.set(0.4, 0.4, 0.4);
+    this.add(this.dama);
   }
   
   initStats() {
