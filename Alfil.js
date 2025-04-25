@@ -4,6 +4,9 @@ import * as CSG from '../libs/three-bvh-csg.js'
 class Alfil extends THREE.Object3D {
   constructor(gui,titleGui) {
     super();
+
+    // CONSTANTE DE RESOLUCIÓN
+    const RES = 4;
     
     // En primer lugar creamos la interfaz para el alfil
     this.createGUI(gui, titleGui);
@@ -37,15 +40,15 @@ class Alfil extends THREE.Object3D {
     shape.quadraticCurveTo(3, 11.5, 0, 14);
 
     // Una vez definido el shape, se crea la geometría
-    var points = shape.getPoints(); (10).shape;
-    var cuerpoGeom = new THREE.LatheGeometry(points, 300, 0, Math.PI * 2);
+    var points = shape.getPoints(); 
+    var cuerpoGeom = new THREE.LatheGeometry(points, RES*20, 0, Math.PI * 2);
 
     // Se construye el objeto Brush que modela el cuerpo del alfil
     this.cuerpo = new CSG.Brush (cuerpoGeom, material);    
     
     //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
     // Se crean las geometrías necesarias
-    var esferaGeom = new THREE.SphereGeometry(0.5, 50, 50);
+    var esferaGeom = new THREE.SphereGeometry(0.5, RES*5, RES*5);
     var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
 
     // Se posicionan y se orientan

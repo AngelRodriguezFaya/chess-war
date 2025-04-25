@@ -4,6 +4,9 @@ import * as CSG from '../libs/three-bvh-csg.js'
 class Torre extends THREE.Object3D {
   constructor(gui,titleGui) {
     super();
+
+    // CONSTANTE DE RESOLUCIÓN
+    const RES = 4;
     
     // En primer lugar creamos la interfaz para la torre
     this.createGUI(gui, titleGui);
@@ -42,11 +45,11 @@ class Torre extends THREE.Object3D {
 
     //---------- Ahora creamos los toros que se van a añadir a la torre -----------------
     // Se crean la geometría de los toros
-    var toro1Geom = new THREE.TorusGeometry(3.3, 0.4, 150, 150);
-    var toro2Geom = new THREE.TorusGeometry(3, 0.2, 150, 150);
-    var toro3Geom = new THREE.TorusGeometry(2.7, 0.2, 150, 150);
-    var toro4Geom = new THREE.TorusGeometry(2.1, 0.25, 150, 150);
-    var toro5Geom = new THREE.TorusGeometry(2.4, 0.2, 3, 150);
+    var toro1Geom = new THREE.TorusGeometry(3.3, 0.4, RES*10, RES*10);
+    var toro2Geom = new THREE.TorusGeometry(3, 0.2, RES*10, RES*10);
+    var toro3Geom = new THREE.TorusGeometry(2.7, 0.2, RES*10, RES*10);
+    var toro4Geom = new THREE.TorusGeometry(2.1, 0.25, RES*10, RES*10);
+    var toro5Geom = new THREE.TorusGeometry(2.4, 0.2, 3, RES*10);
 
     // Se posicioonan y se orientan
     toro1Geom.rotateX(Math.PI / 2);
