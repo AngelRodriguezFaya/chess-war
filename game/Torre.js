@@ -1,15 +1,61 @@
+/*############################################################################*/
+// Importaciones
+
 import * as THREE from '../libs/three.module.js'
 import * as CSG from '../libs/three-bvh-csg.js'
 
-class Torre extends THREE.Object3D {
-  constructor(gui,titleGui) {
+
+
+
+
+/*############################################################################*/
+// Clase Torre
+
+export class Torre extends THREE.Object3D
+{
+  /*############################################################################*/
+  // Constructor
+
+  constructor(gui, titleGui)
+  {
+    // Llamamos al constructor padre
     super();
 
+    // Inicialización de los parámetros
+    this.iniParam();
+    
+    // Se crea la parte de la interfaz que corresponde a la caja
+    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
+    this.createGUI(gui, titleGui);
+
+    // Creación del objeto
+    this.createObject();
+  }
+
+  /*############################################################################*/
+  // Inicialización de los parámetros
+
+  iniParam()
+  {
+  }
+
+  /*############################################################################*/
+  // Interfaz de usuario
+
+  createGUI(gui, titleGui)
+  {
+  }
+
+  /*############################################################################*/
+  // Creación del objeto
+
+  /*########################################################*/
+  // Creación
+  
+  createObject()
+  {
     // CONSTANTE DE RESOLUCIÓN
     const RES = 4;
-    
-    // En primer lugar creamos la interfaz para la torre
-    this.createGUI(gui, titleGui);
 
     // Creamos el material
     var material = new THREE.MeshNormalMaterial({ flatShading : true });
@@ -107,13 +153,13 @@ class Torre extends THREE.Object3D {
     this.final = evaluator.evaluate(this.result7, this.caja3, CSG.SUBTRACTION); 
 
     //------------ Añadimos la torre (resultado final) a la escena -----------------
-    this.add(this.final);    
+    this.add(this.final);
   }
 
-  createGUI(gui, titleGui){}
-  
-  update () {}
+  /*############################################################################*/
+  // Método update del objeto
 
+  update()
+  {
+  }
 }
-
-export { Torre };
