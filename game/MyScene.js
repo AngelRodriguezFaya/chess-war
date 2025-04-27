@@ -14,6 +14,7 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 import { Alfil } from './Alfil.js'
 import { Torre } from './Torre.js'
 import { Dama } from './Dama.js'
+import { Caballo } from './Caballo.js'
 
 
 
@@ -315,6 +316,10 @@ class MyScene extends THREE.Scene
     this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
     this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
     this.add(this.dama);
+
+    // Caballo
+    this.caballo = new Caballo(this.gui, "Controles del caballo");
+    this.add(this.caballo);
   }
 
 
@@ -338,6 +343,7 @@ class MyScene extends THREE.Scene
     this.alfil.update();
     this.torre.update();
     this.dama.update();
+    this.caballo.update();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render(this, this.getCamera());
