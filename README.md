@@ -7,17 +7,17 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 
 ### Autores
 - :bust_in_silhouette:  Ángel Rodríguez Faya :octocat: [http://github.com/AngelRodriguezFaya](http://github.com/AngelRodriguezFaya)
-- :bust_in_silhouette:  Francisco Victoriano Pérez Morales :octocat: 
+- :bust_in_silhouette:  Francisco Victoriano Pérez Morales :octocat: [https://github.com/fvperezmorales](https://github.com/fvperezmorales)
 
 ### Modelado 3D con Three.js (Todo lo que se necesita saber).
 
 Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
-- [ ]  Instanciación de primitivas.
+- [x]  Instanciación de primitivas.
 - [x]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
-- [ ]  Extrusión y barrido
+- [ ]  Extrusión
+- [ ]  Barrido
 - [x]  Revolución
-- [ ]  Extrusión y barrido
-- [ ]  Cargar un modelo en formato .obj
+- [x]  Cargar un modelo en formato .obj
 - [ ]  Modelos Jerárquicos
 
 Además, necesitamos figuras con **Animaciones**.
@@ -34,10 +34,10 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 |  Nombre  | Cantidad por jugador | Animación (SI/NO/NS) | Técnicas utilizadas para su modelado en 3D| Breve descripción | 
 | :------------: | :------------: | :------------: | :------------: | :------------: |
 | Rey  | 1  |  SI  |   |   |
-|  Dama |  1  | NS  |   |   |
-| Alfiles  | 2 |  NO |   |   |
+|  Dama |  1  | NO  | Cargar un modelo en formato .obj  | Esta pieza se ha realizado cargando un modelo en formato .obj, el cuál se puede ver y descargar desde el siguiente enlace: [Enlace a la figura de la Dama en Free 3D ](https://free3d.com/es/modelo-3d/marionette-queen-v1--45470.html)   |
+| Alfiles  | 2 |  NO | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
 | Caballos | 2  | SI  |   |   |
-|  Torres  | 2  | NO  | Revolución. Operaciones booleanas (CSG)  |   |
+|  Torres  | 2  | NO  | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
 |  Peones  | 8  | NS  |   |   |   |
 
 
@@ -104,6 +104,11 @@ En cada presentación parcial debe tenerse hecho, al menos:
 
 - **Defensa 1:**
 	- Al menos 4 piezas modeladas con diferentes técnicas. *No tiene porque ser la articulada*
+  	- Las piezas modeladas que nosotros entregaremos para está defensa serán: (x si está hecha, *vacío* si no lo está)
+  	- [x]  Torre
+  	- [x]  Alfil
+  	- [x]  Dama
+  	- [ ]  Caballo
 
 - **Defensa 2:**
 	- El tablero
