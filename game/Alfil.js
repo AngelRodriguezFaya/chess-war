@@ -24,8 +24,7 @@ export class Alfil extends THREE.Object3D
     // Inicialización de los parámetros
     this.iniParam();
     
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
+    // Se crea la parte de la interfaz de usuarioº
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
