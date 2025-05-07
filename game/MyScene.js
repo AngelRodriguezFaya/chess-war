@@ -16,6 +16,7 @@ import { Torre } from './Torre.js'
 import { Dama } from './Dama.js'
 import { Caballo } from './Caballo.js'
 import { Tablero } from './Tablero.js'  
+import { Peon } from './Peon.js'
 
 
 
@@ -59,6 +60,10 @@ class MyScene extends THREE.Scene
     
     // Por último creamos los modelos
     this.createModels();
+
+    this.peon = new Peon(this.gui, "Controles del peón");
+    this.add(this.peon);
+
   }
 
 
@@ -173,10 +178,12 @@ class MyScene extends THREE.Scene
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    this.camera.position.set(16, 30, 62);
+    // this.camera.position.set(16, 30, 62);
+    this.camera.position.set(20, 10, 20);
     
     // Y hacia dónde mira
-    var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
+    // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
+    var look = new THREE.Vector3(0, 0, 0); // Hacia el punto de origen
     this.camera.lookAt(look);
     this.add(this.camera);
     
@@ -285,29 +292,30 @@ class MyScene extends THREE.Scene
   {
     // Alfil
     this.alfil = new Alfil(this.gui, "Controles del alfil");
-    this.alfil.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    this.alfil.applyMatrix4(new THREE.Matrix4().makeTranslation(-1.5, 0, 3.5));
+    // this.alfil.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
+    // this.alfil.applyMatrix4(new THREE.Matrix4().makeTranslation(-1.5, 0, 3.5));
     this.add(this.alfil);
+    this.alfil.position.set(18, 0, 0);
+    
+    // // Torre
+    // this.torre = new Torre(this.gui, "Controles de la torre");
+    // this.torre.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
+    // this.torre.applyMatrix4(new THREE.Matrix4().makeTranslation(-3.5, 0, 3.5));
+    // this.add(this.torre);
 
-    // Torre
-    this.torre = new Torre(this.gui, "Controles de la torre");
-    this.torre.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    this.torre.applyMatrix4(new THREE.Matrix4().makeTranslation(-3.5, 0, 3.5));
-    this.add(this.torre);
+    // // Dama
+    // this.dama = new Dama(this.gui, "Controles de la dama");
+    // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(0.06, 0.06, 0.06));
+    // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.135, 0.025, 0.135));
+    // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
+    // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
+    // this.add(this.dama);
 
-    // Dama
-    this.dama = new Dama(this.gui, "Controles de la dama");
-    this.dama.applyMatrix4(new THREE.Matrix4().makeScale(0.06, 0.06, 0.06));
-    this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.135, 0.025, 0.135));
-    this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
-    this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
-    this.add(this.dama);
-
-    // Caballo
-    this.caballo = new Caballo(this.gui, "Controles del caballo");
-    this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
-    this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
-    this.add(this.caballo);
+    // // Caballo
+    // this.caballo = new Caballo(this.gui, "Controles del caballo");
+    // this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
+    // this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
+    // this.add(this.caballo);
   }
 
 
@@ -328,10 +336,10 @@ class MyScene extends THREE.Scene
     this.cameraControl.update();
     
     // Se actualiza el resto del modelo
-    this.alfil.update();
-    this.torre.update();
-    this.dama.update();
-    this.caballo.update();
+    // this.alfil.update();
+    // this.torre.update();
+    // this.dama.update();
+    // this.caballo.update();
 
     // Se actualiza el tablero
     this.tablero.update();

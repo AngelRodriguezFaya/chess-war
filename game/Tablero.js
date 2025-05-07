@@ -51,9 +51,9 @@ export class Tablero extends THREE.Object3D
   createObject()
   {
     // CONSTANTES
-    const ANCHO = 4;
+    const ANCHO = 9;
     const ALTO = 2;
-    const LARGO = 4;
+    const LARGO = 9;
 
 
     // Creamos los materiales
@@ -73,7 +73,7 @@ export class Tablero extends THREE.Object3D
             var casilla = new THREE.Mesh(geometriaCasilla, material);
 
             // Se posiciona la casilla
-            casilla.position.set(col * ANCHO, 0, fila * LARGO);
+            casilla.position.set(col * ANCHO, -(ALTO/2), fila * LARGO);
 
             // Se añade la casilla al tablero
             this.add(casilla);
