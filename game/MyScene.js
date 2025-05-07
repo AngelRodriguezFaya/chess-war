@@ -15,6 +15,7 @@ import { Alfil } from './Alfil.js'
 import { Torre } from './Torre.js'
 import { Dama } from './Dama.js'
 import { Caballo } from './Caballo.js'
+import { Tablero } from './Tablero.js'  
 
 
 
@@ -50,7 +51,7 @@ class MyScene extends THREE.Scene
     this.createLights();
 
     // Un suelo
-    this.createGround();
+    this.createTable();
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
@@ -132,7 +133,7 @@ class MyScene extends THREE.Scene
     // En el contexto de una función this alude a la función
     this.guiControls = {
       lightPower : 500.0,
-      ambientIntensity : 0.5,   
+      ambientIntensity : 3,   
     }
 
     // Se crea una sección para los controles de esta clase
@@ -144,7 +145,7 @@ class MyScene extends THREE.Scene
       .onChange ((value) => this.setLightPower(value));
     
     // Otro para la intensidad de la luz ambiental
-    folder.add (this.guiControls, 'ambientIntensity', 0, 1, 0.05)
+    folder.add (this.guiControls, 'ambientIntensity', 0, 3, 0.05)
       .name('Luz ambiental: ')
       .onChange ((value) => this.setAmbientIntensity(value));
     
@@ -172,10 +173,10 @@ class MyScene extends THREE.Scene
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    this.camera.position.set(0, 8, 10);
+    this.camera.position.set(16, 30, 62);
     
     // Y hacia dónde mira
-    var look = new THREE.Vector3(0, 0, 0);
+    var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
     this.camera.lookAt(look);
     this.add(this.camera);
     
@@ -229,7 +230,7 @@ class MyScene extends THREE.Scene
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
     this.pointLight = new THREE.PointLight(0xffffff);
     this.pointLight.power = this.guiControls.lightPower;
-    this.pointLight.position.set(2, 3, 1);
+    this.pointLight.position.set(20, 30, 10);
     this.add(this.pointLight);
   }
 
@@ -253,25 +254,10 @@ class MyScene extends THREE.Scene
   /*############################################################################*/
   // Suelo de la escena
 
-  createGround()
+  createTable()
   {
-    // El suelo es un Mesh, necesita una geometría y un material.
-    // La geometría es una caja con muy poca altura
-    var geometryGround = new THREE.BoxGeometry(8, 0.5, 8);
-    
-    // El material se hará con una textura de madera
-    var texture = new THREE.TextureLoader().load('../imgs/textura-ajedrezada.jpg');
-    var materialGround = new THREE.MeshStandardMaterial({map: texture});
-    
-    // Ya se puede construir el Mesh
-    var ground = new THREE.Mesh(geometryGround, materialGround);
-    
-    // Todas las figuras se crean centradas en el origen.
-    // El suelo lo bajamos la mitad de su altura para que el origen del mundo se quede en su lado superior
-    ground.position.y = -0.26;
-
-    // Que no se nos olvide añadirlo a la escena, que en este caso es this
-    this.add(ground);
+    this.tablero = new Tablero(this.gui, "Controles del tablero");
+    this.add(this.tablero);
   }
 
 
@@ -284,7 +270,7 @@ class MyScene extends THREE.Scene
   createAxis()
   {
     // Ejes para el modelo
-    this.axis = new THREE.AxesHelper(12);
+    this.axis = new THREE.AxesHelper(50);
     this.add(this.axis);
   }
 
@@ -346,6 +332,9 @@ class MyScene extends THREE.Scene
     this.torre.update();
     this.dama.update();
     this.caballo.update();
+
+    // Se actualiza el tablero
+    this.tablero.update();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderer.render(this, this.getCamera());
