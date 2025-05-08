@@ -50,7 +50,7 @@ export class Peon extends THREE.Object3D
   
   createObject()
   {
-    const RES = 20;
+    const RES = 200;
     const ROTACION_PIERNAS = Math.PI/50;
     var material = new THREE.MeshNormalMaterial({ flatShading : true });
 
@@ -90,8 +90,8 @@ export class Peon extends THREE.Object3D
     // Espinillas ------------------------------------------------------------
 
     // Definimos las geometrías de las piernas
-    var geomPiernaIzq = new THREE.CylinderGeometry(0.6, 0.5, 2.3, RES);
-    var geomPiernaDer = new THREE.CylinderGeometry(0.6, 0.5, 2.3, RES);
+    var geomPiernaIzq = new THREE.CylinderGeometry(0.5, 0.4, 2.3, RES);
+    var geomPiernaDer = new THREE.CylinderGeometry(0.5, 0.4, 2.3, RES);
 
     // Las posicionamos y orientamos
     geomPiernaIzq.rotateZ(-ROTACION_PIERNAS);
@@ -113,12 +113,12 @@ export class Peon extends THREE.Object3D
 
 
     // Rodillas ------------------------------------------------------------
-    var geomRodillaIzq = new THREE.SphereGeometry(0.65, RES, RES);
-    var geomRodillaDer = new THREE.SphereGeometry(0.65, RES, RES);
+    var geomRodillaIzq = new THREE.SphereGeometry(0.52, RES, RES);
+    var geomRodillaDer = new THREE.SphereGeometry(0.52, RES, RES);
 
     // Las posicionamos y orientamos
-    geomRodillaIzq.translate(-1.24, 3.3, 0);
-    geomRodillaDer.translate(1.24, 3.3, 0);
+    geomRodillaIzq.translate(-1.22, 3.5, 0);
+    geomRodillaDer.translate(1.22, 3.5, 0);
 
     // Creamos las rodillas
     var rodillaIzq = new THREE.Mesh(geomRodillaIzq, material);
@@ -130,15 +130,15 @@ export class Peon extends THREE.Object3D
 
 
     // Muslos ------------------------------------------------------------
-    var geomMusloIzq = new THREE.CylinderGeometry(0.8, 0.65, 2.5, RES);
-    var geomMusloDer = new THREE.CylinderGeometry(0.8, 0.65, 2.5, RES);
+    var geomMusloIzq = new THREE.CylinderGeometry(0.8, 0.5, 2.7, RES);
+    var geomMusloDer = new THREE.CylinderGeometry(0.8, 0.5, 2.7, RES);
 
     // Las posicionamos y orientamos
     geomMusloIzq.rotateZ(-ROTACION_PIERNAS);
-    geomMusloIzq.translate(-1.15, 4.65, 0);
+    geomMusloIzq.translate(-1.15, 4.8, 0);
 
     geomMusloDer.rotateZ(ROTACION_PIERNAS);
-    geomMusloDer.translate(1.15, 4.65, 0);
+    geomMusloDer.translate(1.15, 4.8, 0);
 
     // Creamos los muslos
     var musloIzq = new THREE.Mesh(geomMusloIzq, material);
@@ -151,31 +151,105 @@ export class Peon extends THREE.Object3D
     // Cadera y tronco ------------------------------------------------------------
 
     const formaCadTron = new THREE.Shape();
-    formaCadTron.moveTo(0, 0);
-    formaCadTron.lineTo(1.6, 0);
-    formaCadTron.lineTo(1.6, 2);
-    formaCadTron.lineTo(1, 2.5);
+    formaCadTron.moveTo(-0.4, 0);
+    formaCadTron.quadraticCurveTo(0, 1, 0.4, 0);
+    formaCadTron.lineTo(1.75, 0);
+    formaCadTron.quadraticCurveTo(1.8, 1, 1.4, 2.5);
     formaCadTron.lineTo(1.8, 5.5);
     formaCadTron.lineTo(1, 5.8);
-    formaCadTron.quadraticCurveTo(0, 5, -1, 5.8)
+    formaCadTron.lineTo(-1, 5.8)
     formaCadTron.lineTo(-1.8, 5.5);
-    formaCadTron.lineTo(-1, 2.5);
-    formaCadTron.lineTo(-1.2, 2);
-    formaCadTron.lineTo(-1.2, 0);
-    formaCadTron.lineTo(0, 0);
+    formaCadTron.lineTo(-1.4, 2.5);
+    formaCadTron.quadraticCurveTo(-1.8, 1, -1.75, 0);
+    formaCadTron.lineTo(-0.4, 0);
 
-    var opciones = { depth : 1, steps : 2, bevelEnabled : true } ;
+
+    var opciones = { depth : 1.2, steps : 2, bevelEnabled : true } ;
     var geomCadTron = new THREE. ExtrudeGeometry ( formaCadTron , opciones );
 
     // La posicionamos y orientamos
-    geomCadTron.translate(0, 5.5, -0.5)
+    geomCadTron.translate(0, 6.1, -0.6)
     
     // Creamos la cadera y el tronco
     var cadTron = new THREE.Mesh(geomCadTron, material);
 
     // Añadimos la cadera y el tronco al peón
     this.add(cadTron);
+
+    // Cuello ------------------------------------------------------------
+    // Definimos la forma 2D del cuello
+    var formaCuello = new THREE.Shape();
+    formaCuello.moveTo(0, 0);
+    formaCuello.quadraticCurveTo(0.2, -1.5, 1.1, 0.4);
+    formaCuello.lineTo(0.6, 0.8);
+    formaCuello.lineTo(0, 0); 
+
+    // Definimos la geometría del cuello por revolución
+    var puntosCuello = formaCuello.getPoints();
+    var geomCuello = new THREE. LatheGeometry ( puntosCuello , RES, 0, Math.PI * 2) ;
     
+    // La posicionamos 
+    geomCuello.translate(0, 11.6, 0);
+
+    // Creamos el cuello
+    var cuello = new THREE.Mesh(geomCuello, material);
+
+    // Añadimos el cuello
+    this.add(cuello);
+    
+    // Cabeza ------------------------------------------------------------
+
+    // Definimos la geometría de la cabeza
+    var formaCabeza = new THREE.Shape();
+    formaCabeza.moveTo(0, 0);
+    formaCabeza.lineTo(0.6, 0);
+    formaCabeza.quadraticCurveTo(0.9, 0.5, 0.9, 1);
+    formaCabeza.quadraticCurveTo(0.7, 1.8, 0, 2);
+
+
+    var puntosCabeza = formaCabeza.getPoints();
+    var geomCabeza = new THREE. LatheGeometry ( puntosCabeza , RES, 0, Math.PI * 2) ;
+
+    // La posicionamos
+    geomCabeza.translate(0, 12.4, 0);
+    // Creamos la cabeza
+    this.cabeza = new CSG.Brush(geomCabeza, material);
+    // Añadimos la cabeza
+
+    var ojos = new THREE.BoxGeometry(2, 0.1, 2);
+    ojos.rotateX(Math.PI / 20);
+    ojos.translate(0, 13.3, 1.2);
+
+
+    this.ojos = new CSG.Brush(ojos, material);
+
+    // Se construye un Evaluator que utilizaremos para las operaciones booleanas
+    var evaluator = new CSG.Evaluator();
+    
+    // Realizamos las operaciones booleanas
+    this.result1 = evaluator.evaluate(this.cabeza, this.ojos, CSG.SUBTRACTION);
+    this.add(this.result1);
+
+    
+
+
+    // var geomCilCabeza = new THREE.CylinderGeometry(0.8, 0.6, 1, RES);
+    // // La posicionamos
+    // geomCilCabeza.translate(0, 12.8, 0);
+    // // Creamos la cabeza
+    // var cilCabeza = new THREE.Mesh(geomCilCabeza, material);
+    // // Añadimos la cabeza
+    // this.add(cilCabeza);
+
+    //  var geomCabeza = new THREE.SphereGeometry(0.8, RES, RES);
+    // // La posicionamos
+    // geomCabeza.translate(0, 13.3, 0);
+    // // Creamos la cabeza
+    // var cabeza = new THREE.Mesh(geomCabeza, material);
+    // // Añadimos la cabeza
+    // this.add(cabeza);
+
+
 
   }
 

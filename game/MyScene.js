@@ -179,11 +179,11 @@ class MyScene extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camera.position.set(20, 10, 20);
+    this.camera.position.set(0, 10, 20);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    var look = new THREE.Vector3(0, 0, 0); // Hacia el punto de origen
+    var look = new THREE.Vector3(0, 10, 0); // Hacia el punto de origen
     this.camera.lookAt(look);
     this.add(this.camera);
     
