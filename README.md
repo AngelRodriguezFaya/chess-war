@@ -14,7 +14,7 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
 - [x]  Instanciación de primitivas.
 - [x]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
-- [ ]  Extrusión
+- [x]  Extrusión
 - [ ]  Barrido
 - [x]  Revolución
 - [x]  Cargar un modelo en formato .obj
@@ -36,9 +36,9 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 | Rey  | 1  |  SI  |   |   |
 |  Dama |  1  | NO  | Cargar un modelo en formato .obj  | Esta pieza se ha realizado cargando un modelo en formato .obj, el cuál se puede ver y descargar desde el siguiente enlace: [Enlace a la figura de la Dama en Free 3D ](https://free3d.com/es/modelo-3d/marionette-queen-v1--45470.html)   |
 | Alfiles  | 2 |  NO | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
-| Caballos | 2  | SI  |   |   |
+| Caballos | 2  | No  | Instanciación de primitvas. Revolución. Operaciones booleanas (CSG). Barrido  |   |
 |  Torres  | 2  | NO  | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
-|  Peones  | 8  | NS  |   |   |   |
+|  Peones  | 8  | SI  |   |   |   |
 
 
 ### Programación de las entregas
@@ -50,11 +50,11 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 
 - **El último día es el 19 de mayo**, pues el 26 de mayo sólo está disponible para la defensa final, la cuál, si todas las entregas van bien no tendremos que realizar. Además, es más difícil que las otras tres, por lo que trataremos evitarla a toda costa.
 
-| Defensa nº   | Fecha de presentación  |
-| :------------: | :------------: |
-|  1   | 28/04/2025  |
-|  2 | 05/05/2025  |
-|  3  |  12/05/2025  |
+| Defensa nº   | Fecha de presentación  | Realizada |
+| :------------: | :------------: | :------------: |
+|  1   | 05/05/2025  | [X] |
+|  2 | 12/05/2025  | [ ] |
+|  3  |  19/05/2025  | [ ] |
 
 ### Requisitos mínimos del juego
 - **Geometría:**
@@ -108,11 +108,13 @@ En cada presentación parcial debe tenerse hecho, al menos:
   	- [x]  Torre
   	- [x]  Alfil
   	- [x]  Dama
-  	- [ ]  Caballo
+  	- [X]  Caballo
 
 - **Defensa 2:**
-	- El tablero
+	- [X]  El tablero
 	- El resto de piezas
+   		- [ ] Rey
+           	- [ ] Peón 
 	- Movimientos válidos de las piezas (picking). *Preferiblemente de la pieza luchadora*
 	- Cambio de cámara
 
