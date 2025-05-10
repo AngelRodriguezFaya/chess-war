@@ -16,7 +16,7 @@ export class Alfil extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui)
+  constructor(gui, titleGui, material)
   {
     // Llamamos al constructor padre
     super();
@@ -56,8 +56,10 @@ export class Alfil extends THREE.Object3D
     // CONSTANTE DE RESOLUCIÓN
     const RES = 4;
 
-    // Creamos el material
-    var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    // // Creamos el material
+    // var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    this.material = material; // El material se pasa como parámetro al constructor
+
 
     // La construcción del alfil 
 

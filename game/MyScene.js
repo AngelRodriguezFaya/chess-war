@@ -311,11 +311,11 @@ class MyScene extends THREE.Scene
     // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
     // this.add(this.dama);
 
-    // // Caballo
-    // this.caballo = new Caballo(this.gui, "Controles del caballo");
+    // Caballo
+    this.caballo = new Caballo(this.gui, "Controles del caballo");
     // this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
     // this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
-    // this.add(this.caballo);
+    this.add(this.caballo);
   }
 
 

@@ -16,7 +16,7 @@ export class Caballo extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui)
+  constructor(gui, titleGui, material)
   {
     // Llamamos al constructor padre
     super();
@@ -56,10 +56,12 @@ export class Caballo extends THREE.Object3D
   {
     var evaluator = new CSG.Evaluator();
 
-    // Materiales
-    var material = new THREE.MeshNormalMaterial();
-    material.flatShading = true;
-    material.needsUpdate = true;
+    // // Materiales
+    // var material = new THREE.MeshNormalMaterial();
+    // material.flatShading = true;
+    // material.needsUpdate = true;
+    this.material = material; // El material se pasa como parámetro al constructor
+
 
     /*####################################*/
     // Base

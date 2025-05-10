@@ -16,7 +16,7 @@ export class Torre extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui)
+  constructor(gui, titleGui, material)
   {
     // Llamamos al constructor padre
     super();
@@ -58,11 +58,13 @@ export class Torre extends THREE.Object3D
     const RES = 4;
 
     // Creamos el material
-    var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    // var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    this.material = material; // El material se pasa como parámetro al constructor
+
 
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
     var evaluator = new CSG.Evaluator();
-
+a
     //------------ Creamos la torre -----------------
 
     // Definimos los puntos que definen la geometría de la torre

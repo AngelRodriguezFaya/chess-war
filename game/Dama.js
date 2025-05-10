@@ -16,7 +16,7 @@ export class Dama extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui)
+  constructor(gui, titleGui, material)
   {
     // Llamamos al constructor padre
     super();
@@ -54,7 +54,8 @@ export class Dama extends THREE.Object3D
   
   createObject()
   {
-    var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    // var material = new THREE.MeshNormalMaterial({ flatShading : true });
+    this.material = material; // El material se pasa como parámetro al constructor
     var objectLoader = new OBJLoader();
 
     objectLoader.load('../models/dama/dama.obj', (object) => {
