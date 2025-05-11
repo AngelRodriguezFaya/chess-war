@@ -11,21 +11,21 @@ Disponemos de libertad para desarrollar e implementar el juego como deseemos; no
 
 ### Modelado 3D con Three.js (Todo lo que se necesita saber).
 
-Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*) **(modificar esto)**
+Las diferentes técnicas que debemos de utilizar para modelar las piezas son (*las que tienen el tick son las que yas se han utilizado en alguna pieza*)
 - [x]  Instanciación de primitivas.
 - [x]  Geometría de Sólidos Constructiva (CSG), también llamada Operaciones Booleanas.
 - [x]  Extrusión
-- [ ]  Barrido
+- [x]  Barrido
 - [x]  Revolución
 - [x]  Cargar un modelo en formato .obj
-- [ ]  Modelos Jerárquicos
+- [x]  Modelos Jerárquicos
 
 Además, necesitamos figuras con **Animaciones**.
 
 ### El Ajedrez y sus Piezas
 > El **ajedrez** es un juego de tablero entre dos contrincantes en el que cada uno dispone al inicio de dieciséis piezas móviles, desiguales en importancia y valor, que se desplazan sobre un tablero capturando piezas del jugador contrario, según ciertas reglas.[...]
 
->Se juega sobre un **tablero cuadriculado de 8×8 casillas **(también llamadas escaques), alternadas en colores blanco y negro, que constituyen las 64 posibles posiciones entre las que se mueven las piezas durante el desarrollo del juego. Al principio del juego cada jugador tiene dieciséis piezas: un rey, una dama, dos alfiles, dos caballos, dos torres y ocho peones. Se trata de un juego de estrategia en el que el objetivo es «encerrar» al rey del oponente. Esto se hace amenazando la casilla que ocupa el rey con alguna de las piezas propias sin que el otro jugador pueda proteger a su rey interponiendo una pieza entre su rey y la pieza que lo amenaza (a menos que dicha pieza sea un peón o un caballo), mover su rey a un escaque libre o capturar a la pieza que lo está amenazando, lo que trae como resultado el jaque mate y el fin de la partida.
+>Se juega sobre un **tablero cuadriculado de 8×8 casillas** (también llamadas escaques), alternadas en colores blanco y negro, que constituyen las 64 posibles posiciones entre las que se mueven las piezas durante el desarrollo del juego. Al principio del juego cada jugador tiene dieciséis piezas: un rey, una dama, dos alfiles, dos caballos, dos torres y ocho peones. Se trata de un juego de estrategia en el que el objetivo es «encerrar» al rey del oponente. Esto se hace amenazando la casilla que ocupa el rey con alguna de las piezas propias sin que el otro jugador pueda proteger a su rey interponiendo una pieza entre su rey y la pieza que lo amenaza (a menos que dicha pieza sea un peón o un caballo), mover su rey a un escaque libre o capturar a la pieza que lo está amenazando, lo que trae como resultado el jaque mate y el fin de la partida.
 
 Fuente: [Wikipedia - Ajedrez](https://es.wikipedia.org/wiki/Ajedrez)
 
@@ -38,7 +38,7 @@ A continuación detallaremos más detalles sobre las piezas y como la hemos desa
 | Alfiles  | 2 |  NO | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
 | Caballos | 2  | No  | Instanciación de primitvas. Revolución. Operaciones booleanas (CSG). Barrido  |   |
 |  Torres  | 2  | NO  | Instanciación de primitivas. Revolución. Operaciones booleanas (CSG)  |   |
-|  Peones  | 8  | SI  |   |   |   |
+|  Peones  | 8  | SI  | Instanciación de primitivas. Operaciones Booleanas (CSG). Extrusión. Barrido. Revolución. Modelos Jerárquicos  |   |   |
 
 
 ### Programación de las entregas
@@ -112,9 +112,9 @@ En cada presentación parcial debe tenerse hecho, al menos:
 
 - **Defensa 2:**
 	- [X]  El tablero
-	- El resto de piezas
-   		- [ ] Rey
-           	- [ ] Peón 
+	- El resto de piezas:
+ 		- [ ] Rey
+ 		- [ ] Peón 
 	- Movimientos válidos de las piezas (picking). *Preferiblemente de la pieza luchadora*
 	- Cambio de cámara
 
