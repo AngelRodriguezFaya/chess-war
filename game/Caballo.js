@@ -29,7 +29,7 @@ export class Caballo extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(material);
   }
 
   /*############################################################################*/
@@ -52,7 +52,7 @@ export class Caballo extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(material)
   {
     var evaluator = new CSG.Evaluator();
 
@@ -60,7 +60,7 @@ export class Caballo extends THREE.Object3D
     // var material = new THREE.MeshNormalMaterial();
     // material.flatShading = true;
     // material.needsUpdate = true;
-    this.material = material; // El material se pasa como parámetro al constructor
+    // this.material = material; // El material se pasa como parámetro al constructor
 
 
     /*####################################*/

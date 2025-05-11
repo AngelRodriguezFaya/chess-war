@@ -16,7 +16,7 @@ export class Dama extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material)
+  constructor(gui, titleGui, materialDama)
   {
     // Llamamos al constructor padre
     super();
@@ -29,7 +29,7 @@ export class Dama extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(materialDama);
   }
 
   /*############################################################################*/
@@ -52,23 +52,22 @@ export class Dama extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(materialDama)
   {
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
-    this.material = material; // El material se pasa como parámetro al constructor
+    // this.material = material; // El material se pasa como parámetro al constructor
     var objectLoader = new OBJLoader();
 
     objectLoader.load('../models/dama/dama.obj', (object) => {
       // Utilizamos el método traverse para asignar el material a cada hijo del objeto cargado
       object.traverse((child) => {
         if (child.isMesh) {
-          child.material = material;
+          child.material = materialDama;
         }
         });
 
         // Aqui se hacen todas las transformaciones necesarias para que el objeto se vea bien
         this.rotation.x = -Math.PI / 2;
-        this.rotation.z = Math.PI;
 
         // Se añade el objeto a la escena
         this.add(object);

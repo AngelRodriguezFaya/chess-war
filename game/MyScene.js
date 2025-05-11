@@ -51,18 +51,15 @@ class MyScene extends THREE.Scene
     // Tras crear cada elemento se añadirá a la escena con this.add(variable)
     this.createLights();
 
-    // Un suelo
-    this.createTable();
+    // // Un suelo
+    // this.createTable();
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
     this.createAxis();
     
-    // Por último creamos los modelos
+    // Por último creamos las figuras y el tablero
     this.createModels();
-
-    this.peon = new Peon(this.gui, "Controles del peón");
-    this.add(this.peon);
 
   }
 
@@ -179,11 +176,11 @@ class MyScene extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camera.position.set(0, 10, 20);
+    this.camera.position.set(30, 60, 170);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    var look = new THREE.Vector3(0, 10, 0); // Hacia el punto de origen
+    var look = new THREE.Vector3(30, 10, 30); 
     this.camera.lookAt(look);
     this.add(this.camera);
     
@@ -290,35 +287,216 @@ class MyScene extends THREE.Scene
 
   createModels()
   {
-    // Alfil
-    this.alfil = new Alfil(this.gui, "Controles del alfil");
-    // this.alfil.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    // this.alfil.applyMatrix4(new THREE.Matrix4().makeTranslation(-1.5, 0, 3.5));
-    this.add(this.alfil);
-    this.alfil.position.set(18, 0, 0);
+    // Se crea el tablero
+    this.createTable();
+
+    // Se crean las piezas del jugador 1
+    this.createModelsPlayer1();
+
+    // Se crean las piezas del jugador 2
+    this.createModelsPlayer2();
+
+    // var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
+    // var materialMarrones = new THREE.MeshStandardMaterial({ color: 0x562B05});
+    // var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
+
+    // // Alfil
+    // this.alfil = new Alfil(this.gui, "Controles del alfil", materialAux);
+    // // this.alfil.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
+    // // this.alfil.applyMatrix4(new THREE.Matrix4().makeTranslation(-1.5, 0, 3.5));
+    // this.add(this.alfil);
+    // this.alfil.position.set(18, 0, 0);
     
-    // // Torre
-    // this.torre = new Torre(this.gui, "Controles de la torre");
-    // this.torre.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    // this.torre.applyMatrix4(new THREE.Matrix4().makeTranslation(-3.5, 0, 3.5));
+    // // // Torre
+    // this.torre = new Torre(this.gui, "Controles de la torre", materialAux);
+    // // this.torre.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
+    // // this.torre.applyMatrix4(new THREE.Matrix4().makeTranslation(-3.5, 0, 3.5));
     // this.add(this.torre);
 
-    // // Dama
-    // this.dama = new Dama(this.gui, "Controles de la dama");
-    // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(0.06, 0.06, 0.06));
-    // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.135, 0.025, 0.135));
-    // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
-    // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
+    // // // Dama
+    // this.dama = new Dama(this.gui, "Controles de la dama", materialAux);
+    // // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(0.06, 0.06, 0.06));
+    // // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.135, 0.025, 0.135));
+    // // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
+    // // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
     // this.add(this.dama);
 
-    // Caballo
-    this.caballo = new Caballo(this.gui, "Controles del caballo");
-    // this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
-    // this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
-    this.add(this.caballo);
+    // // Caballo
+    // this.caballo = new Caballo(this.gui, "Controles del caballo", materialAux);
+    // // this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
+    // // this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
+    // this.add(this.caballo);
   }
 
+  createModelsPlayer1(){
+    var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
+    var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
+    
+    // Crear las torres
+    this.torre1player1 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.add(this.torre1player1);
+    this.torre1player1.position.set(0, 0, 0);
 
+    this.torre2player1 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.add(this.torre2player1);
+    this.torre2player1.position.set(63, 0, 0);
+
+    // Crear los caballos
+    this.caballo1player1 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.add(this.caballo1player1);
+    this.caballo1player1.scale.set(4, 4, 4);
+    this.caballo1player1.rotateY(-Math.PI/2);
+    this.caballo1player1.position.set(9, 0, 0);
+
+    this.caballo2player1 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.add(this.caballo2player1);
+    this.caballo2player1.scale.set(4, 4, 4);
+    this.caballo2player1.rotateY(-Math.PI/2);
+    this.caballo2player1.position.set(54, 0, 0);
+
+    // Crear los alfiles
+    this.alfil1player1 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.add(this.alfil1player1);
+    this.alfil1player1.position.set(18, 0, 0);
+
+    this.alfil2player1 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.add(this.alfil2player1);
+    this.alfil2player1.position.set(45, 0, 0);
+
+    // Crear la dama
+    this.damaplayer1 = new Dama(this.gui, "Controles de la dama", materialAux);
+    this.add(this.damaplayer1);
+    this.damaplayer1.scale.set(0.7, 0.7, 0.7);
+    this.damaplayer1.position.set(29, 0, -1);
+
+    // Crear el rey
+    // TODO: Crear el rey
+
+    // Crear los peones
+    this.peon1player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon1player1);
+    this.peon1player1.position.set(0, 0, 9);
+
+    this.peon2player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon2player1);
+    this.peon2player1.position.set(9, 0, 9);
+
+    this.peon3player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon3player1);
+    this.peon3player1.position.set(18, 0, 9);
+
+    this.peon4player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon4player1);
+    this.peon4player1.position.set(27, 0, 9);
+    
+    this.peon5player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon5player1);
+    this.peon5player1.position.set(36, 0, 9);
+    
+    this.peon6player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon6player1);
+    this.peon6player1.position.set(45, 0, 9);
+    
+    this.peon7player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon7player1);
+    this.peon7player1.position.set(54, 0, 9);
+    
+    this.peon8player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon8player1);
+    this.peon8player1.position.set(63, 0, 9);
+
+  }
+
+  createModelsPlayer2(){
+    var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
+    var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
+    
+    // Crear las torres
+    this.torre1player2 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.add(this.torre1player2);
+    this.torre1player2.position.set(0, 0, 63);
+
+    this.torre2player2 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.add(this.torre2player2);
+    this.torre2player2.position.set(63, 0, 63);
+
+    // Crear los caballos
+    this.caballo1player2 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.add(this.caballo1player2);
+    this.caballo1player2.scale.set(4, 4, 4);
+    this.caballo1player2.rotateY(-Math.PI/2);
+    this.caballo1player2.rotateY(Math.PI);
+    this.caballo1player2.position.set(9, 0, 63);
+
+    this.caballo2player2 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.add(this.caballo2player2);
+    this.caballo2player2.scale.set(4, 4, 4);
+    this.caballo2player2.rotateY(-Math.PI/2);
+    this.caballo2player2.rotateY(Math.PI);
+    this.caballo2player2.position.set(54, 0, 63);
+
+    // Crear los alfiles
+    this.alfil1player2 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.add(this.alfil1player2);
+    this.alfil1player2.rotateY(Math.PI);
+    this.alfil1player2.position.set(18, 0, 63);
+
+    this.alfil2player2 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.add(this.alfil2player2);
+    this.alfil2player2.rotateY(Math.PI);
+    this.alfil2player2.position.set(45, 0, 63);
+
+    // Crear la dama
+    this.damaplayer1 = new Dama(this.gui, "Controles de la dama", materialAux);
+    this.add(this.damaplayer1);
+    this.damaplayer1.scale.set(0.7, 0.7, 0.7);
+    this.damaplayer1.rotateY(Math.PI);
+    this.damaplayer1.position.set(26, 0, 64); // Se modifica la posición para que no se solape con el rey
+
+    // Crear el rey
+
+    // Crear los peones
+    this.peon1player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon1player2);
+    this.peon1player2.rotateY(Math.PI);
+    this.peon1player2.position.set(0, 0, 54);
+
+    this.peon2player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon2player2);
+    this.peon2player2.rotateY(Math.PI);
+    this.peon2player2.position.set(9, 0, 54);
+
+    this.peon3player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon3player2);
+    this.peon3player2.rotateY(Math.PI);
+    this.peon3player2.position.set(18, 0, 54);
+
+    this.peon4player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon4player2);
+    this.peon4player2.rotateY(Math.PI);
+    this.peon4player2.position.set(27, 0, 54);
+
+    this.peon5player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon5player2);
+    this.peon5player2.rotateY(Math.PI);
+    this.peon5player2.position.set(36, 0, 54);
+
+    this.peon6player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon6player2);
+    this.peon6player2.rotateY(Math.PI);
+    this.peon6player2.position.set(45, 0, 54);
+
+    this.peon7player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon7player2);
+    this.peon7player2.rotateY(Math.PI);
+    this.peon7player2.position.set(54, 0, 54);
+
+    this.peon8player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.add(this.peon8player2);
+    this.peon8player2.rotateY(Math.PI);
+    this.peon8player2.position.set(63, 0, 54);
+
+  }
 
 
 

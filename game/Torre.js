@@ -29,7 +29,7 @@ export class Torre extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(material);
   }
 
   /*############################################################################*/
@@ -52,19 +52,20 @@ export class Torre extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(material)
   {
     // CONSTANTE DE RESOLUCIÓN
     const RES = 4;
 
     // Creamos el material
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
-    this.material = material; // El material se pasa como parámetro al constructor
+    // El material se pasa como parámetro al constructor
+    var materialTorre = material; 
 
 
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
     var evaluator = new CSG.Evaluator();
-a
+    
     //------------ Creamos la torre -----------------
 
     // Definimos los puntos que definen la geometría de la torre
@@ -88,7 +89,7 @@ a
     var torreGeom = new THREE.LatheGeometry(this.points, 50, 0, Math.PI * 2);
     
     // Se construye el objeto Brush que modela la torre
-    this.torre = new CSG.Brush (torreGeom, material);
+    this.torre = new CSG.Brush (torreGeom, materialTorre);
 
 
     //---------- Ahora creamos los toros que se van a añadir a la torre -----------------
@@ -116,11 +117,11 @@ a
     toro5Geom.translate(0, 9.4, 0);    
 
     // Se construyen los objetos Brush que modelan los toros
-    this.toro1 = new CSG.Brush (toro1Geom, material);
-    this.toro2 = new CSG.Brush (toro2Geom, material);
-    this.toro3 = new CSG.Brush (toro3Geom, material);
-    this.toro4 = new CSG.Brush (toro4Geom, material);
-    this.toro5 = new CSG.Brush (toro5Geom, material);   
+    this.toro1 = new CSG.Brush (toro1Geom, materialTorre);
+    this.toro2 = new CSG.Brush (toro2Geom, materialTorre);
+    this.toro3 = new CSG.Brush (toro3Geom, materialTorre);
+    this.toro4 = new CSG.Brush (toro4Geom, materialTorre);
+    this.toro5 = new CSG.Brush (toro5Geom, materialTorre);   
     
 
     // Usamos el evaluador para unir los toros a la torre
@@ -145,9 +146,9 @@ a
     caja3Geom.rotateY(-Math.PI / 3);
 
     // Se construyen los objetos Brush que modelan las cajas
-    this.caja1 = new CSG.Brush (caja1Geom, material); 
-    this.caja2 = new CSG.Brush (caja2Geom, material);
-    this.caja3 = new CSG.Brush (caja3Geom, material);
+    this.caja1 = new CSG.Brush (caja1Geom, materialTorre); 
+    this.caja2 = new CSG.Brush (caja2Geom, materialTorre);
+    this.caja3 = new CSG.Brush (caja3Geom, materialTorre);
 
     // Usamos el evaluador para restar las cajas a la torre
     this.result6 = evaluator.evaluate(this.result5, this.caja1, CSG.SUBTRACTION);

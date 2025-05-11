@@ -25,7 +25,7 @@ export class Peon extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(material);
   }
 
   /*############################################################################*/
@@ -48,11 +48,11 @@ export class Peon extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(material)
   {
     const RES = 20;
     const ROTACION_PIERNAS = Math.PI/50;
-    this.material = material; // El material se pasa como parámetro al constructor
+    // this.material = material; // El material se pasa como parámetro al constructor
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
     var evaluator = new CSG.Evaluator();

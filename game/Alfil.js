@@ -28,7 +28,7 @@ export class Alfil extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(material);
   }
 
   /*############################################################################*/
@@ -51,14 +51,14 @@ export class Alfil extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(material)
   {
     // CONSTANTE DE RESOLUCIÓN
     const RES = 4;
 
     // // Creamos el material
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
-    this.material = material; // El material se pasa como parámetro al constructor
+    var materialAlfil = material; // El material se pasa como parámetro al constructor
 
 
     // La construcción del alfil 
@@ -91,7 +91,7 @@ export class Alfil extends THREE.Object3D
     var cuerpoGeom = new THREE.LatheGeometry(points, RES*20, 0, Math.PI * 2);
 
     // Se construye el objeto Brush que modela el cuerpo del alfil
-    this.cuerpo = new CSG.Brush(cuerpoGeom, material);    
+    this.cuerpo = new CSG.Brush(cuerpoGeom, materialAlfil);    
     
     //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
     // Se crean las geometrías necesarias
@@ -106,8 +106,8 @@ export class Alfil extends THREE.Object3D
     
 
     // Se construyen los objetos Brush
-    this.esfera = new CSG.Brush(esferaGeom, material);
-    this.caja = new CSG.Brush(cajaGeom, material);
+    this.esfera = new CSG.Brush(esferaGeom, materialAlfil);
+    this.caja = new CSG.Brush(cajaGeom, materialAlfil);
 
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
     var evaluator = new CSG.Evaluator();
