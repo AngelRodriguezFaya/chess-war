@@ -23,9 +23,7 @@ import { ReinaModelo } from './modelos/ReinaModelo.js'
 import { CaballoModelo } from './modelos/CaballoModelo.js'
 import { TableroModelo } from './modelos/TableroModelo.js'  
 import { PeonModelo } from './modelos/PeonModelo.js'
-
-
-
+import { ReyModelo } from './modelos/ReyModelo.js'
 
 
 /*############################################################################*/
@@ -343,7 +341,9 @@ class MyScene extends THREE.Scene
     this.damaplayer1.position.set(29, 0, -1);
 
     // Crear el rey
-    // TODO: Crear el rey
+    this.reyplayer1 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(0, 4), TypePlayer.BLACK);
+    this.add(this.reyplayer1);
+    this.reyplayer1.position.set(36, 0, 0);
 
     // Crear los peones
     this.peon1player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 0), TypePlayer.BLACK);
@@ -428,6 +428,10 @@ class MyScene extends THREE.Scene
     this.damaplayer1.position.set(26, 0, 64); // Se modifica la posición para que no se solape con el rey
 
     // Crear el rey
+    this.reyplayer2 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(7, 4), TypePlayer.WHITE);
+    this.add(this.reyplayer2);
+    // this.reyplayer2.rotateY(Math.PI);
+    this.reyplayer2.position.set(36, 0, 63);
 
     // Crear los peones
     this.peon1player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 0), TypePlayer.WHITE);
