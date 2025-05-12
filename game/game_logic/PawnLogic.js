@@ -1,4 +1,4 @@
-import { Piece } from './Piece.js';
+import { Piece } from './PieceLogic.js';
 import { TypePiece, TypePlayer } from './TypeUtility.js';
 import { BoardPosition, Movement } from './Move.js';
 import { addMovePosition, addEatPosition, addFirstMovePosition, addEnPassantPosition } from './MoveUtility.js';

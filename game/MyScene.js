@@ -11,12 +11,12 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 /*########################################################*/
 // Clases de mi proyecto
 
-import { Alfil } from './Alfil.js'
-import { Torre } from './Torre.js'
-import { Dama } from './Dama.js'
-import { Caballo } from './Caballo.js'
-import { Tablero } from './Tablero.js'  
-import { Peon } from './Peon.js'
+import { BishopModel } from './game_models/BishopModel.js'
+import { RookModel } from './game_models/RookModel.js'
+import { QueenModel } from './game_models/QueenModel.js'
+import { KnightModel } from './game_models/KnightModel.js'
+import { BoardModel } from './game_models/BoardModel.js'  
+import { PawnModel } from './game_models/PawnModel.js'
 
 
 
@@ -50,9 +50,6 @@ class MyScene extends THREE.Scene
     // Bien como hijo de la escena (this en esta clase) o como hijo de un elemento que ya esté en la escena.
     // Tras crear cada elemento se añadirá a la escena con this.add(variable)
     this.createLights();
-
-    // // Un suelo
-    // this.createTable();
     
     // Y unos ejes. Imprescindibles para orientarnos sobre dónde están las cosas
     // Todas las unidades están en metros
@@ -60,7 +57,6 @@ class MyScene extends THREE.Scene
     
     // Por último creamos las figuras y el tablero
     this.createModels();
-
   }
 
 
@@ -260,7 +256,7 @@ class MyScene extends THREE.Scene
 
   createTable()
   {
-    this.tablero = new Tablero(this.gui, "Controles del tablero");
+    this.tablero = new BoardModel(this.gui, "Controles del tablero");
     this.add(this.tablero);
   }
 
@@ -295,37 +291,6 @@ class MyScene extends THREE.Scene
 
     // Se crean las piezas del jugador 2
     this.createModelsPlayer2();
-
-    // var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
-    // var materialMarrones = new THREE.MeshStandardMaterial({ color: 0x562B05});
-    // var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
-
-    // // Alfil
-    // this.alfil = new Alfil(this.gui, "Controles del alfil", materialAux);
-    // // this.alfil.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    // // this.alfil.applyMatrix4(new THREE.Matrix4().makeTranslation(-1.5, 0, 3.5));
-    // this.add(this.alfil);
-    // this.alfil.position.set(18, 0, 0);
-    
-    // // // Torre
-    // this.torre = new Torre(this.gui, "Controles de la torre", materialAux);
-    // // this.torre.applyMatrix4(new THREE.Matrix4().makeScale(0.11, 0.11, 0.11));
-    // // this.torre.applyMatrix4(new THREE.Matrix4().makeTranslation(-3.5, 0, 3.5));
-    // this.add(this.torre);
-
-    // // // Dama
-    // this.dama = new Dama(this.gui, "Controles de la dama", materialAux);
-    // // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(0.06, 0.06, 0.06));
-    // // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.135, 0.025, 0.135));
-    // // this.dama.applyMatrix4(new THREE.Matrix4().makeScale(1.1, 1.1, 1.1));
-    // // this.dama.applyMatrix4(new THREE.Matrix4().makeTranslation(-0.5, 0, 3.5));
-    // this.add(this.dama);
-
-    // // Caballo
-    // this.caballo = new Caballo(this.gui, "Controles del caballo", materialAux);
-    // // this.caballo.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.45, 0.45));
-    // // this.caballo.applyMatrix4(new THREE.Matrix4().makeTranslation(-2.5, 0, 3.5));
-    // this.add(this.caballo);
   }
 
   createModelsPlayer1(){
@@ -333,38 +298,38 @@ class MyScene extends THREE.Scene
     var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
     
     // Crear las torres
-    this.torre1player1 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.torre1player1 = new RookModel(this.gui, "Controles de la torre", materialAux);
     this.add(this.torre1player1);
     this.torre1player1.position.set(0, 0, 0);
 
-    this.torre2player1 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.torre2player1 = new RookModel(this.gui, "Controles de la torre", materialAux);
     this.add(this.torre2player1);
     this.torre2player1.position.set(63, 0, 0);
 
     // Crear los caballos
-    this.caballo1player1 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.caballo1player1 = new KnightModel(this.gui, "Controles del caballo", materialAux);
     this.add(this.caballo1player1);
     this.caballo1player1.scale.set(4, 4, 4);
     this.caballo1player1.rotateY(-Math.PI/2);
     this.caballo1player1.position.set(9, 0, 0);
 
-    this.caballo2player1 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.caballo2player1 = new KnightModel(this.gui, "Controles del caballo", materialAux);
     this.add(this.caballo2player1);
     this.caballo2player1.scale.set(4, 4, 4);
     this.caballo2player1.rotateY(-Math.PI/2);
     this.caballo2player1.position.set(54, 0, 0);
 
     // Crear los alfiles
-    this.alfil1player1 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.alfil1player1 = new BishopModel(this.gui, "Controles del alfil", materialAux);
     this.add(this.alfil1player1);
     this.alfil1player1.position.set(18, 0, 0);
 
-    this.alfil2player1 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.alfil2player1 = new BishopModel(this.gui, "Controles del alfil", materialAux);
     this.add(this.alfil2player1);
     this.alfil2player1.position.set(45, 0, 0);
 
     // Crear la dama
-    this.damaplayer1 = new Dama(this.gui, "Controles de la dama", materialAux);
+    this.damaplayer1 = new QueenModel(this.gui, "Controles de la dama", materialAux);
     this.add(this.damaplayer1);
     this.damaplayer1.scale.set(0.7, 0.7, 0.7);
     this.damaplayer1.position.set(29, 0, -1);
@@ -373,35 +338,35 @@ class MyScene extends THREE.Scene
     // TODO: Crear el rey
 
     // Crear los peones
-    this.peon1player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon1player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon1player1);
     this.peon1player1.position.set(0, 0, 9);
 
-    this.peon2player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon2player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon2player1);
     this.peon2player1.position.set(9, 0, 9);
 
-    this.peon3player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon3player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon3player1);
     this.peon3player1.position.set(18, 0, 9);
 
-    this.peon4player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon4player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon4player1);
     this.peon4player1.position.set(27, 0, 9);
     
-    this.peon5player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon5player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon5player1);
     this.peon5player1.position.set(36, 0, 9);
     
-    this.peon6player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon6player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon6player1);
     this.peon6player1.position.set(45, 0, 9);
     
-    this.peon7player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon7player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon7player1);
     this.peon7player1.position.set(54, 0, 9);
     
-    this.peon8player1 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon8player1 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon8player1);
     this.peon8player1.position.set(63, 0, 9);
 
@@ -412,23 +377,23 @@ class MyScene extends THREE.Scene
     var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
     
     // Crear las torres
-    this.torre1player2 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.torre1player2 = new RookModel(this.gui, "Controles de la torre", materialAux);
     this.add(this.torre1player2);
     this.torre1player2.position.set(0, 0, 63);
 
-    this.torre2player2 = new Torre(this.gui, "Controles de la torre", materialAux);
+    this.torre2player2 = new RookModel(this.gui, "Controles de la torre", materialAux);
     this.add(this.torre2player2);
     this.torre2player2.position.set(63, 0, 63);
 
     // Crear los caballos
-    this.caballo1player2 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.caballo1player2 = new KnightModel(this.gui, "Controles del caballo", materialAux);
     this.add(this.caballo1player2);
     this.caballo1player2.scale.set(4, 4, 4);
     this.caballo1player2.rotateY(-Math.PI/2);
     this.caballo1player2.rotateY(Math.PI);
     this.caballo1player2.position.set(9, 0, 63);
 
-    this.caballo2player2 = new Caballo(this.gui, "Controles del caballo", materialAux);
+    this.caballo2player2 = new KnightModel(this.gui, "Controles del caballo", materialAux);
     this.add(this.caballo2player2);
     this.caballo2player2.scale.set(4, 4, 4);
     this.caballo2player2.rotateY(-Math.PI/2);
@@ -436,18 +401,18 @@ class MyScene extends THREE.Scene
     this.caballo2player2.position.set(54, 0, 63);
 
     // Crear los alfiles
-    this.alfil1player2 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.alfil1player2 = new BishopModel(this.gui, "Controles del alfil", materialAux);
     this.add(this.alfil1player2);
     this.alfil1player2.rotateY(Math.PI);
     this.alfil1player2.position.set(18, 0, 63);
 
-    this.alfil2player2 = new Alfil(this.gui, "Controles del alfil", materialAux);
+    this.alfil2player2 = new BishopModel(this.gui, "Controles del alfil", materialAux);
     this.add(this.alfil2player2);
     this.alfil2player2.rotateY(Math.PI);
     this.alfil2player2.position.set(45, 0, 63);
 
     // Crear la dama
-    this.damaplayer1 = new Dama(this.gui, "Controles de la dama", materialAux);
+    this.damaplayer1 = new QueenModel(this.gui, "Controles de la dama", materialAux);
     this.add(this.damaplayer1);
     this.damaplayer1.scale.set(0.7, 0.7, 0.7);
     this.damaplayer1.rotateY(Math.PI);
@@ -456,42 +421,42 @@ class MyScene extends THREE.Scene
     // Crear el rey
 
     // Crear los peones
-    this.peon1player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon1player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon1player2);
     this.peon1player2.rotateY(Math.PI);
     this.peon1player2.position.set(0, 0, 54);
 
-    this.peon2player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon2player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon2player2);
     this.peon2player2.rotateY(Math.PI);
     this.peon2player2.position.set(9, 0, 54);
 
-    this.peon3player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon3player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon3player2);
     this.peon3player2.rotateY(Math.PI);
     this.peon3player2.position.set(18, 0, 54);
 
-    this.peon4player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon4player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon4player2);
     this.peon4player2.rotateY(Math.PI);
     this.peon4player2.position.set(27, 0, 54);
 
-    this.peon5player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon5player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon5player2);
     this.peon5player2.rotateY(Math.PI);
     this.peon5player2.position.set(36, 0, 54);
 
-    this.peon6player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon6player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon6player2);
     this.peon6player2.rotateY(Math.PI);
     this.peon6player2.position.set(45, 0, 54);
 
-    this.peon7player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon7player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon7player2);
     this.peon7player2.rotateY(Math.PI);
     this.peon7player2.position.set(54, 0, 54);
 
-    this.peon8player2 = new Peon(this.gui, "Controles del peón", materialAux);
+    this.peon8player2 = new PawnModel(this.gui, "Controles del peón", materialAux);
     this.add(this.peon8player2);
     this.peon8player2.rotateY(Math.PI);
     this.peon8player2.position.set(63, 0, 54);

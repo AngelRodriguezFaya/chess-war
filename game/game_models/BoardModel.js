@@ -1,14 +1,14 @@
 /*############################################################################*/
 // Importaciones
 
-import * as THREE from '../libs/three.module.js'
-import * as CSG from '../libs/three-bvh-csg.js'
+import * as THREE from '../../libs/three.module.js'
+import * as CSG from '../../libs/three-bvh-csg.js'
 
 
 /*############################################################################*/
 // Clase Tablero
 
-export class Tablero extends THREE.Object3D
+export class BoardModel extends THREE.Object3D
 {
   /*############################################################################*/
   // Constructor

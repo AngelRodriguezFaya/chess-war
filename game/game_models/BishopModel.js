@@ -1,8 +1,8 @@
 /*############################################################################*/
 // Importaciones
 
-import * as THREE from '../libs/three.module.js'
-import * as CSG from '../libs/three-bvh-csg.js'
+import * as THREE from '../../libs/three.module.js'
+import * as CSG from '../../libs/three-bvh-csg.js'
 
 
 
@@ -11,7 +11,7 @@ import * as CSG from '../libs/three-bvh-csg.js'
 /*############################################################################*/
 // Clase Alfil
 
-export class Alfil extends THREE.Object3D
+export class BishopModel extends THREE.Object3D
 {
   /*############################################################################*/
   // Constructor

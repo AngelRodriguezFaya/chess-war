@@ -1,8 +1,8 @@
 /*############################################################################*/
 // Importaciones
 
-import * as THREE from '../libs/three.module.js'
-import * as CSG from '../libs/three-bvh-csg.js'
+import * as THREE from '../../libs/three.module.js'
+import * as CSG from '../../libs/three-bvh-csg.js'
 
 
 
@@ -11,7 +11,7 @@ import * as CSG from '../libs/three-bvh-csg.js'
 /*############################################################################*/
 // Clase Torre
 
-export class Torre extends THREE.Object3D
+export class RookModel extends THREE.Object3D
 {
   /*############################################################################*/
   // Constructor

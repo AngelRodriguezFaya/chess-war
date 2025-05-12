@@ -1,8 +1,8 @@
 /*############################################################################*/
 // Importaciones
 
-import * as THREE from '../libs/three.module.js';
-import { OBJLoader } from '../libs/OBJLoader.js';
+import * as THREE from '../../libs/three.module.js';
+import { OBJLoader } from '../../libs/OBJLoader.js';
 
 
 
@@ -11,7 +11,7 @@ import { OBJLoader } from '../libs/OBJLoader.js';
 /*############################################################################*/
 // Clase Dama
 
-export class Dama extends THREE.Object3D
+export class QueenModel extends THREE.Object3D
 {
   /*############################################################################*/
   // Constructor
