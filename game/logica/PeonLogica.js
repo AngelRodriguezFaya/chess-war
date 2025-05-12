@@ -1,7 +1,7 @@
-import { Piece } from './PieceLogic.js';
-import { TypePiece, TypePlayer } from './TypeUtility.js';
-import { BoardPosition, Movement } from './Move.js';
-import { addMovePosition, addEatPosition, addFirstMovePosition, addEnPassantPosition } from './MoveUtility.js';
+import { Piece } from './PiezaLogica.js';
+import { TypePiece, TypePlayer } from './TiposUtils.js';
+import { BoardPosition, Movement } from './Movimiento.js';
+import { addMovePosition, addEatPosition, addFirstMovePosition, addEnPassantPosition } from './MovimientosUtils.js';
 
 export class Pawn extends Piece {
   constructor(player) {

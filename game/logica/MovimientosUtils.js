@@ -1,5 +1,5 @@
-import { Move } from './Move.js';
-import { TypePiece } from './TypeUtility.js';
+import { Move } from './Movimiento.js';
+import { TypePiece } from './TiposUtils.js';
 
 export function addMove(board, move, kill, moves) {
   if (kill) {

@@ -1,6 +1,7 @@
 export const TypePlayer = Object.freeze({
   WHITE: 'WHITE',
-  BLACK: 'BLACK'
+  BLACK: 'BLACK',
+  UNKNOWN: 'UNKNOWN'
 });
 
 export const TypePiece = Object.freeze({
@@ -9,5 +10,6 @@ export const TypePiece = Object.freeze({
   BISHOP: 'BISHOP',
   QUEEN: 'QUEEN',
   KING: 'KING',
-  PAWN: 'PAWN'
+  PAWN: 'PAWN',
+  BOARD: 'BOARD'
 });

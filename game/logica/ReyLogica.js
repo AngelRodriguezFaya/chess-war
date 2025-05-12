@@ -1,7 +1,7 @@
-import { Piece } from './PieceLogic.js';
-import { TypePiece } from './TypeUtility.js';
-import { BoardPosition, Movement } from './Move.js';
-import { addMoveEatPosition, addCastlingPosition, addCastlingPositionExtra } from './MoveUtility.js';
+import { Piece } from './PiezaLogica.js';
+import { TypePiece } from './TiposUtils.js';
+import { BoardPosition, Movement } from './Movimiento.js';
+import { addMoveEatPosition, addCastlingPosition, addCastlingPositionExtra } from './MovimientosUtils.js';
 
 export class King extends Piece {
   constructor(player) {

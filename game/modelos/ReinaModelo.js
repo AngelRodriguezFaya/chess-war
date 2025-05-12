@@ -4,6 +4,9 @@
 import * as THREE from '../../libs/three.module.js';
 import { OBJLoader } from '../../libs/OBJLoader.js';
 
+import { TypePiece } from '../logica/TiposUtils.js'
+import { PiezaBaseModelo } from './PiezaBaseModelo.js'
+
 
 
 
@@ -11,15 +14,15 @@ import { OBJLoader } from '../../libs/OBJLoader.js';
 /*############################################################################*/
 // Clase Dama
 
-export class QueenModel extends THREE.Object3D
+export class ReinaModelo extends PiezaBaseModelo
 {
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, materialDama)
+  constructor(gui, titleGui, materialDama, board_position, type_player)
   {
     // Llamamos al constructor padre
-    super();
+    super(board_position, TypePiece.QUEEN, type_player);
 
     // Inicialización de los parámetros
     this.iniParam();

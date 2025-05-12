@@ -1,7 +1,7 @@
-import { Piece } from './PieceLogic.js';
-import { TypePiece } from './TypeUtility.js';
-import { Movement } from './Move.js';
-import { addMoveEatPosition } from './MoveUtility.js';
+import { Piece } from './PiezaLogica.js';
+import { TypePiece } from './TiposUtils.js';
+import { Movement } from './Movimiento.js';
+import { addMoveEatPosition } from './MovimientosUtils.js';
 
 export class Rook extends Piece {
   constructor(player) {

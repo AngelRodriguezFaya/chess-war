@@ -4,6 +4,9 @@
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
 
+import { TypePiece } from '../logica/TiposUtils.js'
+import { PiezaBaseModelo } from './PiezaBaseModelo.js'
+
 
 
 
@@ -11,15 +14,15 @@ import * as CSG from '../../libs/three-bvh-csg.js'
 /*############################################################################*/
 // Clase Torre
 
-export class RookModel extends THREE.Object3D
+export class TorreModelo extends PiezaBaseModelo
 {
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material)
+  constructor(gui, titleGui, material, board_position, type_player)
   {
     // Llamamos al constructor padre
-    super();
+    super(board_position, TypePiece.ROOK, type_player);
 
     // Inicialización de los parámetros
     this.iniParam();

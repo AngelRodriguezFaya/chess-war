@@ -4,19 +4,25 @@
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
 
+import { TypePiece } from '../logica/TiposUtils.js'
+import { PiezaBaseModelo } from './PiezaBaseModelo.js'
+
+
+
+
 
 /*############################################################################*/
 // Clase Peon
 
-export class PawnModel extends THREE.Object3D
+export class PeonModelo extends PiezaBaseModelo
 {
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material)
+  constructor(gui, titleGui, material, board_position, type_player)
   {
     // Llamamos al constructor padre
-    super();
+    super(board_position, TypePiece.PAWN, type_player);
 
     // Inicialización de los parámetros
     this.iniParam();

@@ -1,7 +1,7 @@
-import { Piece } from './PieceLogic.js';
-import { TypePiece } from './TypeUtility.js';
-import { BoardPosition, Movement } from './Move.js';
-import { addMoveEatPosition } from './MoveUtility.js';
+import { Piece } from './PiezaLogica.js';
+import { TypePiece } from './TiposUtils.js';
+import { BoardPosition, Movement } from './Movimiento.js';
+import { addMoveEatPosition } from './MovimientosUtils.js';
 
 export class Knight extends Piece {
   constructor(player) {

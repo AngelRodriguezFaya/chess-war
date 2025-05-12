@@ -1,11 +1,11 @@
-import { TypePlayer, TypePiece } from './TypeUtility.js';
-import { Move, Movement, BoardPosition } from './Move.js';
-import { Rook } from './RookLogic.js';
-import { Knight } from './KnightLogic.js';
-import { Bishop } from './BishopLogic.js';
-import { Queen } from './QueenLogic.js';
-import { King } from './KingLogic.js';
-import { Pawn } from './PawnLogic.js';
+import { TypePlayer, TypePiece } from './TiposUtils.js';
+import { Move, Movement, BoardPosition } from './Movimiento.js';
+import { Rook } from './TorreLogica.js';
+import { Knight } from './CaballoLogica.js';
+import { Bishop } from './AlfilLogica.js';
+import { Queen } from './ReinaLogica.js';
+import { King } from './ReyLogica.js';
+import { Pawn } from './PeonLogica.js';
 
 export class Board {
   constructor() {
