@@ -11,5 +11,5 @@ export const TypePiece = Object.freeze({
   QUEEN: 'QUEEN',
   KING: 'KING',
   PAWN: 'PAWN',
-  BOARD: 'BOARD'
+  BOX: 'BOX'
 });

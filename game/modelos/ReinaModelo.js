@@ -66,11 +66,14 @@ export class ReinaModelo extends PiezaBaseModelo
       object.traverse((child) => {
         if (child.isMesh) {
           child.material = materialDama;
+          child.geometry.center();
         }
         });
 
         // Aqui se hacen todas las transformaciones necesarias para que el objeto se vea bien
-        this.rotation.x = -Math.PI / 2;
+        this.scale.set(0.7, 0.7, 0.7);
+        this.translateY(8);
+        this.rotateX(-Math.PI / 2);
 
         // Se añade el objeto a la escena
         this.add(object);

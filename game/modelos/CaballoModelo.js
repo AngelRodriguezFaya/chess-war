@@ -136,14 +136,14 @@ export class CaballoModelo extends PiezaBaseModelo
     // Hacemos las operaciones lógicas
     this.model = evaluator.evaluate(this.model, body_geometry_brush, CSG.ADDITION);
 
-    /*####################################*/
-    // Hair
-
-    // Geometría
-
+    // Escalado final
+    this.model.scale.set(4, 4, 4);
 
     /*####################################*/
     // Mesh
+
+    // UserData
+    this.model.userData = this;
 
     // Terminamos añadiendo el resultado final
     this.add(this.model);

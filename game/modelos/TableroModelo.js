@@ -4,6 +4,13 @@
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
 
+import { BoardPosition } from '../logica/Movimiento.js';
+import { TypePlayer } from '../logica/TiposUtils.js'
+import { CasillaModelo } from './CasillaModelo.js';
+
+
+
+
 
 /*############################################################################*/
 // Clase Tablero
@@ -25,7 +32,7 @@ export class TableroModelo extends THREE.Object3D
     this.createGUI(gui, titleGui);
 
     // Creación del objeto
-    this.createObject();
+    this.createObject(gui);
   }
 
   /*############################################################################*/
@@ -48,7 +55,7 @@ export class TableroModelo extends THREE.Object3D
   /*########################################################*/
   // Creación
   
-  createObject()
+  createObject(gui)
   {
     // CONSTANTES
     const ANCHO = 9;
@@ -60,9 +67,6 @@ export class TableroModelo extends THREE.Object3D
     var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
     var materialMarrones = new THREE.MeshStandardMaterial({ color: 0x562B05});
 
-    // Definimos la geometría de cada casilla (las casillas serán cajas)
-    var geometriaCasilla = new THREE.BoxGeometry(ANCHO, ALTO, LARGO);
-
     // La construcción de las 64 casillas que forman el tablero (8x8)
     for (let fila = 0; fila < 8; fila++){
         for (let col = 0; col < 8; col++){
@@ -70,7 +74,7 @@ export class TableroModelo extends THREE.Object3D
             let material = (fila + col) % 2 == 0 ? materialBeige : materialMarrones;
 
             // Se crea la casilla
-            var casilla = new THREE.Mesh(geometriaCasilla, material);
+            var casilla = new CasillaModelo(gui, `Casilla fila: ${fila} columna: ${col}`, material, ANCHO, ALTO, LARGO, new BoardPosition(fila, col), TypePlayer.UNKNOWN);
 
             // Se posiciona la casilla
             casilla.position.set(col * ANCHO, -(ALTO/2), fila * LARGO);

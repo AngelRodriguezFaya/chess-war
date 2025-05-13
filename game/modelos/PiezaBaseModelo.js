@@ -25,22 +25,4 @@ export class PiezaBaseModelo extends THREE.Object3D
     this.type_piece = type_piece;
     this.type_player = type_player;
   }
-
-  /*############################################################################*/
-  // Getters/Setters
-
-  getBoardPosition()
-  {
-    return this.board_position;
-  }
-
-  getTypePiece()
-  {
-    return this.type_piece;
-  }
-
-  getTypePlayer()
-  {
-    return this.type_player;
-  }
 }

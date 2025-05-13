@@ -119,6 +119,9 @@ export class AlfilModelo extends PiezaBaseModelo
     this.result1 = evaluator.evaluate(this.cuerpo, this.esfera, CSG.ADDITION);
     this.final = evaluator.evaluate(this.result1, this.caja, CSG.SUBTRACTION);
 
+    // Guardamos la userData
+    this.final.userData = this;
+
     this.add(this.final);
   }
 

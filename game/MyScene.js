@@ -12,16 +12,17 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 // Clases de mi proyecto
 
 // Lógica
-import { TypePlayer } from './logica/TiposUtils.js'
+import { TypePiece, TypePlayer } from './logica/TiposUtils.js'
 import { BoardPosition } from './logica/Movimiento.js'
 import { Board } from './logica/TableroLogica.js'
 
 // Modelos
+import { PiezaBaseModelo } from './modelos/PiezaBaseModelo.js'
 import { AlfilModelo } from './modelos/AlfilModelo.js'
 import { TorreModelo } from './modelos/TorreModelo.js'
 import { ReinaModelo } from './modelos/ReinaModelo.js'
 import { CaballoModelo } from './modelos/CaballoModelo.js'
-import { TableroModelo } from './modelos/TableroModelo.js'  
+import { TableroModelo } from './modelos/TableroModelo.js'
 import { PeonModelo } from './modelos/PeonModelo.js'
 import { ReyModelo } from './modelos/ReyModelo.js'
 
@@ -34,21 +35,32 @@ import { ReyModelo } from './modelos/ReyModelo.js'
 class MyScene extends THREE.Scene
 {
   /*############################################################################*/
+  // Estados de la aplicación
+
+  static SELECCIONANDO_PIEZA = 0;
+  static SELECCIONANDO_CASILLA = 1;
+
+
+
+
+
+  /*############################################################################*/
   // Constructor
   
   constructor(myCanvas)
   {
     // Llamamos al constructor padre
     super();
-
-    // Creamos el 'tablero' que lleva la lógica del juego
-    this.board = new Board();
     
     // Lo primero, crear el visualizador, pasándole el lienzo sobre el que realizar los renderizados
     this.renderer = this.createRenderer(myCanvas);
     
     // Se añade a la gui los controles para manipular los elementos de esta clase
     this.gui = this.createGUI();
+
+    // Inicializamos el picking
+    this.raycaster = new THREE.Raycaster();
+    this.mouse = new THREE.Vector2();
 
     // Tendremos una cámara con un control de movimiento con el ratón
     this.createCamera();
@@ -62,10 +74,18 @@ class MyScene extends THREE.Scene
     // Todas las unidades están en metros
     this.createAxis();
     
-    // Por último creamos las figuras y el tablero
+    // Creamos las figuras y el tablero
     this.createModels();
 
-    console.log(this.board.getPiece(new BoardPosition(0, 1)).moves(this.board, new BoardPosition(0, 1), false))
+    // Creamos el 'tablero' que lleva la lógica del juego
+    this.board = new Board();
+
+    // Manejo de las piezas seleccionadas
+    this.pieza_seleccionada = null;
+    this.jugador_actual = TypePlayer.WHITE;
+
+    // Inicializamos el estado actual de la aplicación
+    this.estado_aplicacion = MyScene.SELECCIONANDO_PIEZA;
   }
 
 
@@ -164,6 +184,114 @@ class MyScene extends THREE.Scene
 
 
   /*############################################################################*/
+  // Picking
+
+  /*########################################################*/
+  // Búsqueda del objeto clicado
+
+  findPickedObject(event, piece_types)
+  {
+    // Obtenemos la posición del click en coordenadas normalizadas
+    var rect = this.renderer.domElement.getBoundingClientRect();
+    this.mouse.x = 2*((event.clientX - rect.left) / rect.width) - 1;
+    this.mouse.y = 1 - 2*((event.clientY - rect.top) / rect.height);
+
+    // Se actualiza un rayo que parte de la cámara y que pasa por la
+    // posición donde se ha hecho el clic
+    this.raycaster.setFromCamera(this.mouse, this.camera);
+
+    // Buscamos los objetos que son intersectados por el rayo
+    var picked_objects = this.raycaster.intersectObjects(this.children, true);
+
+    // Buscamos el primer objeto cuyo tipo se encuentre en la lista de piezas
+    for (let i = 0; i < picked_objects.length; i++) {
+      var picked_obj = picked_objects[i].object.userData;
+
+      if (picked_obj instanceof PiezaBaseModelo) {
+        if (piece_types.includes(picked_obj.type_piece)) {
+          return picked_obj;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /*########################################################*/
+  // Callbacks
+
+  onMouseUp(event)
+  {
+    switch (this.estado_aplicacion) {
+      case (MyScene.SELECCIONANDO_PIEZA):
+        // Tratamos de seleccionar solo las fichas del juego
+        var picked_obj = this.findPickedObject(event, [TypePiece.ROOK, TypePiece.KNIGHT, TypePiece.BISHOP, TypePiece.QUEEN, TypePiece.KING, TypePiece.PAWN]);
+
+        // Comprobamos si hemos seleccionado algun objeto
+        if (picked_obj !== null) {
+          // Cambiamos de estado si la pieza seleccionada es del jugador actual
+          if (this.jugador_actual === picked_obj.type_player) {
+            // Guardamos una referencia a la pieza seleccionada
+            this.pieza_seleccionada = picked_obj;
+
+            // Cambiamos de estado
+            this.estado_aplicacion = MyScene.SELECCIONANDO_CASILLA;
+
+            console.log(`Pieza seleccionada: ${picked_obj.type_piece} ${picked_obj.type_player}`);
+            console.log(this.board.getPiece(picked_obj.board_position).moves(this.board, picked_obj.board_position, false));
+          }
+        }
+
+        break;
+      
+      case (MyScene.SELECCIONANDO_CASILLA):
+        // Tratamos de seleccionar solo las fichas del juego
+        var picked_obj = this.findPickedObject(event, [TypePiece.BOX]);
+
+        // Comprobamos si hemos seleccionado algun objeto
+        if (picked_obj !== null) {
+          // Compromabos si hemos seleccionado la misma casilla de la pieza. Si es así
+          // Volvemos a seleccionar una pieza del mismo jugador
+          if (this.pieza_seleccionada.board_position.equals(picked_obj.board_position)) {
+            // Deleccionamos la pieza y cambiamos de estado
+            this.pieza_seleccionada = null;
+            this.estado_aplicacion = MyScene.SELECCIONANDO_PIEZA;
+
+            console.log("Se ha seleccionado la misma casilla, seleccione otra pieza");
+          }
+          else {
+            // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
+            if (this.board.tryMove(this.pieza_seleccionada.board_position, picked_obj.board_position)) {
+              // Actualizamos la posición de la pieza y su modelo
+              this.pieza_seleccionada.board_position = picked_obj.board_position;
+              this.pieza_seleccionada.position.set(picked_obj.board_position.column() * 9, 0, picked_obj.board_position.row() * 9);
+
+              // Deleccionamos la pieza y cambiamos de estado
+              this.pieza_seleccionada = null;
+              this.estado_aplicacion = MyScene.SELECCIONANDO_PIEZA;
+
+              // Cambiamos de turno y de estado
+              if (this.jugador_actual === TypePlayer.WHITE) {
+                this.jugador_actual = TypePlayer.BLACK;
+              }
+              else {
+                this.jugador_actual = TypePlayer.WHITE;
+              }
+
+              console.log(`Turno: ${this.jugador_actual}`);
+            }
+          }
+        }
+
+        break;
+    }
+  }
+
+
+
+
+
+  /*############################################################################*/
   // Cámara
 
   /*########################################################*/
@@ -181,7 +309,7 @@ class MyScene extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camera.position.set(30, 60, 170);
+    this.camera.position.set(30, 100, 125);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
@@ -190,7 +318,7 @@ class MyScene extends THREE.Scene
     this.add(this.camera);
     
     // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    this.cameraControl = new TrackballControls (this.camera, this.renderer.domElement);
+    this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
 
     // Se configuran las velocidades de los movimientos
     this.cameraControl.rotateSpeed = 1.5;
@@ -267,6 +395,7 @@ class MyScene extends THREE.Scene
   {
     // Ejes para el modelo
     this.axis = new THREE.AxesHelper(50);
+    this.axis.translateY(0.1);
     this.add(this.axis);
   }
 
@@ -315,13 +444,11 @@ class MyScene extends THREE.Scene
     // Crear los caballos
     this.caballo1player1 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(0, 1), TypePlayer.BLACK);
     this.add(this.caballo1player1);
-    this.caballo1player1.scale.set(4, 4, 4);
     this.caballo1player1.rotateY(-Math.PI/2);
     this.caballo1player1.position.set(9, 0, 0);
 
     this.caballo2player1 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(0, 6), TypePlayer.BLACK);
     this.add(this.caballo2player1);
-    this.caballo2player1.scale.set(4, 4, 4);
     this.caballo2player1.rotateY(-Math.PI/2);
     this.caballo2player1.position.set(54, 0, 0);
 
@@ -337,8 +464,7 @@ class MyScene extends THREE.Scene
     // Crear la dama
     this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", materialAux, new BoardPosition(0, 3), TypePlayer.BLACK);
     this.add(this.damaplayer1);
-    this.damaplayer1.scale.set(0.7, 0.7, 0.7);
-    this.damaplayer1.position.set(29, 0, -1);
+    this.damaplayer1.position.set(27, 0, 0);
 
     // Crear el rey
     this.reyplayer1 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(0, 4), TypePlayer.BLACK);
@@ -397,14 +523,12 @@ class MyScene extends THREE.Scene
     // Crear los caballos
     this.caballo1player2 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(7, 1), TypePlayer.WHITE);
     this.add(this.caballo1player2);
-    this.caballo1player2.scale.set(4, 4, 4);
     this.caballo1player2.rotateY(-Math.PI/2);
     this.caballo1player2.rotateY(Math.PI);
     this.caballo1player2.position.set(9, 0, 63);
 
-    this.caballo2player2 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(7, 6, TypePlayer.WHITE));
+    this.caballo2player2 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(7, 6), TypePlayer.WHITE);
     this.add(this.caballo2player2);
-    this.caballo2player2.scale.set(4, 4, 4);
     this.caballo2player2.rotateY(-Math.PI/2);
     this.caballo2player2.rotateY(Math.PI);
     this.caballo2player2.position.set(54, 0, 63);
@@ -423,14 +547,13 @@ class MyScene extends THREE.Scene
     // Crear la dama
     this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", materialAux, new BoardPosition(7, 3), TypePlayer.WHITE);
     this.add(this.damaplayer1);
-    this.damaplayer1.scale.set(0.7, 0.7, 0.7);
     this.damaplayer1.rotateY(Math.PI);
-    this.damaplayer1.position.set(26, 0, 64); // Se modifica la posición para que no se solape con el rey
+    this.damaplayer1.position.set(27, 0, 63);
 
     // Crear el rey
     this.reyplayer2 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(7, 4), TypePlayer.WHITE);
     this.add(this.reyplayer2);
-    // this.reyplayer2.rotateY(Math.PI);
+    this.reyplayer2.rotateY(Math.PI);
     this.reyplayer2.position.set(36, 0, 63);
 
     // Crear los peones
@@ -523,8 +646,9 @@ $(
     // Se instancia la escena pasándole el div que se ha creado en el html para visualizar
     var scene = new MyScene("#WebGL-output");
 
-    // Se añaden los listener de la aplicación. En este caso, el que va a comprobar cuándo se modifica el tamaño de la ventana de la aplicación.
-    window.addEventListener ("resize", () => scene.onWindowResize());
+    // Se añaden los listener de la aplicación.
+    window.addEventListener("resize", () => scene.onWindowResize());
+    window.addEventListener("mouseup", (event) => scene.onMouseUp(event));
     
     // Que no se nos olvide, la primera visualización.
     scene.update();
