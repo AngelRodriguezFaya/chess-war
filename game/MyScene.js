@@ -262,6 +262,7 @@ class MyScene extends THREE.Scene
               // Comprobamos si hay que borrar una pieza
               if (move.existKill()) {
                 var kill_pos = move.currentKill();
+                console.log(move);
                 this.tablero.eliminaPieza(kill_pos.row(), kill_pos.column());
               }
 

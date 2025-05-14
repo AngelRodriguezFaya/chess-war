@@ -30,11 +30,11 @@ export class Pawn extends Piece {
 
       new_position.update(position.row() - 1, position.column() - 1);
       kill_position.update(position.row(), position.column() - 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position, kill, moves);
+      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
 
       new_position.update(position.row() - 1, position.column() + 1);
       kill_position.update(position.row(), position.column() + 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position, kill, moves);
+      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
     } else {
       new_position.update(position.row() + 1, position.column());
       addMovePosition(board, new Movement(position, new_position), kill, moves);
@@ -51,11 +51,11 @@ export class Pawn extends Piece {
 
       new_position.update(position.row() + 1, position.column() + 1);
       kill_position.update(position.row(), position.column() + 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position, kill, moves);
+      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
 
       new_position.update(position.row() + 1, position.column() - 1);
       kill_position.update(position.row(), position.column() - 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position, kill, moves);
+      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
     }
 
     return moves;
