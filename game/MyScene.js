@@ -13,18 +13,11 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 
 // Lógica
 import { TypePiece, TypePlayer } from './logica/TiposUtils.js'
-import { BoardPosition } from './logica/Movimiento.js'
 import { Board } from './logica/TableroLogica.js'
 
 // Modelos
 import { PiezaBaseModelo } from './modelos/PiezaBaseModelo.js'
-import { AlfilModelo } from './modelos/AlfilModelo.js'
-import { TorreModelo } from './modelos/TorreModelo.js'
-import { ReinaModelo } from './modelos/ReinaModelo.js'
-import { CaballoModelo } from './modelos/CaballoModelo.js'
 import { TableroModelo } from './modelos/TableroModelo.js'
-import { PeonModelo } from './modelos/PeonModelo.js'
-import { ReyModelo } from './modelos/ReyModelo.js'
 
 
 /*############################################################################*/
@@ -159,15 +152,15 @@ class MyScene extends THREE.Scene
     // En este caso la intensidad de la luz y si se muestran o no los ejes
     // En el contexto de una función this alude a la función
     this.guiControls = {
-      lightPower : 500.0,
-      ambientIntensity : 3,   
+      lightPower : 50000.0,
+      ambientIntensity : 0.0,   
     }
 
     // Se crea una sección para los controles de esta clase
     var folder = gui.addFolder ('Luz y Ejes');
     
     // Se le añade un control para la potencia de la luz puntual
-    folder.add (this.guiControls, 'lightPower', 0, 1000, 20)
+    folder.add (this.guiControls, 'lightPower', 0, 100000, 50)
       .name('Luz puntual : ')
       .onChange ((value) => this.setLightPower(value));
     
@@ -226,7 +219,7 @@ class MyScene extends THREE.Scene
       case (MyScene.SELECCIONANDO_PIEZA):
         // Tratamos de seleccionar solo las fichas del juego
         var picked_obj = this.findPickedObject(event, [TypePiece.ROOK, TypePiece.KNIGHT, TypePiece.BISHOP, TypePiece.QUEEN, TypePiece.KING, TypePiece.PAWN]);
-
+        
         // Comprobamos si hemos seleccionado algun objeto
         if (picked_obj !== null) {
           // Cambiamos de estado si la pieza seleccionada es del jugador actual
@@ -238,7 +231,6 @@ class MyScene extends THREE.Scene
             this.estado_aplicacion = MyScene.SELECCIONANDO_CASILLA;
 
             console.log(`Pieza seleccionada: ${picked_obj.type_piece} ${picked_obj.type_player}`);
-            console.log(this.board.getPiece(picked_obj.board_position).moves(this.board, picked_obj.board_position, false));
           }
         }
 
@@ -261,8 +253,22 @@ class MyScene extends THREE.Scene
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
-            if (this.board.tryMove(this.pieza_seleccionada.board_position, picked_obj.board_position)) {
+            var move = this.board.tryMove(this.pieza_seleccionada.board_position, picked_obj.board_position)
+
+            if (move !== null) {
+              // Ejecutamos el movimiento
+              this.board.doMove(move);
+
+              // Comprobamos si hay que borrar una pieza
+              if (move.existKill()) {
+                var kill_pos = move.currentKill();
+                console.log(this.tablero.getCasillaPieza(kill_pos.row(), kill_pos.column()));
+                this.tablero.eliminaPieza(kill_pos.row(), kill_pos.column());
+              }
+
               // Actualizamos la posición de la pieza y su modelo
+              this.tablero.muevePieza(this.pieza_seleccionada.board_position.row(), this.pieza_seleccionada.board_position.column(),
+                                      picked_obj.board_position.row(), picked_obj.board_position.column());
               this.pieza_seleccionada.board_position = picked_obj.board_position;
               this.pieza_seleccionada.position.set(picked_obj.board_position.column() * 9, 0, picked_obj.board_position.row() * 9);
 
@@ -309,16 +315,16 @@ class MyScene extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camera.position.set(30, 100, 125);
+    this.camera.position.set(33.75, 100, 100);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    var look = new THREE.Vector3(30, 10, 30); 
+    var look = new THREE.Vector3(33.75, 10, 33.75); 
     this.camera.lookAt(look);
     this.add(this.camera);
     
     // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
+    /*this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
 
     // Se configuran las velocidades de los movimientos
     this.cameraControl.rotateSpeed = 1.5;
@@ -326,7 +332,7 @@ class MyScene extends THREE.Scene
     this.cameraControl.panSpeed = 0.5;
 
     // Debe orbitar con respecto al punto de mira de la cámara
-    this.cameraControl.target = look;
+    this.cameraControl.target = look;*/
   }
 
   /*########################################################*/
@@ -367,7 +373,7 @@ class MyScene extends THREE.Scene
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
     this.pointLight = new THREE.PointLight(0xffffff);
     this.pointLight.power = this.guiControls.lightPower;
-    this.pointLight.position.set(20, 30, 10);
+    this.pointLight.position.set(30, 25, 30);
     this.add(this.pointLight);
   }
 
@@ -408,197 +414,12 @@ class MyScene extends THREE.Scene
 
   createModels()
   {
-    // Se crea el tablero
-    this.createBoard();
-
-    // Se crean las piezas del jugador 1
-    this.createModelsPlayer1();
-
-    // Se crean las piezas del jugador 2
-    this.createModelsPlayer2();
-  }
-
-  /*############################################################################*/
-  // Suelo de la escena
-
-  createBoard()
-  {
     this.tablero = new TableroModelo(this.gui, "Controles del tablero");
     this.add(this.tablero);
   }
 
-  createModelsPlayer1()
-  {
-    var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
-    var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
-    
-    // Crear las torres
-    this.torre1player1 = new TorreModelo(this.gui, "Controles de la torre", materialAux, new BoardPosition(0, 0), TypePlayer.BLACK);
-    this.add(this.torre1player1);
-    this.torre1player1.position.set(0, 0, 0);
 
-    this.torre2player1 = new TorreModelo(this.gui, "Controles de la torre", materialAux, new BoardPosition(0, 7), TypePlayer.BLACK);
-    this.add(this.torre2player1);
-    this.torre2player1.position.set(63, 0, 0);
-
-    // Crear los caballos
-    this.caballo1player1 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(0, 1), TypePlayer.BLACK);
-    this.add(this.caballo1player1);
-    this.caballo1player1.rotateY(-Math.PI/2);
-    this.caballo1player1.position.set(9, 0, 0);
-
-    this.caballo2player1 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(0, 6), TypePlayer.BLACK);
-    this.add(this.caballo2player1);
-    this.caballo2player1.rotateY(-Math.PI/2);
-    this.caballo2player1.position.set(54, 0, 0);
-
-    // Crear los alfiles
-    this.alfil1player1 = new AlfilModelo(this.gui, "Controles del alfil", materialAux, new BoardPosition(0, 2), TypePlayer.BLACK);
-    this.add(this.alfil1player1);
-    this.alfil1player1.position.set(18, 0, 0);
-
-    this.alfil2player1 = new AlfilModelo(this.gui, "Controles del alfil", materialAux, new BoardPosition(0, 5), TypePlayer.BLACK);
-    this.add(this.alfil2player1);
-    this.alfil2player1.position.set(45, 0, 0);
-
-    // Crear la dama
-    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", materialAux, new BoardPosition(0, 3), TypePlayer.BLACK);
-    this.add(this.damaplayer1);
-    this.damaplayer1.position.set(27, 0, 0);
-
-    // Crear el rey
-    this.reyplayer1 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(0, 4), TypePlayer.BLACK);
-    this.add(this.reyplayer1);
-    this.reyplayer1.position.set(36, 0, 0);
-
-    // Crear los peones
-    this.peon1player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 0), TypePlayer.BLACK);
-    this.add(this.peon1player1);
-    this.peon1player1.position.set(0, 0, 9);
-
-    this.peon2player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 1), TypePlayer.BLACK);
-    this.add(this.peon2player1);
-    this.peon2player1.position.set(9, 0, 9);
-
-    this.peon3player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 2), TypePlayer.BLACK);
-    this.add(this.peon3player1);
-    this.peon3player1.position.set(18, 0, 9);
-
-    this.peon4player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 3), TypePlayer.BLACK);
-    this.add(this.peon4player1);
-    this.peon4player1.position.set(27, 0, 9);
-    
-    this.peon5player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 4), TypePlayer.BLACK);
-    this.add(this.peon5player1);
-    this.peon5player1.position.set(36, 0, 9);
-    
-    this.peon6player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 5), TypePlayer.BLACK);
-    this.add(this.peon6player1);
-    this.peon6player1.position.set(45, 0, 9);
-    
-    this.peon7player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 6), TypePlayer.BLACK);
-    this.add(this.peon7player1);
-    this.peon7player1.position.set(54, 0, 9);
-    
-    this.peon8player1 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(1, 7), TypePlayer.BLACK);
-    this.add(this.peon8player1);
-    this.peon8player1.position.set(63, 0, 9);
-
-  }
-
-  createModelsPlayer2()
-  {
-    var materialBeige = new THREE.MeshStandardMaterial({ color: 0xF5F5DC});
-    var materialAux = new THREE.MeshNormalMaterial({ flatShading : true });
-    
-    // Crear las torres
-    this.torre1player2 = new TorreModelo(this.gui, "Controles de la torre", materialAux, new BoardPosition(7, 0), TypePlayer.WHITE);
-    this.add(this.torre1player2);
-    this.torre1player2.position.set(0, 0, 63);
-
-    this.torre2player2 = new TorreModelo(this.gui, "Controles de la torre", materialAux, new BoardPosition(7, 7), TypePlayer.WHITE);
-    this.add(this.torre2player2);
-    this.torre2player2.position.set(63, 0, 63);
-
-    // Crear los caballos
-    this.caballo1player2 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(7, 1), TypePlayer.WHITE);
-    this.add(this.caballo1player2);
-    this.caballo1player2.rotateY(-Math.PI/2);
-    this.caballo1player2.rotateY(Math.PI);
-    this.caballo1player2.position.set(9, 0, 63);
-
-    this.caballo2player2 = new CaballoModelo(this.gui, "Controles del caballo", materialAux, new BoardPosition(7, 6), TypePlayer.WHITE);
-    this.add(this.caballo2player2);
-    this.caballo2player2.rotateY(-Math.PI/2);
-    this.caballo2player2.rotateY(Math.PI);
-    this.caballo2player2.position.set(54, 0, 63);
-
-    // Crear los alfiles
-    this.alfil1player2 = new AlfilModelo(this.gui, "Controles del alfil", materialAux, new BoardPosition(7, 2), TypePlayer.WHITE);
-    this.add(this.alfil1player2);
-    this.alfil1player2.rotateY(Math.PI);
-    this.alfil1player2.position.set(18, 0, 63);
-
-    this.alfil2player2 = new AlfilModelo(this.gui, "Controles del alfil", materialAux, new BoardPosition(7, 5), TypePlayer.WHITE);
-    this.add(this.alfil2player2);
-    this.alfil2player2.rotateY(Math.PI);
-    this.alfil2player2.position.set(45, 0, 63);
-
-    // Crear la dama
-    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", materialAux, new BoardPosition(7, 3), TypePlayer.WHITE);
-    this.add(this.damaplayer1);
-    this.damaplayer1.rotateY(Math.PI);
-    this.damaplayer1.position.set(27, 0, 63);
-
-    // Crear el rey
-    this.reyplayer2 = new ReyModelo(this.gui, "Controles del rey", materialAux, new BoardPosition(7, 4), TypePlayer.WHITE);
-    this.add(this.reyplayer2);
-    this.reyplayer2.rotateY(Math.PI);
-    this.reyplayer2.position.set(36, 0, 63);
-
-    // Crear los peones
-    this.peon1player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 0), TypePlayer.WHITE);
-    this.add(this.peon1player2);
-    this.peon1player2.rotateY(Math.PI);
-    this.peon1player2.position.set(0, 0, 54);
-
-    this.peon2player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 1), TypePlayer.WHITE);
-    this.add(this.peon2player2);
-    this.peon2player2.rotateY(Math.PI);
-    this.peon2player2.position.set(9, 0, 54);
-
-    this.peon3player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 2), TypePlayer.WHITE);
-    this.add(this.peon3player2);
-    this.peon3player2.rotateY(Math.PI);
-    this.peon3player2.position.set(18, 0, 54);
-
-    this.peon4player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 3), TypePlayer.WHITE);
-    this.add(this.peon4player2);
-    this.peon4player2.rotateY(Math.PI);
-    this.peon4player2.position.set(27, 0, 54);
-
-    this.peon5player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 4), TypePlayer.WHITE);
-    this.add(this.peon5player2);
-    this.peon5player2.rotateY(Math.PI);
-    this.peon5player2.position.set(36, 0, 54);
-
-    this.peon6player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 5), TypePlayer.WHITE);
-    this.add(this.peon6player2);
-    this.peon6player2.rotateY(Math.PI);
-    this.peon6player2.position.set(45, 0, 54);
-
-    this.peon7player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 6), TypePlayer.WHITE);
-    this.add(this.peon7player2);
-    this.peon7player2.rotateY(Math.PI);
-    this.peon7player2.position.set(54, 0, 54);
-
-    this.peon8player2 = new PeonModelo(this.gui, "Controles del peón", materialAux, new BoardPosition(6, 7), TypePlayer.WHITE);
-    this.add(this.peon8player2);
-    this.peon8player2.rotateY(Math.PI);
-    this.peon8player2.position.set(63, 0, 54);
-
-  }
-
+  
 
 
   /*############################################################################*/
@@ -612,7 +433,7 @@ class MyScene extends THREE.Scene
     
     // Se actualizan los elementos de la escena para cada frame
     // Se actualiza la posición de la cámara según su controlador
-    this.cameraControl.update();
+    //this.cameraControl.update();
     
     // Se actualiza el resto del modelo
     // this.alfil.update();

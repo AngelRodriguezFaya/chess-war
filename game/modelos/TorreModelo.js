@@ -159,6 +159,7 @@ export class TorreModelo extends PiezaBaseModelo
     this.final = evaluator.evaluate(this.result7, this.caja3, CSG.SUBTRACTION); 
 
     //------------ Añadimos la torre (resultado final) a la escena -----------------
+    this.final.userData = this;
     this.add(this.final);
   }
 

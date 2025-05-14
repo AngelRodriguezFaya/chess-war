@@ -96,6 +96,8 @@ export class ReyModelo extends PiezaBaseModelo
       var pieDer = new THREE.Mesh(geomPieDer, material);
       
       // Añadimos los pies al rey
+      pieIzq.userData = this;
+      pieDer.userData = this;
       this.add(pieIzq);
       this.add(pieDer);
   
@@ -123,6 +125,8 @@ export class ReyModelo extends PiezaBaseModelo
       var espinillaDer = new THREE.Mesh(geomEspinillaDer, material);
   
       // Las añadimos al rey
+      espinillaIzq.userData = this;
+      espinillaDer.userData = this;
       this.add(espinillaIzq);
       this.add(espinillaDer);
         
@@ -146,8 +150,10 @@ export class ReyModelo extends PiezaBaseModelo
       var rodillaDer = new THREE.Mesh(geomRodillaDer, material);
   
       // Añadimos las rodillas al rey
+      rodillaIzq.userData = this;
+      rodillaDer.userData = this;
       this.add(rodillaIzq);
-      this.add(rodillaDer);  
+      this.add(rodillaDer);
   
 
 
@@ -171,6 +177,8 @@ export class ReyModelo extends PiezaBaseModelo
       var musloDer = new THREE.Mesh(geomMusloDer, material);
   
       // Añadimos los muslos al rey
+      musloIzq.userData = this;
+      musloDer.userData = this;
       this.add(musloIzq);
       this.add(musloDer);
       
@@ -205,6 +213,7 @@ export class ReyModelo extends PiezaBaseModelo
       var cadTron = new THREE.Mesh(geomCadTron, material);
   
       // Añadimos la cadera y el tronco al rey
+      cadTron.userData = this;
       this.add(cadTron);
   
 
@@ -231,6 +240,7 @@ export class ReyModelo extends PiezaBaseModelo
       var cuello = new THREE.Mesh(geomCuello, material);
   
       // Añadimos el cuello al rey
+      cuello.userData = this;
       this.add(cuello);
       
 
@@ -274,6 +284,8 @@ export class ReyModelo extends PiezaBaseModelo
       var ojoDer = new THREE.Mesh(ojoDerGeom, material);
 
       // Añadimos los ojos al rey
+      ojoIzq.userData = this;
+      ojoDer.userData = this;
       this.add(ojoIzq);
       this.add(ojoDer);
 
@@ -289,6 +301,7 @@ export class ReyModelo extends PiezaBaseModelo
       var nariz = new THREE.Mesh(narizGeom, material);
 
       // Añadimos la nariz al rey
+      nariz.userData = this;
       this.add(nariz);
 
       // Definimos la geometría de la boca
@@ -304,6 +317,7 @@ export class ReyModelo extends PiezaBaseModelo
       var cabezaFinal = evaluator.evaluate(this.cabeza, boca, CSG.SUBTRACTION);
 
       // Añadimos la boca al rey
+      cabezaFinal.userData = this;
       this.add(cabezaFinal);
 
       // -------------------------------- Corona ------------------------------------------
@@ -361,6 +375,7 @@ export class ReyModelo extends PiezaBaseModelo
       var coronaFinal = evaluator.evaluate(corona4, muescaCorona4, CSG.SUBTRACTION);
 
       // Añadimos la corona al rey
+      coronaFinal.userData = this;
       this.add(coronaFinal);
       coronaFinal.position.set(2, 0, 0);
 
@@ -387,6 +402,7 @@ export class ReyModelo extends PiezaBaseModelo
       var prtHombroDcho = new THREE.Mesh(prtHombroDchoGeom, material);
   
       // Añadimos la protección del hombro al rey
+      prtHombroDcho.userData = this;
       this.add(prtHombroDcho);
 
 
@@ -404,6 +420,7 @@ export class ReyModelo extends PiezaBaseModelo
       var brazoSupDcho = new THREE.Mesh(brazoSupGeom, material);
   
       // Añadimos la parte superior del brazo al rey
+      brazoSupDcho.userData = this;
       this.add(brazoSupDcho);
 
       // ------------------------------- Codo ------------------------------------------
@@ -418,6 +435,7 @@ export class ReyModelo extends PiezaBaseModelo
       var codoDcho = new THREE.Mesh(codoDchoGeom, material);
   
       // Añadimos el codo al rey
+      codoDcho.userData = this;
       this.add(codoDcho);
 
 
@@ -435,6 +453,7 @@ export class ReyModelo extends PiezaBaseModelo
       // Creamos la parte inferior del brazo
       var brazoDchoInf = new THREE.Mesh(brazoInfDchoGeom, material);
       // Añadimos la parte inferior del brazo al rey
+      brazoDchoInf.userData = this;
       this.add(brazoDchoInf);
 
       // ------------------------------- Mano Derecha --------------------------------
@@ -498,6 +517,7 @@ export class ReyModelo extends PiezaBaseModelo
   
       // Añado la mano Final al rey
       resultFinalManoDcha.position.set(-3.2, 1.2, -0.9);
+      resultFinalManoDcha.userData = this;
       this.add(resultFinalManoDcha);  
 
 
@@ -516,7 +536,7 @@ export class ReyModelo extends PiezaBaseModelo
         // Creamos el protector de la muñeca
         var prtMunecaDcha = new THREE.Mesh(prtMunecaDchaGeom, material);
         // Añadimos el protector de la muñeca al rey
-
+        prtMunecaDcha.userData = this;
         this.add(prtMunecaDcha);
         
       
@@ -537,6 +557,7 @@ export class ReyModelo extends PiezaBaseModelo
         var prtHombroIzq = new THREE.Mesh(prtHombroIzqGeom, material);
 
         // Añadimos la protección del hombro al rey
+        prtHombroIzq.userData = this;
         this.add(prtHombroIzq);
 
       // --------------------- Parte superior del brazo --------------------------------
@@ -553,6 +574,7 @@ export class ReyModelo extends PiezaBaseModelo
         var brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
 
         // Añadimos la parte superior del brazo al rey
+        brazoSupIzq.userData = this;
         this.add(brazoSupIzq);
 
       // ------------------------------- Codo ------------------------------------------
@@ -567,6 +589,7 @@ export class ReyModelo extends PiezaBaseModelo
         var codoIzq = new THREE.Mesh(codoIzqGeom, material);
 
         // Añadimos el codo al rey
+        codoIzq.userData = this;
         this.add(codoIzq);
 
       // --------------------- Parte inferior del brazo --------------------------------
@@ -583,6 +606,7 @@ export class ReyModelo extends PiezaBaseModelo
         var brazoIzqInf = new THREE.Mesh(brazoInfIzqGeom, material);
 
         // Añadimos la parte inferior del brazo al rey
+        brazoIzqInf.userData = this;
         this.add(brazoIzqInf);
 
       // ------------------------------- Mano Izquierda --------------------------------
@@ -637,6 +661,7 @@ export class ReyModelo extends PiezaBaseModelo
 
         // Añado la mano Final al rey
         resultFinalManoIzqda.position.set(3.9, 0.3, -0.9); // Cambiamos la posición de la mano
+        resultFinalManoIzqda.userData = this;
         this.add(resultFinalManoIzqda);
         
       // ------------------------------- Protector de la muñeca ------------------------
@@ -651,7 +676,7 @@ export class ReyModelo extends PiezaBaseModelo
         // Creamos el protector de la muñeca
         var prtMunecaIzqda = new THREE.Mesh(prtMunecaIzqdaGeom, material);
         // Añadimos el protector de la muñeca al rey
-
+        prtMunecaIzqda.userData = this;
         this.add(prtMunecaIzqda);
 
       
@@ -690,8 +715,11 @@ export class ReyModelo extends PiezaBaseModelo
       var hojaEspada = new THREE.Mesh(hojaEspadaGeom, material);
   
       // Añadimos la espada al rey
+      mastil1Espada.userData = this;
+      mastil1Espada.userData = this;
+      hojaEspada.userData = this;
       this.add(mastil1Espada);
-      this.add(mastil2Espada);
+      this.add(mastil1Espada);
       this.add(hojaEspada);
     
     }

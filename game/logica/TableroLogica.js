@@ -49,18 +49,18 @@ export class Board {
 
   tryMove(current_pos, new_pos) {
     const piece = this.getPiece(current_pos);
-    if (!piece) return false;
+    if (!piece) return null;
     const moves = piece.possibleMoves(this, current_pos);
     for (const move of moves) {
       if (
         move.currentMove().currentPos().equals(current_pos) &&
         move.currentMove().newPos().equals(new_pos)
       ) {
-        this.doMove(move);
-        return true;
+        //this.doMove(move);
+        return move;
       }
     }
-    return false;
+    return null;
   }
 
   doMove(move) {
@@ -74,18 +74,19 @@ export class Board {
 
     const pos = move.currentMove().newPos();
     const piece = this.getPiece(pos);
-    if (piece.type === TypePiece.PAWN) {
+
+    if (piece.type() === TypePiece.PAWN) {
       if (
-        (piece.player === TypePlayer.WHITE && pos.row === 0) ||
-        (piece.player === TypePlayer.BLACK && pos.row === 7)
+        (piece.player() === TypePlayer.WHITE && pos.row() === 0) ||
+        (piece.player() === TypePlayer.BLACK && pos.row() === 7)
       ) {
         this.deletePiece(pos);
         this.getPiece(pos, true);
-        this._board[pos.row()][pos.column()] = new Queen(piece.player);
+        this._board[pos.row()][pos.column()] = new Queen(piece.player());
       }
     }
 
-    if (piece.type === TypePiece.KING) {
+    if (piece.type() === TypePiece.KING) {
       if (piece.player === TypePlayer.WHITE) {
         this._white_king_pos = pos;
       } else {
@@ -137,7 +138,7 @@ export class Board {
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = this._board[r][c];
-        if (piece && piece.player !== player) {
+        if (piece && piece.player() !== player) {
           const moves = piece.killMoves(this, new BoardPosition(r, c));
           for (const move of moves) {
             if (move.currentKill().equals(king_pos)) {

@@ -9,7 +9,7 @@ export function addMove(board, move, kill, moves) {
   } else {
     let new_board = board.clone();
     new_board.doMove(move);
-
+    
     if (!new_board.isInCheck(new_board.getPiece(move.currentMove().newPos()).player())) {
       moves.push(move);
     }

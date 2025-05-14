@@ -90,6 +90,8 @@ export class PeonModelo extends PiezaBaseModelo
     var pieIzq = new THREE.Mesh(geomPieIzq, material);
     var pieDer = new THREE.Mesh(geomPieDer, material);
 
+    pieIzq.userData = this;
+    pieDer.userData = this;
     this.add(pieIzq);
     this.add(pieDer);
 
@@ -114,6 +116,8 @@ export class PeonModelo extends PiezaBaseModelo
     var piernaDer = new THREE.Mesh(geomPiernaDer, material);
 
     // Añadimos las piernas al peón
+    piernaIzq.userData = this;
+    piernaDer.userData = this;
     this.add(piernaIzq);
     this.add(piernaDer);
 
@@ -134,6 +138,8 @@ export class PeonModelo extends PiezaBaseModelo
     var rodillaDer = new THREE.Mesh(geomRodillaDer, material);
 
     // Añadimos las rodillas al peón
+    rodillaIzq.userData = this;
+    rodillaDer.userData = this;
     this.add(rodillaIzq);
     this.add(rodillaDer);
 
@@ -154,6 +160,8 @@ export class PeonModelo extends PiezaBaseModelo
     var musloDer = new THREE.Mesh(geomMusloDer, material);
 
     // Añadimos los muslos al peón
+    musloIzq.userData = this;
+    musloDer.userData = this;
     this.add(musloIzq);
     this.add(musloDer);
 
@@ -183,6 +191,7 @@ export class PeonModelo extends PiezaBaseModelo
     var cadTron = new THREE.Mesh(geomCadTron, material);
 
     // Añadimos la cadera y el tronco al peón
+    cadTron.userData = this;
     this.add(cadTron);
 
     // Cuello ------------------------------------------------------------
@@ -204,6 +213,7 @@ export class PeonModelo extends PiezaBaseModelo
     var cuello = new THREE.Mesh(geomCuello, material);
 
     // Añadimos el cuello
+    cuello.userData = this;
     this.add(cuello);
     
     // Cabeza ------------------------------------------------------------
@@ -243,6 +253,7 @@ export class PeonModelo extends PiezaBaseModelo
     this.resultado = evaluator.evaluate(this.cabeza, this.ojos, CSG.SUBTRACTION);
 
     // Añadimos el resultado (Cabeza + aperura para los ojos) al peón
+    this.resultado.userData = this;
     this.add(this.resultado);
 
     
@@ -274,6 +285,7 @@ export class PeonModelo extends PiezaBaseModelo
     var filoCasco = new THREE.Mesh(filoGeom, material);
 
     // Añadimos el filo del casco al peón
+    filoCasco.userData = this;
     this.add(filoCasco);
 
 
@@ -294,6 +306,7 @@ export class PeonModelo extends PiezaBaseModelo
 
     // Añadimos la defensa de la mandíbula al peón
     var defensa = evaluator.evaluate(mandibula, cajaAux, CSG.SUBTRACTION);
+    defensa.userData = this;
     this.add(defensa);
     defensa.position.set(0, 0.15, 2.6);
 
@@ -312,6 +325,8 @@ export class PeonModelo extends PiezaBaseModelo
     var cilindro2 = new THREE.Mesh(cilindro2, material);
 
     // Añadimos los cilindros al peón
+    cilindro1.userData = this;
+    cilindro2.userData = this;
     this.add(cilindro1);
     this.add(cilindro2);
 
@@ -330,6 +345,7 @@ export class PeonModelo extends PiezaBaseModelo
     var prtHombroDcho = new THREE.Mesh(prtHombroDchoGeom, material);
 
     // Añadimos la protección del hombro al peón
+    prtHombroDcho.userData = this;
     this.add(prtHombroDcho);
 
     // Definimos la geometría de la parte superior del brazo
@@ -343,6 +359,7 @@ export class PeonModelo extends PiezaBaseModelo
     var brazoSupDcho = new THREE.Mesh(brazoSupGeom, material);
 
     // Añadimos la parte superior del brazo al peón
+    brazoSupDcho.userData = this;
     this.add(brazoSupDcho);
 
     // Definimos la geometría del codo
@@ -355,6 +372,7 @@ export class PeonModelo extends PiezaBaseModelo
     var codoDcho = new THREE.Mesh(codoDchoGeom, material);
 
     // Añadimos el codo al peón
+    codoDcho.userData = this;
     this.add(codoDcho);
 
     // Definimos la geometría de la parte inferior del brazo
@@ -365,6 +383,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos la parte inferior del brazo
     var brazoInf = new THREE.Mesh(brazoInfDchoGeom, material);
     // Añadimos la parte inferior del brazo al peón
+    brazoInf.userData = this;
     this.add(brazoInf);
 
     // Definimos la geometría de la mano derecha
@@ -426,6 +445,7 @@ export class PeonModelo extends PiezaBaseModelo
     var resultFinalManoDcha = evaluator.evaluate(result6ManoDcha, hueco2ManoDcha, CSG.SUBTRACTION);
 
     // Añado la mano Final al peón
+    resultFinalManoDcha.userData = this;
     this.add(resultFinalManoDcha);   
 
     // Definimos la geometría para el protector de la muneca
@@ -436,6 +456,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos el protector de la muñeca
     var prtMunecaDcha = new THREE.Mesh(prtMunecaDchaGeom, material);
     // Añadimos el protector de la muñeca al peón
+    prtMunecaDcha.userData = this;
     this.add(prtMunecaDcha);
     
 
@@ -448,6 +469,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos la protección del hombro
     var prtHombroIzq = new THREE.Mesh(prtHombroIzqGeom, material);
     // Añadimos la protección del hombro al peón
+    prtHombroIzq.userData = this;
     this.add(prtHombroIzq);
 
     // Definimos la geometría de la parte superior del brazo
@@ -459,6 +481,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos la parte superior del brazo
     var brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
     // Añadimos la parte superior del brazo al peón
+    brazoSupIzq.userData = this;
     this.add(brazoSupIzq);
     // Definimos la geometría del codo
     var codoIzqGeom = new THREE.SphereGeometry(0.42, RES, RES);
@@ -468,6 +491,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos el codo
     var codoIzq = new THREE.Mesh(codoIzqGeom, material);
     // Añadimos el codo al peón
+    codoIzq.userData = this;
     this.add(codoIzq);
     // Definimos la geometría de la parte inferior del brazo
     var brazoInfIzqGeom = new THREE.CylinderGeometry(0.4, 0.2, 2.5, RES);
@@ -477,6 +501,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos la parte inferior del brazo
     var brazoInfIzq = new THREE.Mesh(brazoInfIzqGeom, material);
     // Añadimos la parte inferior del brazo al peón
+    brazoInfIzq.userData = this;
     this.add(brazoInfIzq);
 
     
@@ -523,6 +548,7 @@ export class PeonModelo extends PiezaBaseModelo
     var result6ManoIzq = evaluator.evaluate(result5ManoIzq, huecoManoIzq, CSG.SUBTRACTION);
     var resultFinalManoIzq = evaluator.evaluate(result6ManoIzq, hueco2ManoIzq, CSG.SUBTRACTION);
     // Añado la mano Final al peón
+    resultFinalManoIzq.userData = this;
     this.add(resultFinalManoIzq);
 
     // Definimos la geometría para el protector de la muneca
@@ -533,6 +559,7 @@ export class PeonModelo extends PiezaBaseModelo
     // Creamos el protector de la muñeca
     var prtMunecaIzq = new THREE.Mesh(prtMunecaIzqGeom, material);
     // Añadimos el protector de la muñeca al peón
+    prtMunecaIzq.userData = this;
     this.add(prtMunecaIzq);
 
 
@@ -553,6 +580,7 @@ export class PeonModelo extends PiezaBaseModelo
     var asaFinalEscudo = evaluator.evaluate(asaEscudo, cajaAux, CSG.SUBTRACTION);
 
     // Añadimos el resultado al peón
+    asaFinalEscudo.userData = this;
     this.add(asaFinalEscudo);
 
 
@@ -582,6 +610,7 @@ export class PeonModelo extends PiezaBaseModelo
     var escudo = new THREE.Mesh(geomEscudo, material);
 
     // Añadimos el escudo al peón
+    escudo.userData = this;
     this.add(escudo);
 
 
@@ -616,6 +645,9 @@ export class PeonModelo extends PiezaBaseModelo
     var hojaEspada = new THREE.Mesh(hojaEspadaGeom, material);
 
     // Añadimos la espada al peón
+    mastil1Espada.userData = this;
+    mastil2Espada.userData = this;
+    hojaEspada.userData = this;
     this.add(mastil1Espada);
     this.add(mastil2Espada);
     this.add(hojaEspada);
