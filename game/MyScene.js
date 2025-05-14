@@ -262,7 +262,6 @@ class MyScene extends THREE.Scene
               // Comprobamos si hay que borrar una pieza
               if (move.existKill()) {
                 var kill_pos = move.currentKill();
-                console.log(this.tablero.getCasillaPieza(kill_pos.row(), kill_pos.column()));
                 this.tablero.eliminaPieza(kill_pos.row(), kill_pos.column());
               }
 
@@ -271,6 +270,17 @@ class MyScene extends THREE.Scene
                                       picked_obj.board_position.row(), picked_obj.board_position.column());
               this.pieza_seleccionada.board_position = picked_obj.board_position;
               this.pieza_seleccionada.position.set(picked_obj.board_position.column() * 9, 0, picked_obj.board_position.row() * 9);
+
+              if (move.existMoveExtra()) {
+                var current_extra_pos = move.currentMoveExtra().currentPos();
+                var new_extra_pos = move.currentMoveExtra().newPos();
+                var extra_pieza = this.tablero.getCasillaPieza(current_extra_pos.row(), current_extra_pos.column()).pieza;
+
+                this.tablero.muevePieza(current_extra_pos.row(), current_extra_pos.column(),
+                                        new_extra_pos.row(), new_extra_pos.column());
+                extra_pieza.board_position = new_extra_pos;
+                extra_pieza.position.set(new_extra_pos.column() * 9, 0, new_extra_pos.row() * 9);
+              }
 
               // Deleccionamos la pieza y cambiamos de estado
               this.pieza_seleccionada = null;
