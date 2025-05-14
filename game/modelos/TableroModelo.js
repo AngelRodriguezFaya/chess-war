@@ -143,12 +143,14 @@ export class TableroModelo extends THREE.Object3D
     var alfil1player1_pos = new BoardPosition(0, 2);
     this.alfil1player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil1player1_pos, TypePlayer.BLACK);
     this.add(this.alfil1player1);
+    this.alfil1player1.rotateY(Math.PI);
     this.alfil1player1.position.set(18, 0, 0);
     this.tablero[alfil1player1_pos.row()][alfil1player1_pos.column()].pieza = this.alfil1player1;
 
     var alfil2player1_pos = new BoardPosition(0, 5);
     this.alfil2player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil2player1_pos, TypePlayer.BLACK);
     this.add(this.alfil2player1);
+    this.alfil2player1.rotateY(Math.PI);
     this.alfil2player1.position.set(45, 0, 0);
     this.tablero[alfil2player1_pos.row()][alfil2player1_pos.column()].pieza = this.alfil2player1;
 
@@ -253,14 +255,12 @@ export class TableroModelo extends THREE.Object3D
     var alfil1player2_pos = new BoardPosition(7, 2);
     this.alfil1player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil1player2_pos, TypePlayer.WHITE);
     this.add(this.alfil1player2);
-    this.alfil1player2.rotateY(Math.PI);
     this.alfil1player2.position.set(18, 0, 63);
     this.tablero[alfil1player2_pos.row()][alfil1player2_pos.column()].pieza = this.alfil1player2;
 
     var alfil2player2_pos = new BoardPosition(7, 5);
     this.alfil2player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil2player2_pos, TypePlayer.WHITE);
     this.add(this.alfil2player2);
-    this.alfil2player2.rotateY(Math.PI);
     this.alfil2player2.position.set(45, 0, 63);
     this.tablero[alfil2player2_pos.row()][alfil2player2_pos.column()].pieza = this.alfil2player2;
 
