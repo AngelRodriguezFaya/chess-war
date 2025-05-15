@@ -30,12 +30,26 @@ export class TableroModelo extends THREE.Object3D
     // Llamamos al constructor padre
     super();
 
+    // Definimos los materiales
+    this.definirMateriales();
+
     // Creación del modelo
     this.crearModelo();
   }
 
   /*############################################################################*/
   // Creación del modelo
+
+  definirMateriales()
+  {
+    this.material_casilla_blanca = new THREE.MeshStandardMaterial({ color: 0xF5F5DC });
+    this.material_casilla_negra = new THREE.MeshStandardMaterial({ color: 0x562B05 });
+    this.material_casilla_verde = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    this.material_casilla_seleccionada = new THREE.MeshStandardMaterial({ color: 0x009900 });
+    this.material_casilla_rojo = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+    this.material_piezas_negras = new THREE.MeshStandardMaterial({ color: 0x341C02 });
+    this.material_piezas_blancas = new THREE.MeshStandardMaterial({ color: 0xD3B683 });
+  }
   
   crearModelo()
   {
@@ -47,15 +61,11 @@ export class TableroModelo extends THREE.Object3D
     var alto = 2;
     var largo = 9;
 
-    // Creamos los materiales
-    var material_casilla_blanca = new THREE.MeshStandardMaterial({ color: 0xF5F5DC });
-    var material_casilla_negra = new THREE.MeshStandardMaterial({ color: 0x562B05 });
-
     // La construcción de las 64 casillas que forman el tablero (8x8)
-    for (let fila = 0; fila < 8; fila++){
-      for (let col = 0; col < 8; col++){
+    for (let fila = 0; fila < 8; fila++) {
+      for (let col = 0; col < 8; col++) {
         // Alternamos el material de las casillas
-        let material = (fila + col) % 2 == 0 ? material_casilla_blanca : material_casilla_negra;
+        var material = (fila + col) % 2 == 0 ? this.material_casilla_blanca : this.material_casilla_negra;
 
         // Se crea la casilla
         var casilla = new CasillaModelo(material, ancho, alto, largo, new Posicion(fila, col), TipoJugador.DESCONOCIDO);
@@ -71,82 +81,78 @@ export class TableroModelo extends THREE.Object3D
       }
     }
 
-    // Materiales
-    var material_piezas_negras = new THREE.MeshStandardMaterial({ color: 0x341C02 });
-    var material_piezas_blancas = new THREE.MeshStandardMaterial({ color: 0xD3B683 });
-
     // Crear las torres negras
-    this.torre_negra_1 = new TorreModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.torre_negra_2 = new TorreModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.torre_negra_1 = new TorreModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.torre_negra_2 = new TorreModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
 
     // Crear los caballos negros
-    this.caballo_negro_1 = new CaballoModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.caballo_negro_1 = new CaballoModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
     this.caballo_negro_1.rotateY(-Math.PI/2);
-    this.caballo_negro_2 = new CaballoModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.caballo_negro_2 = new CaballoModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
     this.caballo_negro_2.rotateY(-Math.PI/2);
 
     // Crear los alfiles negros
-    this.alfil_negro_1 = new AlfilModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.alfil_negro_1 = new AlfilModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
     this.alfil_negro_1.rotateY(Math.PI);
-    this.alfil_negro_2 = new AlfilModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.alfil_negro_2 = new AlfilModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
     this.alfil_negro_2.rotateY(Math.PI);
 
     // Crear la reina negra
-    this.reina_negra = new ReinaModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.reina_negra = new ReinaModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
 
     // Crear el rey negro
-    this.rey_negro = new ReyModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.rey_negro = new ReyModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
 
     // Crear los peones
-    this.peon_negro_1 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_2 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_3 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_4 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_5 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_6 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_7 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_8 = new PeonModelo(material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_1 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_2 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_3 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_4 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_5 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_6 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_7 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    this.peon_negro_8 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
 
     // Crear las torres blancas
-    this.torre_blanca_1 = new TorreModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.torre_blanca_2 = new TorreModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.torre_blanca_1 = new TorreModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.torre_blanca_2 = new TorreModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
 
     // Crear los caballos blancos
-    this.caballo_blanco_1 = new CaballoModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.caballo_blanco_1 = new CaballoModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.caballo_blanco_1.rotateY(-Math.PI/2);
     this.caballo_blanco_1.rotateY(Math.PI);
-    this.caballo_blanco_2 = new CaballoModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.caballo_blanco_2 = new CaballoModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.caballo_blanco_2.rotateY(-Math.PI/2);
     this.caballo_blanco_2.rotateY(Math.PI);
 
     // Crear los alfiles blancos
-    this.alfil_blanco_1 = new AlfilModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.alfil_blanco_2 = new AlfilModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.alfil_blanco_1 = new AlfilModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.alfil_blanco_2 = new AlfilModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
 
     // Crear la reina blanca
-    this.reina_blanca = new ReinaModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.reina_blanca = new ReinaModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.reina_blanca.rotateY(Math.PI);
 
     // Crear el rey
-    this.rey_blanco = new ReyModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.rey_blanco = new ReyModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.rey_blanco.rotateY(Math.PI);
 
     // Crear los peones
-    this.peon_blanco_1 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_1 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_1.rotateY(Math.PI);
-    this.peon_blanco_2 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_2 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_2.rotateY(Math.PI);
-    this.peon_blanco_3 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_3 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_3.rotateY(Math.PI);
-    this.peon_blanco_4 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_4 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_4.rotateY(Math.PI);
-    this.peon_blanco_5 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_5 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_5.rotateY(Math.PI);
-    this.peon_blanco_6 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_6 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_6.rotateY(Math.PI);
-    this.peon_blanco_7 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_7 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_7.rotateY(Math.PI);
-    this.peon_blanco_8 = new PeonModelo(material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.peon_blanco_8 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
     this.peon_blanco_8.rotateY(Math.PI);
 
     // Posicionamos las piezas
@@ -239,6 +245,58 @@ export class TableroModelo extends THREE.Object3D
   {
     this.tablero[fila2][columna2].pieza = this.tablero[fila1][columna1].pieza;
     this.tablero[fila1][columna1].pieza = null;
+  }
+
+  /*############################################################################*/
+  // Actualización de materiales
+
+  actualizaMaterialCasilla(fila, columna, material)
+  {
+    var casilla = this.tablero[fila][columna].casilla;
+
+    casilla.traverse((obj) => {
+      obj.material = material;
+    });
+  }
+
+  reseteaColorCasillas()
+  {
+    for (let fila = 0; fila < 8; fila++) {
+      for (let col = 0; col < 8; col++) {
+        var material = (fila + col) % 2 == 0 ? this.material_casilla_blanca : this.material_casilla_negra;
+
+        this.actualizaMaterialCasilla(fila, col, material);
+      }
+    }
+  }
+
+  actualizaColorCasillas(jugadas)
+  {
+    this.reseteaColorCasillas();
+
+    for (let i = 0; i < jugadas.length; i++) {
+      var posicion_actual = jugadas[i].getMovimiento().getPosicionActual();
+      var posicion_siguiente = jugadas[i].getMovimiento().getPosicionSiguiente();
+
+      this.actualizaMaterialCasilla(posicion_actual.getFila(), posicion_actual.getColumna(), this.material_casilla_seleccionada);
+      this.actualizaMaterialCasilla(posicion_siguiente.getFila(), posicion_siguiente.getColumna(), this.material_casilla_verde);
+      
+      // Hay un movimiento extra
+      if (jugadas[i].getDisponibleExtra()) {
+        var posicion_actual_extra = jugadas[i].getMovimientoExtra().getPosicionActual();
+        var posicion_siguiente_extra = jugadas[i].getMovimientoExtra().getPosicionSiguiente();
+
+        this.actualizaMaterialCasilla(posicion_actual_extra.getFila(), posicion_actual_extra.getColumna(), this.material_casilla_seleccionada);
+        this.actualizaMaterialCasilla(posicion_siguiente_extra.getFila(), posicion_siguiente_extra.getColumna(), this.material_casilla_verde);
+      }
+
+      // Hay un movimiento para comer
+      if (jugadas[i].getDisponibleCome()) {
+        var posicion_come = jugadas[i].getPosicionCome();
+
+        this.actualizaMaterialCasilla(posicion_come.getFila(), posicion_come.getColumna(), this.material_casilla_rojo);
+      }
+    }
   }
 
   /*############################################################################*/

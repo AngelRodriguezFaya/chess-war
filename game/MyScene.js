@@ -154,7 +154,7 @@ class MyScene extends THREE.Scene
   /*############################################################################*/
   // Picking
 
-  findPickedObject(event, piece_types)
+  findPickedObject(event, piece_types, tipo_jugador)
   {
     // Obtenemos la posición del click en coordenadas normalizadas
     var rect = this.renderer.domElement.getBoundingClientRect();
@@ -174,7 +174,9 @@ class MyScene extends THREE.Scene
 
       if (picked_obj instanceof PiezaBaseModelo) {
         if (piece_types.includes(picked_obj._tipo_pieza)) {
-          return picked_obj;
+          if (picked_obj.getTipoJugador() === tipo_jugador) {
+            return picked_obj;
+          }
         }
       }
     }
@@ -187,27 +189,24 @@ class MyScene extends THREE.Scene
     switch (this.estado_aplicacion) {
       case (MyScene.SELECCIONANDO_PIEZA):
         // Tratamos de seleccionar solo las fichas del juego
-        var picked_obj = this.findPickedObject(event, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON]);
+        var picked_obj = this.findPickedObject(event, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON], this.jugador_actual);
         
         // Comprobamos si hemos seleccionado algun objeto
-        if (picked_obj !== null) {
-          // Cambiamos de estado si la pieza seleccionada es del jugador actual
-          if (this.jugador_actual === picked_obj.getTipoJugador()) {
-            // Guardamos una referencia a la pieza seleccionada
-            this.pieza_seleccionada = picked_obj;
+        if (this.jugador_actual === picked_obj.getTipoJugador()) {
+          // Guardamos una referencia a la pieza seleccionada
+          this.pieza_seleccionada = picked_obj;
 
-            // Cambiamos de estado
-            this.estado_aplicacion = MyScene.SELECCIONANDO_CASILLA;
+          // Cambiamos de estado
+          this.estado_aplicacion = MyScene.SELECCIONANDO_CASILLA;
 
-            console.log(`Pieza seleccionada: ${picked_obj.getTipoPieza()} ${picked_obj.getTipoJugador()}}`);
-          }
+          console.log(`Pieza seleccionada: ${picked_obj.getTipoPieza()} ${picked_obj.getTipoJugador()}}`);
         }
 
         break;
       
       case (MyScene.SELECCIONANDO_CASILLA):
         // Tratamos de seleccionar solo las fichas del juego
-        var picked_obj = this.findPickedObject(event, [TipoPieza.CASILLA]);
+        var picked_obj = this.findPickedObject(event, [TipoPieza.CASILLA], TipoJugador.DESCONOCIDO);
 
         // Comprobamos si hemos seleccionado algun objeto
         if (picked_obj !== null) {
@@ -228,18 +227,13 @@ class MyScene extends THREE.Scene
               // Ejecutamos el movimiento
               this.tablero_logica.aplicarJugada(jugada);
 
-              // Comprobamos si hay que borrar una pieza
+              // Si en la jugada se mata a alguna pieza la borramos
               if (jugada.getDisponibleCome()) {
                 var kill_pos = jugada.getPosicionCome();
                 this.tablero.eliminaPieza(kill_pos.getFila(), kill_pos.getColumna());
               }
 
-              // Actualizamos la posición de la pieza y su modelo
-              this.tablero.muevePieza(this.pieza_seleccionada.getPosicionTablero().getFila(), this.pieza_seleccionada.getPosicionTablero().getColumna(),
-                                      picked_obj.getPosicionTablero().getFila(), picked_obj.getPosicionTablero().getColumna());
-              this.pieza_seleccionada.setPosicionTablero(picked_obj.getPosicionTablero());
-              this.pieza_seleccionada.position.set(picked_obj.getPosicionTablero().getColumna() * 9, 0, picked_obj.getPosicionTablero().getFila() * 9);
-
+              // Si hay un movimiento extra (el realizado por el enroque) movemos dicha pieza
               if (jugada.getDisponibleExtra()) {
                 var current_extra_pos = jugada.getMovimientoExtra().getPosicionActual();
                 var new_extra_pos = jugada.getMovimientoExtra().getPosicionSiguiente();
@@ -250,6 +244,20 @@ class MyScene extends THREE.Scene
                 extra_pieza.board_position = new_extra_pos;
                 extra_pieza.position.set(new_extra_pos.getColumna() * 9, 0, new_extra_pos.getFila() * 9);
               }
+
+              // Movemos la pieza
+              this.tablero.muevePieza(this.pieza_seleccionada.getPosicionTablero().getFila(), this.pieza_seleccionada.getPosicionTablero().getColumna(),
+                                      picked_obj.getPosicionTablero().getFila(), picked_obj.getPosicionTablero().getColumna());
+              this.pieza_seleccionada.setPosicionTablero(picked_obj.getPosicionTablero());
+              this.pieza_seleccionada.position.set(picked_obj.getPosicionTablero().getColumna() * 9, 0, picked_obj.getPosicionTablero().getFila() * 9);
+
+              // Obtenemos la posicion y pieza de la nueva posición para comprobar
+              // si un peon se convierte en reina (solucion temporal) y actualizar
+              // la posición del rey
+              //                 IMPLEMENTAR
+
+              // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
+              this.tablero.reseteaColorCasillas();
 
               // Deseleccionamos la pieza y cambiamos de estado
               this.pieza_seleccionada = null;
@@ -266,6 +274,33 @@ class MyScene extends THREE.Scene
               console.log(`Turno: ${this.jugador_actual}`);
             }
           }
+        }
+
+        break;
+    }
+  }
+
+  onMouseMove(event)
+  {
+    switch (this.estado_aplicacion) {
+      case (MyScene.SELECCIONANDO_PIEZA):
+        // Tratamos de seleccionar solo las fichas del juego
+        var picked_obj = this.findPickedObject(event, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON], this.jugador_actual);
+
+        // Comprobamos si hemos seleccionado algun objeto
+        if (picked_obj !== null) {
+          // Obtenemos la posición en el tablero
+          var posicion_tablero = picked_obj.getPosicionTablero();
+
+          // Obtenemos las jugadas disponibles de la pieza
+          var jugadas_posibles = this.tablero_logica.getPieza(posicion_tablero).getJugadas(this.tablero_logica, posicion_tablero);
+
+          // Actualizamos los colores de las casillas
+          this.tablero.actualizaColorCasillas(jugadas_posibles);
+        }
+        else {
+          // Reseteamos el color del tablero que el raton no esta encima de ninguma pieza
+          this.tablero.reseteaColorCasillas();
         }
 
         break;
@@ -411,6 +446,7 @@ $(
     // Se añaden los listener de la aplicación.
     window.addEventListener("resize", () => scene.onWindowResize());
     window.addEventListener("mouseup", (event) => scene.onMouseUp(event));
+    window.addEventListener("mousemove", (event) => scene.onMouseMove(event));
     
     // Que no se nos olvide, la primera visualización.
     scene.update();
