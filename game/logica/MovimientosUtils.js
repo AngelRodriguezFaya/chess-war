@@ -1,129 +1,157 @@
-import { Move } from './Movimiento.js';
-import { TypePiece } from './TiposUtils.js';
+import { Jugada } from './Jugada.js';
+import { TipoPieza } from './TiposUtils.js';
 
-export function addMove(board, move, kill, moves) {
-  if (kill) {
-    if (move.existKill()) {
-      moves.push(move);
+export function anadeJugada(tablero, jugada, come, lista_jugadas)
+{
+  if (come) {
+    // Si la jugada se mata a alguna pieza
+    if (jugada.getDisponibleCome()) {
+      lista_jugadas.push(jugada);
     }
   } else {
-    let new_board = board.clone();
-    new_board.doMove(move);
+    var tablero_tmp = tablero.clone();
+    tablero_tmp.aplicarJugada(jugada);
     
-    if (!new_board.isInCheck(new_board.getPiece(move.currentMove().newPos()).player())) {
-      moves.push(move);
+    // Si la jugada no provoca un autojaque la guardamos
+    if (!tablero_tmp.estaEnJaque(tablero_tmp.getPieza(jugada.getMovimiento().getPosicionSiguiente()).getTipoJugador())) {
+      lista_jugadas.push(jugada);
     }
   }
 }
 
-export function addMovePosition(board, move, kill, moves) {
-  if (!board.isPiece(move.currentPos()) || !board.isNull(move.newPos())) {
+export function anadeMovimientoPosicion(tablero, movimiento, come, lista_jugadas)
+{
+  // La pieza debe estar en la posición actual y la posición siguiente vacia
+  if (!tablero.esPosicionPieza(movimiento.getPosicionActual()) || !tablero.esPosicionNula(movimiento.getPosicionSiguiente())) {
     return;
   }
-
-  let new_move = new Move(move);
-  addMove(board, new_move, kill, moves);
-}
-
-export function addEatPosition(board, move, kill, moves) {
-  if (!board.isPiece(move.currentPos()) || !board.isPiece(move.newPos())) {
-    return;
-  }
-
-  if (board.getPiece(move.currentPos()).player() === board.getPiece(move.newPos()).player()) {
-    return;
-  }
-
-  let new_move = new Move(move);
-  new_move.addToKill(move.newPos());
   
-  addMove(board, new_move, kill, moves);
+  // Creamos y añadimos la jugada
+  var jugada = new Jugada(movimiento);
+
+  anadeJugada(tablero, jugada, come, lista_jugadas);
 }
 
-export function addMoveEatPosition(board, move, kill, moves) {
-  addMovePosition(board, move, kill, moves);
-  addEatPosition(board, move, kill, moves);
+export function anadeMovimientoCome(tablero, movimiento, come, lista_jugadas)
+{
+  // La posición actual y la siguiente deben estar ocupadas
+  if (!tablero.esPosicionPieza(movimiento.getPosicionActual()) || !tablero.esPosicionPieza(movimiento.getPosicionSiguiente())) {
+    return;
+  }
+
+  // Los tipos de jugador de ambas piezas debe ser diferentes
+  if (tablero.getPieza(movimiento.getPosicionActual()).getTipoJugador() === tablero.getPieza(movimiento.getPosicionSiguiente()).getTipoJugador()) {
+    return;
+  }
+
+  // Creamos y añadimos la jugada
+  var jugada = new Jugada(movimiento);
+  jugada.setPosicionCome(movimiento.getPosicionSiguiente());
+
+  anadeJugada(tablero, jugada, come, lista_jugadas);
 }
 
-export function addFirstMovePosition(board, move, empty_pos, kill, moves) {
-  if (!board.isPiece(move.currentPos()) || !board.isNull(move.newPos()) || !board.isNull(empty_pos)) {
-    return;
-  }
 
-  if (board.getPiece(move.currentPos()).numMoves() !== 0) {
-    return;
-  }
 
-  let new_move = new Move(move);
-  addMove(board, new_move, kill, moves);
+export function anadeMovimientoPosicionCome(tablero, movimiento, come, lista_jugadas)
+{
+  // Se crean las jugadas dependiendo de si se pide que 'coman'
+  anadeMovimientoPosicion(tablero, movimiento, come, lista_jugadas);
+  anadeMovimientoCome(tablero, movimiento, come, lista_jugadas);
 }
 
-export function addEnPassantPosition(board, move, eat_pos, kill, moves) {
-  if (!board.isPiece(move.currentPos()) || !board.isNull(move.newPos()) || !board.isPiece(eat_pos)) {
+export function anadePrimerMovimientoPosicion(tablero, movimiento, posicion_vacia, come, lista_jugadas)
+{
+  // La pieza debe estar en la posición actual, la posición siguiente y vacia nulas
+  if (!tablero.esPosicionPieza(movimiento.getPosicionActual()) || !tablero.esPosicionNula(movimiento.getPosicionSiguiente()) || !tablero.esPosicionNula(posicion_vacia)) {
     return;
   }
 
-  if (board.getPiece(move.currentPos()).type() !== TypePiece.PAWN || board.getPiece(eat_pos).type() !== TypePiece.PAWN) {
+  // La pieza no se debe haber movido aún
+  if (tablero.getPieza(movimiento.getPosicionActual()).getNumeroMovimientos() !== 0) {
     return;
   }
 
-  if (eat_pos.notEquals(board.lastMove().currentMove().newPos())) {
+  // Creamos y añadimos la jugada
+  var jugada = new Jugada(movimiento);
+  anadeJugada(tablero, jugada, come, lista_jugadas);
+}
+
+export function anadeMovimientoComeAlPaso(tablero, movimiento, posicion_come, come, lista_jugadas)
+{
+  // La pieza debe estar en la posición actual, la siguiente vacía y la pieza que se va a comer en su posición
+  if (!tablero.esPosicionPieza(movimiento.getPosicionActual()) || !tablero.esPosicionNula(movimiento.getPosicionSiguiente()) || !tablero.esPosicionPieza(posicion_come)) {
     return;
   }
 
-  if (board.getPiece(eat_pos).numMoves() !== 1) {
+  // Las dos piezas deben ser peones
+  if (tablero.getPieza(movimiento.getPosicionActual()).getTipoPieza() !== TipoPieza.PEON || tablero.getPieza(posicion_come).getTipoPieza() !== TipoPieza.PEON) {
     return;
   }
 
-  if (eat_pos.row() !== 3 && eat_pos.row() !== 4) {
+  // Posición de la última jugada debe ser igual a la posición donde se va a comer
+  if (posicion_come.notEquals(tablero.getUltimaJugada().getMovimiento().getPosicionSiguiente())) {
     return;
   }
 
-  let new_move = new Move(move);
-  new_move.addToKill(eat_pos);
+  // Los tipos de jugador de ambas piezas debe ser diferentes
+  if (tablero.getPieza(movimiento.getPosicionActual()).getTipoJugador() === tablero.getPieza(posicion_come).getTipoJugador()) {
+    return;
+  }
+
+  // Debe ser el movimiento de la pieza que se va a comer
+  if (tablero.getPieza(posicion_come).getNumeroMovimientos() !== 1) {
+    return;
+  }
+
+  // Debe ocurrir en las filas 3 o 4
+  if (posicion_come.getFila() !== 3 && posicion_come.getFila() !== 4) {
+    return;
+  }
+
+  // Creamos y añadimos la jugada
+  var jugada = new Jugada(movimiento);
+  jugada.setPosicionCome(posicion_come);
   
-  addMove(board, new_move, kill, moves);
+  anadeJugada(tablero, jugada, come, lista_jugadas);
 }
 
-export function addCastlingPosition(board, move, extra_move, kill, moves) {
-  if (
-    !board.isPiece(move.currentPos()) || !board.isNull(move.newPos()) ||
-    !board.isPiece(extra_move.currentPos()) || !board.isNull(extra_move.newPos())
-  ) {
+export function anadeMovimientoEnroque(tablero, movimiento, movimiento_extra, come, lista_jugadas)
+{
+  // Las dos piezas deben existir y sus posicion futuras estar vacia
+  if (!tablero.esPosicionPieza(movimiento.getPosicionActual()) || !tablero.esPosicionNula(movimiento.getPosicionSiguiente()) ||
+      !tablero.esPosicionPieza(movimiento_extra.getPosicionActual()) || !tablero.esPosicionNula(movimiento_extra.getPosicionSiguiente())) {
     return;
   }
 
-  if (
-    board.getPiece(move.currentPos()).type() !== TypePiece.KING &&
-    board.getPiece(move.currentPos()).type() !== TypePiece.ROOK
-  ) {
+  // Los tipos deben ser rey y torre
+  if (tablero.getPieza(movimiento.getPosicionActual()).getTipoPieza() !== TipoPieza.REY && tablero.getPieza(movimiento.getPosicionActual()).getTipoPieza() !== TipoPieza.TORRE) {
+    return;
+  }
+  
+  if (tablero.getPieza(movimiento_extra.getPosicionActual()).getTipoPieza() !== TipoPieza.REY && tablero.getPieza(movimiento_extra.getPosicionActual()).getTipoPieza() !== TipoPieza.TORRE) {
     return;
   }
 
-  if (
-    board.getPiece(extra_move.currentPos()).type() !== TypePiece.KING &&
-    board.getPiece(extra_move.currentPos()).type() !== TypePiece.ROOK
-  ) {
+  // Las piezas no se dben haber movido
+  if (tablero.getPieza(movimiento.getPosicionActual()).getNumeroMovimientos() !== 0 || tablero.getPieza(movimiento_extra.getPosicionActual()).getNumeroMovimientos() !== 0) {
     return;
   }
 
-  if (
-    board.getPiece(move.currentPos()).numMoves() !== 0 ||
-    board.getPiece(extra_move.currentPos()).numMoves() !== 0
-  ) {
-    return;
-  }
+  // Creamos y añadimos la jugada
+  let jugada = new Jugada(movimiento);
+  jugada.setMovimientoExtra(movimiento_extra);
 
-  let new_move = new Move(move);
-  new_move.addToMoveExtra(extra_move);
-
-  addMove(board, new_move, kill, moves);
+  anadeJugada(tablero, jugada, come, lista_jugadas);
 }
 
-export function addCastlingPositionExtra(board, move, extra_move, empty_pos, kill, moves) {
-  if (!board.isNull(empty_pos)) {
+export function anadeMovimientoEnroqueExtra(tablero, movimiento, movimiento_extra, posicion_vacia, come, lista_jugadas)
+{
+  // En la posicioón vacia no debe de haber nada
+  if (!tablero.esPosicionNula(posicion_vacia)) {
     return;
   }
 
-  addCastlingPosition(board, move, extra_move, kill, moves);
+  // Tratamos de añadir la jugada
+  anadeMovimientoEnroque(tablero, movimiento, movimiento_extra, come, lista_jugadas);
 }

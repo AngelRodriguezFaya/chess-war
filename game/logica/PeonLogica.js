@@ -1,67 +1,71 @@
-import { Piece } from './PiezaLogica.js';
-import { TypePiece, TypePlayer } from './TiposUtils.js';
-import { BoardPosition, Movement } from './Movimiento.js';
-import { addMovePosition, addEatPosition, addFirstMovePosition, addEnPassantPosition } from './MovimientosUtils.js';
+import { PiezaLogica } from './PiezaLogica.js';
+import { TipoPieza, TipoJugador } from './TiposUtils.js';
+import { Posicion, Movimiento } from './Jugada.js';
+import { anadeMovimientoPosicion, anadeMovimientoCome, anadePrimerMovimientoPosicion, anadeMovimientoComeAlPaso } from './MovimientosUtils.js';
 
-export class Pawn extends Piece {
-  constructor(player) {
-    super(player, TypePiece.PAWN);
+export class PeonLogica extends PiezaLogica
+{
+  constructor(jugador)
+  {
+    super(jugador, TipoPieza.PEON);
   }
 
-  moves(board, position, kill) {
-    const moves = [];
-    let new_position = new BoardPosition();
-    let kill_position = new BoardPosition();
-    let empty_position = new BoardPosition();
+  getPosiblesJugadas(tablero, posicion, come)
+  {
+    var lista_jugadas = [];
+    var nueva_posicion = new Posicion();
+    var come_posicion = new Posicion();
+    var posicion_vacia = new Posicion();
 
-    if (this._type_player === TypePlayer.WHITE) {
-      new_position.update(position.row() - 1, position.column());
-      addMovePosition(board, new Movement(position, new_position), kill, moves);
+    if (this._tipo_jugador === TipoJugador.BLANCO) {
+      nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna());
+      anadeMovimientoPosicion(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() - 1, position.column() - 1);
-      addEatPosition(board, new Movement(position, new_position), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() - 1);
+      anadeMovimientoCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() - 1, position.column() + 1);
-      addEatPosition(board, new Movement(position, new_position), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() + 1);
+      anadeMovimientoCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() - 2, position.column());
-      empty_position.update(position.row() - 1, position.column());
-      addFirstMovePosition(board, new Movement(position, new_position), empty_position, kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() - 2, posicion.getColumna());
+      posicion_vacia.actualizar(posicion.getFila() - 1, posicion.getColumna());
+      anadePrimerMovimientoPosicion(tablero, new Movimiento(posicion, nueva_posicion), posicion_vacia, come, lista_jugadas);
 
-      new_position.update(position.row() - 1, position.column() - 1);
-      kill_position.update(position.row(), position.column() - 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() - 1);
+      come_posicion.actualizar(posicion.getFila(), posicion.getColumna() - 1);
+      anadeMovimientoComeAlPaso(tablero, new Movimiento(posicion, nueva_posicion), come_posicion.clone(), come, lista_jugadas);
 
-      new_position.update(position.row() - 1, position.column() + 1);
-      kill_position.update(position.row(), position.column() + 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() + 1);
+      come_posicion.actualizar(posicion.getFila(), posicion.getColumna() + 1);
+      anadeMovimientoComeAlPaso(tablero, new Movimiento(posicion, nueva_posicion), come_posicion.clone(), come, lista_jugadas);
     } else {
-      new_position.update(position.row() + 1, position.column());
-      addMovePosition(board, new Movement(position, new_position), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna());
+      anadeMovimientoPosicion(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() + 1, position.column() - 1);
-      addEatPosition(board, new Movement(position, new_position), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() - 1);
+      anadeMovimientoCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() + 1, position.column() + 1);
-      addEatPosition(board, new Movement(position, new_position), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() + 1);
+      anadeMovimientoCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-      new_position.update(position.row() + 2, position.column());
-      empty_position.update(position.row() + 1, position.column());
-      addFirstMovePosition(board, new Movement(position, new_position), empty_position, kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 2, posicion.getColumna());
+      posicion_vacia.actualizar(posicion.getFila() + 1, posicion.getColumna());
+      anadePrimerMovimientoPosicion(tablero, new Movimiento(posicion, nueva_posicion), posicion_vacia, come, lista_jugadas);
 
-      new_position.update(position.row() + 1, position.column() + 1);
-      kill_position.update(position.row(), position.column() + 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() + 1);
+      come_posicion.actualizar(posicion.getFila(), posicion.getColumna() + 1);
+      anadeMovimientoComeAlPaso(tablero, new Movimiento(posicion, nueva_posicion), come_posicion.clone(), come, lista_jugadas);
 
-      new_position.update(position.row() + 1, position.column() - 1);
-      kill_position.update(position.row(), position.column() - 1);
-      addEnPassantPosition(board, new Movement(position, new_position), kill_position.clone(), kill, moves);
+      nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() - 1);
+      come_posicion.actualizar(posicion.getFila(), posicion.getColumna() - 1);
+      anadeMovimientoComeAlPaso(tablero, new Movimiento(posicion, nueva_posicion), come_posicion.clone(), come, lista_jugadas);
     }
 
-    return moves;
+    return lista_jugadas;
   }
 
-  clone() {
-    return new Pawn(this._type_player);
+  clone()
+  {
+    return new PeonLogica(this._tipo_jugador);
   }
 }

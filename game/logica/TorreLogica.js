@@ -1,47 +1,51 @@
-import { Piece } from './PiezaLogica.js';
-import { TypePiece } from './TiposUtils.js';
-import { Movement } from './Movimiento.js';
-import { addMoveEatPosition } from './MovimientosUtils.js';
+import { PiezaLogica } from './PiezaLogica.js';
+import { TipoPieza } from './TiposUtils.js';
+import { Movimiento } from './Jugada.js';
+import { anadeMovimientoPosicionCome } from './MovimientosUtils.js';
 
-export class Rook extends Piece {
-  constructor(player) {
-    super(player, TypePiece.ROOK);
+export class TorreLogica extends PiezaLogica
+{
+  constructor(jugador)
+  {
+    super(jugador, TipoPieza.TORRE);
   }
 
-  moves(board, position, kill) {
-    const moves = [];
-    let new_position = position.clone();
+  getPosiblesJugadas(tablero, posicion, come)
+  {
+    var lista_jugadas = [];
+    var nueva_posicion = posicion.clone();
 
     do {
-      new_position.update(new_position.row() - 1, position.column());
-      addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
-    } while (board.isNull(new_position));
+      nueva_posicion.actualizar(nueva_posicion.getFila() - 1, posicion.getColumna());
+      anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
+    } while (tablero.esPosicionNula(nueva_posicion));
 
-    new_position = position.clone();
-
-    do {
-      new_position.update(new_position.row() + 1, position.column());
-      addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
-    } while (board.isNull(new_position));
-
-    new_position = position.clone();
+    nueva_posicion = posicion.clone();
 
     do {
-      new_position.update(position.row(), new_position.column() - 1);
-      addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
-    } while (board.isNull(new_position));
+      nueva_posicion.actualizar(nueva_posicion.getFila() + 1, posicion.getColumna());
+      anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
+    } while (tablero.esPosicionNula(nueva_posicion));
 
-    new_position = position.clone();
+    nueva_posicion = posicion.clone();
 
     do {
-      new_position.update(position.row(), new_position.column() + 1);
-      addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
-    } while (board.isNull(new_position));
+      nueva_posicion.actualizar(posicion.getFila(), nueva_posicion.getColumna() - 1);
+      anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
+    } while (tablero.esPosicionNula(nueva_posicion));
 
-    return moves;
+    nueva_posicion = posicion.clone();
+
+    do {
+      nueva_posicion.actualizar(posicion.getFila(), nueva_posicion.getColumna() + 1);
+      anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
+    } while (tablero.esPosicionNula(nueva_posicion));
+
+    return lista_jugadas;
   }
 
-  clone() {
-    return new Rook(this._type_player);
+  clone()
+  {
+    return new TorreLogica(this._tipo_jugador);
   }
 }

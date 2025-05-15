@@ -1,59 +1,63 @@
-import { Piece } from './PiezaLogica.js';
-import { TypePiece } from './TiposUtils.js';
-import { BoardPosition, Movement } from './Movimiento.js';
-import { addMoveEatPosition, addCastlingPosition, addCastlingPositionExtra } from './MovimientosUtils.js';
+import { PiezaLogica } from './PiezaLogica.js';
+import { TipoPieza } from './TiposUtils.js';
+import { Posicion, Movimiento } from './Jugada.js';
+import { anadeMovimientoPosicionCome, anadeMovimientoEnroque, anadeMovimientoEnroqueExtra } from './MovimientosUtils.js';
 
-export class King extends Piece {
-  constructor(player) {
-    super(player, TypePiece.KING);
+export class ReyLogica extends PiezaLogica
+{
+  constructor(jugador)
+  {
+    super(jugador, TipoPieza.REY);
   }
 
-  moves(board, position, kill) {
-    const moves = [];
-    let new_position = new BoardPosition();
-    let extra_position = new BoardPosition();
-    let new_extra_position = new BoardPosition();
-    let empty_position = new BoardPosition();
+  getPosiblesJugadas(tablero, posicion, come)
+  {
+    var lista_jugadas = [];
+    var nueva_posicion = new Posicion();
+    var posicion_extra = new Posicion();
+    var nueva_posicion_extra = new Posicion();
+    var posicion_vacia = new Posicion();
     
-    new_position.update(position.row() + 1, position.column() + 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() + 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() + 1, position.column() - 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() - 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 1, position.column() + 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() + 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 1, position.column() - 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() - 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() + 1, position.column());
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna());
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 1, position.column());
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna());
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row(), position.column() + 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila(), posicion.getColumna() + 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row(), position.column() - 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila(), posicion.getColumna() - 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
     
-    new_position.update(position.row(), position.column() + 2);
-    extra_position.update(position.row(), position.column() + 3);
-    new_extra_position.update(position.row(), position.column() + 1);
-    addCastlingPosition(board, new Movement(position, new_position), new Movement(extra_position, new_extra_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila(), posicion.getColumna() + 2);
+    posicion_extra.actualizar(posicion.getFila(), posicion.getColumna() + 3);
+    nueva_posicion_extra.actualizar(posicion.getFila(), posicion.getColumna() + 1);
+    anadeMovimientoEnroque(tablero, new Movimiento(posicion, nueva_posicion), new Movimiento(posicion_extra, nueva_posicion_extra), come, lista_jugadas);
     
-    new_position.update(position.row(), position.column() - 2);
-    extra_position.update(position.row(), position.column() - 4);
-    new_extra_position.update(position.row(), position.column() - 1);
-    empty_position.update(position.row(), position.column() - 3);
-    addCastlingPositionExtra(board, new Movement(position, new_position), new Movement(extra_position, new_extra_position), empty_position, kill, moves);
+    nueva_posicion.actualizar(posicion.getFila(), posicion.getColumna() - 2);
+    posicion_extra.actualizar(posicion.getFila(), posicion.getColumna() - 4);
+    nueva_posicion_extra.actualizar(posicion.getFila(), posicion.getColumna() - 1);
+    posicion_vacia.actualizar(posicion.getFila(), posicion.getColumna() - 3);
+    anadeMovimientoEnroqueExtra(tablero, new Movimiento(posicion, nueva_posicion), new Movimiento(posicion_extra, nueva_posicion_extra), posicion_vacia, come, lista_jugadas);
 
-    return moves;
+    return lista_jugadas;
   }
 
-  clone() {
-    return new King(this._type_player);
+  clone()
+  {
+    return new ReyLogica(this._tipo_jugador);
   }
 }

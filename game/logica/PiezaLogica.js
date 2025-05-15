@@ -1,39 +1,49 @@
-export class Piece {
-  constructor(type_player, type_piece) {
-    this._type_player = type_player;
-    this._type_piece = type_piece;
-    this._num_moves = 0;
+export class PiezaLogica
+{
+  constructor(tipo_jugador, tipo_pieza)
+  {
+    this._tipo_jugador = tipo_jugador;
+    this._tipo_pieza = tipo_pieza;
+    this._numero_movimientos = 0;
   }
 
-  player() {
-    return this._type_player;
+  getTipoJugador()
+  {
+    return this._tipo_jugador;
   }
 
-  type() {
-    return this._type_piece;
+  getTipoPieza()
+  {
+    return this._tipo_pieza;
   }
 
-  numMoves() {
-    return this._num_moves;
+  getNumeroMovimientos()
+  {
+    return this._numero_movimientos;
   }
 
-  update() {
-    this._num_moves++;
+  actualizar()
+  {
+    this._numero_movimientos++;
   }
 
-  possibleMoves(board, position) {
-    return this.moves(board, position, false);
+  getJugadas(tablero, posicion)
+  {
+    return this.getPosiblesJugadas(tablero, posicion, false);
   }
 
-  killMoves(board, position) {
-    return this.moves(board, position, true);
+  getJugadasCome(tablero, posicion)
+  {
+    return this.getPosiblesJugadas(tablero, posicion, true);
   }
 
-  clone() {
-    throw new Error('clone() must be implemented by subclasses');
-  }
-
-  moves(board, position, kill) {
+  getPosiblesJugadas(tablero, posicion, comer)
+  {
     throw new Error('El método _moves debe ser implementado por las subclases');
+  }
+
+  clone()
+  {
+    throw new Error('clone() must be implemented by subclasses');
   }
 }

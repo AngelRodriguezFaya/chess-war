@@ -4,8 +4,8 @@
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
 
-import { BoardPosition } from '../logica/Movimiento.js';
-import { TypePlayer } from '../logica/TiposUtils.js'
+import { Posicion } from '../logica/Jugada.js';
+import { TipoJugador } from '../logica/TiposUtils.js'
 import { CasillaModelo } from './CasillaModelo.js';
 import { AlfilModelo } from './AlfilModelo.js'
 import { TorreModelo } from './TorreModelo.js'
@@ -81,7 +81,7 @@ export class TableroModelo extends THREE.Object3D
         let material = (fila + col) % 2 == 0 ? materialBeige : materialMarrones;
 
         // Se crea la casilla
-        var casilla = new CasillaModelo(gui, `Casilla fila: ${fila} columna: ${col}`, material, ANCHO, ALTO, LARGO, new BoardPosition(fila, col), TypePlayer.UNKNOWN);
+        var casilla = new CasillaModelo(gui, `Casilla fila: ${fila} columna: ${col}`, material, ANCHO, ALTO, LARGO, new Posicion(fila, col), TipoJugador.DESCONOCIDO);
 
         // Se posiciona la casilla
         casilla.position.set(col * ANCHO, -(ALTO/2), fila * LARGO);
@@ -112,230 +112,230 @@ export class TableroModelo extends THREE.Object3D
     });
 
     // Crear las torres
-    var torre1player1_pos = new BoardPosition(0, 0);
-    this.torre1player1 = new TorreModelo(this.gui, "Controles de la torre", darkBrownMaterial, torre1player1_pos, TypePlayer.BLACK);
+    var torre1player1_pos = new Posicion(0, 0);
+    this.torre1player1 = new TorreModelo(this.gui, "Controles de la torre", darkBrownMaterial, torre1player1_pos, TipoJugador.NEGRO);
     this.add(this.torre1player1);
     this.torre1player1.position.set(0, 0, 0);
-    this.tablero[torre1player1_pos.row()][torre1player1_pos.column()].pieza = this.torre1player1;
+    this.tablero[torre1player1_pos.getFila()][torre1player1_pos.getColumna()].pieza = this.torre1player1;
 
-    var torre2player1_pos = new BoardPosition(0, 7);
-    this.torre2player1 = new TorreModelo(this.gui, "Controles de la torre", darkBrownMaterial, torre2player1_pos, TypePlayer.BLACK);
+    var torre2player1_pos = new Posicion(0, 7);
+    this.torre2player1 = new TorreModelo(this.gui, "Controles de la torre", darkBrownMaterial, torre2player1_pos, TipoJugador.NEGRO);
     this.add(this.torre2player1);
     this.torre2player1.position.set(63, 0, 0);
-    this.tablero[torre2player1_pos.row()][torre2player1_pos.column()].pieza = this.torre2player1;
+    this.tablero[torre2player1_pos.getFila()][torre2player1_pos.getColumna()].pieza = this.torre2player1;
 
     // Crear los caballos
-    var caballo1player1_pos = new BoardPosition(0, 1);
-    this.caballo1player1 = new CaballoModelo(this.gui, "Controles del caballo", darkBrownMaterial, caballo1player1_pos, TypePlayer.BLACK);
+    var caballo1player1_pos = new Posicion(0, 1);
+    this.caballo1player1 = new CaballoModelo(this.gui, "Controles del caballo", darkBrownMaterial, caballo1player1_pos, TipoJugador.NEGRO);
     this.add(this.caballo1player1);
     this.caballo1player1.rotateY(-Math.PI/2);
     this.caballo1player1.position.set(9, 0, 0);
-    this.tablero[caballo1player1_pos.row()][caballo1player1_pos.column()].pieza = this.caballo1player1;
+    this.tablero[caballo1player1_pos.getFila()][caballo1player1_pos.getColumna()].pieza = this.caballo1player1;
 
-    var caballo2player1_pos = new BoardPosition(0, 6);
-    this.caballo2player1 = new CaballoModelo(this.gui, "Controles del caballo", darkBrownMaterial, caballo2player1_pos, TypePlayer.BLACK);
+    var caballo2player1_pos = new Posicion(0, 6);
+    this.caballo2player1 = new CaballoModelo(this.gui, "Controles del caballo", darkBrownMaterial, caballo2player1_pos, TipoJugador.NEGRO);
     this.add(this.caballo2player1);
     this.caballo2player1.rotateY(-Math.PI/2);
     this.caballo2player1.position.set(54, 0, 0);
-    this.tablero[caballo2player1_pos.row()][caballo2player1_pos.column()].pieza = this.caballo2player1;
+    this.tablero[caballo2player1_pos.getFila()][caballo2player1_pos.getColumna()].pieza = this.caballo2player1;
 
     // Crear los alfiles
-    var alfil1player1_pos = new BoardPosition(0, 2);
-    this.alfil1player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil1player1_pos, TypePlayer.BLACK);
+    var alfil1player1_pos = new Posicion(0, 2);
+    this.alfil1player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil1player1_pos, TipoJugador.NEGRO);
     this.add(this.alfil1player1);
     this.alfil1player1.rotateY(Math.PI);
     this.alfil1player1.position.set(18, 0, 0);
-    this.tablero[alfil1player1_pos.row()][alfil1player1_pos.column()].pieza = this.alfil1player1;
+    this.tablero[alfil1player1_pos.getFila()][alfil1player1_pos.getColumna()].pieza = this.alfil1player1;
 
-    var alfil2player1_pos = new BoardPosition(0, 5);
-    this.alfil2player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil2player1_pos, TypePlayer.BLACK);
+    var alfil2player1_pos = new Posicion(0, 5);
+    this.alfil2player1 = new AlfilModelo(this.gui, "Controles del alfil", darkBrownMaterial, alfil2player1_pos, TipoJugador.NEGRO);
     this.add(this.alfil2player1);
     this.alfil2player1.rotateY(Math.PI);
     this.alfil2player1.position.set(45, 0, 0);
-    this.tablero[alfil2player1_pos.row()][alfil2player1_pos.column()].pieza = this.alfil2player1;
+    this.tablero[alfil2player1_pos.getFila()][alfil2player1_pos.getColumna()].pieza = this.alfil2player1;
 
     // Crear la dama
-    var damaplayer1_pos = new BoardPosition(0, 3);
-    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", darkBrownMaterial, damaplayer1_pos, TypePlayer.BLACK);
+    var damaplayer1_pos = new Posicion(0, 3);
+    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", darkBrownMaterial, damaplayer1_pos, TipoJugador.NEGRO);
     this.add(this.damaplayer1);
     this.damaplayer1.position.set(27, 0, 0);
-    this.tablero[damaplayer1_pos.row()][damaplayer1_pos.column()].pieza = this.damaplayer1;
+    this.tablero[damaplayer1_pos.getFila()][damaplayer1_pos.getColumna()].pieza = this.damaplayer1;
 
     // Crear el rey
-    var reyplayer1_pos = new BoardPosition(0, 4);
-    this.reyplayer1 = new ReyModelo(this.gui, "Controles del rey", darkBrownMaterial, reyplayer1_pos, TypePlayer.BLACK);
+    var reyplayer1_pos = new Posicion(0, 4);
+    this.reyplayer1 = new ReyModelo(this.gui, "Controles del rey", darkBrownMaterial, reyplayer1_pos, TipoJugador.NEGRO);
     this.add(this.reyplayer1);
     this.reyplayer1.position.set(36, 0, 0);
-    this.tablero[reyplayer1_pos.row()][reyplayer1_pos.column()].pieza = this.reyplayer1;
+    this.tablero[reyplayer1_pos.getFila()][reyplayer1_pos.getColumna()].pieza = this.reyplayer1;
 
     // Crear los peones
-    var peon1player1_pos = new BoardPosition(1, 0);
-    this.peon1player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon1player1_pos, TypePlayer.BLACK);
+    var peon1player1_pos = new Posicion(1, 0);
+    this.peon1player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon1player1_pos, TipoJugador.NEGRO);
     this.add(this.peon1player1);
     this.peon1player1.position.set(0, 0, 9);
-    this.tablero[peon1player1_pos.row()][peon1player1_pos.column()].pieza = this.peon1player1;
+    this.tablero[peon1player1_pos.getFila()][peon1player1_pos.getColumna()].pieza = this.peon1player1;
 
-    var peon2player1_pos = new BoardPosition(1, 1);
-    this.peon2player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon2player1_pos, TypePlayer.BLACK);
+    var peon2player1_pos = new Posicion(1, 1);
+    this.peon2player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon2player1_pos, TipoJugador.NEGRO);
     this.add(this.peon2player1);
     this.peon2player1.position.set(9, 0, 9);
-    this.tablero[peon2player1_pos.row()][peon2player1_pos.column()].pieza = this.peon2player1;
+    this.tablero[peon2player1_pos.getFila()][peon2player1_pos.getColumna()].pieza = this.peon2player1;
 
-    var peon3player1_pos = new BoardPosition(1, 2);
-    this.peon3player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon3player1_pos, TypePlayer.BLACK);
+    var peon3player1_pos = new Posicion(1, 2);
+    this.peon3player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon3player1_pos, TipoJugador.NEGRO);
     this.add(this.peon3player1);
     this.peon3player1.position.set(18, 0, 9);
-    this.tablero[peon3player1_pos.row()][peon3player1_pos.column()].pieza = this.peon3player1;
+    this.tablero[peon3player1_pos.getFila()][peon3player1_pos.getColumna()].pieza = this.peon3player1;
 
-    var peon4player1_pos = new BoardPosition(1, 3);
-    this.peon4player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon4player1_pos, TypePlayer.BLACK);
+    var peon4player1_pos = new Posicion(1, 3);
+    this.peon4player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon4player1_pos, TipoJugador.NEGRO);
     this.add(this.peon4player1);
     this.peon4player1.position.set(27, 0, 9);
-    this.tablero[peon4player1_pos.row()][peon4player1_pos.column()].pieza = this.peon4player1;
+    this.tablero[peon4player1_pos.getFila()][peon4player1_pos.getColumna()].pieza = this.peon4player1;
     
-    var peon5player1_pos = new BoardPosition(1, 4);
-    this.peon5player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon5player1_pos, TypePlayer.BLACK);
+    var peon5player1_pos = new Posicion(1, 4);
+    this.peon5player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon5player1_pos, TipoJugador.NEGRO);
     this.add(this.peon5player1);
     this.peon5player1.position.set(36, 0, 9);
-    this.tablero[peon5player1_pos.row()][peon5player1_pos.column()].pieza = this.peon5player1;
+    this.tablero[peon5player1_pos.getFila()][peon5player1_pos.getColumna()].pieza = this.peon5player1;
     
-    var peon6player1_pos = new BoardPosition(1, 5);
-    this.peon6player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon6player1_pos, TypePlayer.BLACK);
+    var peon6player1_pos = new Posicion(1, 5);
+    this.peon6player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon6player1_pos, TipoJugador.NEGRO);
     this.add(this.peon6player1);
     this.peon6player1.position.set(45, 0, 9);
-    this.tablero[peon6player1_pos.row()][peon6player1_pos.column()].pieza = this.peon6player1;
+    this.tablero[peon6player1_pos.getFila()][peon6player1_pos.getColumna()].pieza = this.peon6player1;
     
-    var peon7player1_pos = new BoardPosition(1, 6);
-    this.peon7player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon7player1_pos, TypePlayer.BLACK);
+    var peon7player1_pos = new Posicion(1, 6);
+    this.peon7player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon7player1_pos, TipoJugador.NEGRO);
     this.add(this.peon7player1);
     this.peon7player1.position.set(54, 0, 9);
-    this.tablero[peon7player1_pos.row()][peon7player1_pos.column()].pieza = this.peon7player1;
+    this.tablero[peon7player1_pos.getFila()][peon7player1_pos.getColumna()].pieza = this.peon7player1;
     
-    var peon8player1_pos = new BoardPosition(1, 7);
-    this.peon8player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon8player1_pos, TypePlayer.BLACK);
+    var peon8player1_pos = new Posicion(1, 7);
+    this.peon8player1 = new PeonModelo(this.gui, "Controles del peón", darkBrownMaterial, peon8player1_pos, TipoJugador.NEGRO);
     this.add(this.peon8player1);
     this.peon8player1.position.set(63, 0, 9);
-    this.tablero[peon8player1_pos.row()][peon8player1_pos.column()].pieza = this.peon8player1;
+    this.tablero[peon8player1_pos.getFila()][peon8player1_pos.getColumna()].pieza = this.peon8player1;
 
 
 
 
 
     // Crear las torres
-    var torre1player2_pos = new BoardPosition(7, 0);
-    this.torre1player2 = new TorreModelo(this.gui, "Controles de la torre", lightBrownMaterial, torre1player2_pos, TypePlayer.WHITE);
+    var torre1player2_pos = new Posicion(7, 0);
+    this.torre1player2 = new TorreModelo(this.gui, "Controles de la torre", lightBrownMaterial, torre1player2_pos, TipoJugador.BLANCO);
     this.add(this.torre1player2);
     this.torre1player2.position.set(0, 0, 63);
-    this.tablero[torre1player2_pos.row()][torre1player2_pos.column()].pieza = this.torre1player2;
+    this.tablero[torre1player2_pos.getFila()][torre1player2_pos.getColumna()].pieza = this.torre1player2;
 
-    var torre2player2_pos = new BoardPosition(7, 7);
-    this.torre2player2 = new TorreModelo(this.gui, "Controles de la torre", lightBrownMaterial, torre2player2_pos, TypePlayer.WHITE);
+    var torre2player2_pos = new Posicion(7, 7);
+    this.torre2player2 = new TorreModelo(this.gui, "Controles de la torre", lightBrownMaterial, torre2player2_pos, TipoJugador.BLANCO);
     this.add(this.torre2player2);
     this.torre2player2.position.set(63, 0, 63);
-    this.tablero[torre2player2_pos.row()][torre2player2_pos.column()].pieza = this.torre2player2;
+    this.tablero[torre2player2_pos.getFila()][torre2player2_pos.getColumna()].pieza = this.torre2player2;
 
     // Crear los caballos
-    var caballo1player2_pos = new BoardPosition(7, 1);
-    this.caballo1player2 = new CaballoModelo(this.gui, "Controles del caballo", lightBrownMaterial, caballo1player2_pos, TypePlayer.WHITE);
+    var caballo1player2_pos = new Posicion(7, 1);
+    this.caballo1player2 = new CaballoModelo(this.gui, "Controles del caballo", lightBrownMaterial, caballo1player2_pos, TipoJugador.BLANCO);
     this.add(this.caballo1player2);
     this.caballo1player2.rotateY(-Math.PI/2);
     this.caballo1player2.rotateY(Math.PI);
     this.caballo1player2.position.set(9, 0, 63);
-    this.tablero[caballo1player2_pos.row()][caballo1player2_pos.column()].pieza = this.caballo1player2;
+    this.tablero[caballo1player2_pos.getFila()][caballo1player2_pos.getColumna()].pieza = this.caballo1player2;
 
-    var caballo2player2_pos = new BoardPosition(7, 6);
-    this.caballo2player2 = new CaballoModelo(this.gui, "Controles del caballo", lightBrownMaterial, caballo2player2_pos, TypePlayer.WHITE);
+    var caballo2player2_pos = new Posicion(7, 6);
+    this.caballo2player2 = new CaballoModelo(this.gui, "Controles del caballo", lightBrownMaterial, caballo2player2_pos, TipoJugador.BLANCO);
     this.add(this.caballo2player2);
     this.caballo2player2.rotateY(-Math.PI/2);
     this.caballo2player2.rotateY(Math.PI);
     this.caballo2player2.position.set(54, 0, 63);
-    this.tablero[caballo2player2_pos.row()][caballo2player2_pos.column()].pieza = this.caballo2player2;
+    this.tablero[caballo2player2_pos.getFila()][caballo2player2_pos.getColumna()].pieza = this.caballo2player2;
 
     // Crear los alfiles
-    var alfil1player2_pos = new BoardPosition(7, 2);
-    this.alfil1player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil1player2_pos, TypePlayer.WHITE);
+    var alfil1player2_pos = new Posicion(7, 2);
+    this.alfil1player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil1player2_pos, TipoJugador.BLANCO);
     this.add(this.alfil1player2);
     this.alfil1player2.position.set(18, 0, 63);
-    this.tablero[alfil1player2_pos.row()][alfil1player2_pos.column()].pieza = this.alfil1player2;
+    this.tablero[alfil1player2_pos.getFila()][alfil1player2_pos.getColumna()].pieza = this.alfil1player2;
 
-    var alfil2player2_pos = new BoardPosition(7, 5);
-    this.alfil2player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil2player2_pos, TypePlayer.WHITE);
+    var alfil2player2_pos = new Posicion(7, 5);
+    this.alfil2player2 = new AlfilModelo(this.gui, "Controles del alfil", lightBrownMaterial, alfil2player2_pos, TipoJugador.BLANCO);
     this.add(this.alfil2player2);
     this.alfil2player2.position.set(45, 0, 63);
-    this.tablero[alfil2player2_pos.row()][alfil2player2_pos.column()].pieza = this.alfil2player2;
+    this.tablero[alfil2player2_pos.getFila()][alfil2player2_pos.getColumna()].pieza = this.alfil2player2;
 
     // Crear la dama
-    var damaplayer1_pos = new BoardPosition(7, 3);
-    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", lightBrownMaterial, damaplayer1_pos, TypePlayer.WHITE);
+    var damaplayer1_pos = new Posicion(7, 3);
+    this.damaplayer1 = new ReinaModelo(this.gui, "Controles de la dama", lightBrownMaterial, damaplayer1_pos, TipoJugador.BLANCO);
     this.add(this.damaplayer1);
     this.damaplayer1.rotateY(Math.PI);
     this.damaplayer1.position.set(27, 0, 63);
-    this.tablero[damaplayer1_pos.row()][damaplayer1_pos.column()].pieza = this.damaplayer1;
+    this.tablero[damaplayer1_pos.getFila()][damaplayer1_pos.getColumna()].pieza = this.damaplayer1;
 
     // Crear el rey
-    var reyplayer2_pos = new BoardPosition(7, 4);
-    this.reyplayer2 = new ReyModelo(this.gui, "Controles del rey", lightBrownMaterial, reyplayer2_pos, TypePlayer.WHITE);
+    var reyplayer2_pos = new Posicion(7, 4);
+    this.reyplayer2 = new ReyModelo(this.gui, "Controles del rey", lightBrownMaterial, reyplayer2_pos, TipoJugador.BLANCO);
     this.add(this.reyplayer2);
     this.reyplayer2.rotateY(Math.PI);
     this.reyplayer2.position.set(36, 0, 63);
-    this.tablero[reyplayer2_pos.row()][reyplayer2_pos.column()].pieza = this.reyplayer2;
+    this.tablero[reyplayer2_pos.getFila()][reyplayer2_pos.getColumna()].pieza = this.reyplayer2;
 
     // Crear los peones
-    var peon1player2_pos = new BoardPosition(6, 0);
-    this.peon1player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon1player2_pos, TypePlayer.WHITE);
+    var peon1player2_pos = new Posicion(6, 0);
+    this.peon1player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon1player2_pos, TipoJugador.BLANCO);
     this.add(this.peon1player2);
     this.peon1player2.rotateY(Math.PI);
     this.peon1player2.position.set(0, 0, 54);
-    this.tablero[peon1player2_pos.row()][peon1player2_pos.column()].pieza = this.peon1player2;
+    this.tablero[peon1player2_pos.getFila()][peon1player2_pos.getColumna()].pieza = this.peon1player2;
 
-    var peon2player2_pos = new BoardPosition(6, 1);
-    this.peon2player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon2player2_pos, TypePlayer.WHITE);
+    var peon2player2_pos = new Posicion(6, 1);
+    this.peon2player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon2player2_pos, TipoJugador.BLANCO);
     this.add(this.peon2player2);
     this.peon2player2.rotateY(Math.PI);
     this.peon2player2.position.set(9, 0, 54);
-    this.tablero[peon2player2_pos.row()][peon2player2_pos.column()].pieza = this.peon2player2;
+    this.tablero[peon2player2_pos.getFila()][peon2player2_pos.getColumna()].pieza = this.peon2player2;
 
-    var peon3player2_pos = new BoardPosition(6, 2);
-    this.peon3player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon3player2_pos, TypePlayer.WHITE);
+    var peon3player2_pos = new Posicion(6, 2);
+    this.peon3player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon3player2_pos, TipoJugador.BLANCO);
     this.add(this.peon3player2);
     this.peon3player2.rotateY(Math.PI);
     this.peon3player2.position.set(18, 0, 54);
-    this.tablero[peon3player2_pos.row()][peon3player2_pos.column()].pieza = this.peon3player2;
+    this.tablero[peon3player2_pos.getFila()][peon3player2_pos.getColumna()].pieza = this.peon3player2;
 
-    var peon4player2_pos = new BoardPosition(6, 3);
-    this.peon4player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon4player2_pos, TypePlayer.WHITE);
+    var peon4player2_pos = new Posicion(6, 3);
+    this.peon4player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon4player2_pos, TipoJugador.BLANCO);
     this.add(this.peon4player2);
     this.peon4player2.rotateY(Math.PI);
     this.peon4player2.position.set(27, 0, 54);
-    this.tablero[peon4player2_pos.row()][peon4player2_pos.column()].pieza = this.peon4player2;
+    this.tablero[peon4player2_pos.getFila()][peon4player2_pos.getColumna()].pieza = this.peon4player2;
 
-    var peon5player2_pos = new BoardPosition(6, 4);
-    this.peon5player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon5player2_pos, TypePlayer.WHITE);
+    var peon5player2_pos = new Posicion(6, 4);
+    this.peon5player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon5player2_pos, TipoJugador.BLANCO);
     this.add(this.peon5player2);
     this.peon5player2.rotateY(Math.PI);
     this.peon5player2.position.set(36, 0, 54);
-    this.tablero[peon5player2_pos.row()][peon5player2_pos.column()].pieza = this.peon5player2;
+    this.tablero[peon5player2_pos.getFila()][peon5player2_pos.getColumna()].pieza = this.peon5player2;
 
-    var peon6player2_pos = new BoardPosition(6, 5);
-    this.peon6player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon6player2_pos, TypePlayer.WHITE);
+    var peon6player2_pos = new Posicion(6, 5);
+    this.peon6player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon6player2_pos, TipoJugador.BLANCO);
     this.add(this.peon6player2);
     this.peon6player2.rotateY(Math.PI);
     this.peon6player2.position.set(45, 0, 54);
-    this.tablero[peon6player2_pos.row()][peon6player2_pos.column()].pieza = this.peon6player2;
+    this.tablero[peon6player2_pos.getFila()][peon6player2_pos.getColumna()].pieza = this.peon6player2;
 
-    var peon7player2_pos = new BoardPosition(6, 6);
-    this.peon7player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon7player2_pos, TypePlayer.WHITE);
+    var peon7player2_pos = new Posicion(6, 6);
+    this.peon7player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon7player2_pos, TipoJugador.BLANCO);
     this.add(this.peon7player2);
     this.peon7player2.rotateY(Math.PI);
     this.peon7player2.position.set(54, 0, 54);
-    this.tablero[peon7player2_pos.row()][peon7player2_pos.column()].pieza = this.peon7player2;
+    this.tablero[peon7player2_pos.getFila()][peon7player2_pos.getColumna()].pieza = this.peon7player2;
 
-    var peon8player2_pos = new BoardPosition(6, 7);
-    this.peon8player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon8player2_pos, TypePlayer.WHITE);
+    var peon8player2_pos = new Posicion(6, 7);
+    this.peon8player2 = new PeonModelo(this.gui, "Controles del peón", lightBrownMaterial, peon8player2_pos, TipoJugador.BLANCO);
     this.add(this.peon8player2);
     this.peon8player2.rotateY(Math.PI);
     this.peon8player2.position.set(63, 0, 54);
-    this.tablero[peon8player2_pos.row()][peon8player2_pos.column()].pieza = this.peon8player2;
+    this.tablero[peon8player2_pos.getFila()][peon8player2_pos.getColumna()].pieza = this.peon8player2;
   }
 
   /*############################################################################*/

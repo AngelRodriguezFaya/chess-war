@@ -4,7 +4,7 @@
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
 
-import { TypePiece } from '../logica/TiposUtils.js'
+import { TipoPieza } from '../logica/TiposUtils.js'
 import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 
 
@@ -22,7 +22,7 @@ export class CaballoModelo extends PiezaBaseModelo
   constructor(gui, titleGui, material, board_position, type_player)
   {
     // Llamamos al constructor padre
-    super(board_position, TypePiece.KNIGHT, type_player);
+    super(board_position, TipoPieza.CABALLO, type_player);
 
     // Inicialización de los parámetros
     this.iniParam();

@@ -1,45 +1,49 @@
-import { Piece } from './PiezaLogica.js';
-import { TypePiece } from './TiposUtils.js';
-import { BoardPosition, Movement } from './Movimiento.js';
-import { addMoveEatPosition } from './MovimientosUtils.js';
+import { PiezaLogica } from './PiezaLogica.js';
+import { TipoPieza } from './TiposUtils.js';
+import { Posicion, Movimiento } from './Jugada.js';
+import { anadeMovimientoPosicionCome } from './MovimientosUtils.js';
 
-export class Knight extends Piece {
-  constructor(player) {
-    super(player, TypePiece.KNIGHT);
+export class CaballoLogica extends PiezaLogica
+{
+  constructor(jugador) 
+  {
+    super(jugador, TipoPieza.CABALLO);
   }
 
-  moves(board, position, kill) {
-    const moves = [];
-    let new_position = new BoardPosition();
+  getPosiblesJugadas(tablero, posicion, come)
+  {
+    var lista_jugadas = [];
+    let nueva_posicion = new Posicion();
 
-    new_position.update(position.row() + 1, position.column() + 2);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() + 2);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() + 1, position.column() - 2);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 1, posicion.getColumna() - 2);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 1, position.column() + 2);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() + 2);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 1, position.column() - 2);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 1, posicion.getColumna() - 2);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() + 2, position.column() + 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 2, posicion.getColumna() + 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() + 2, position.column() - 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() + 2, posicion.getColumna() - 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 2, position.column() + 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 2, posicion.getColumna() + 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    new_position.update(position.row() - 2, position.column() - 1);
-    addMoveEatPosition(board, new Movement(position, new_position), kill, moves);
+    nueva_posicion.actualizar(posicion.getFila() - 2, posicion.getColumna() - 1);
+    anadeMovimientoPosicionCome(tablero, new Movimiento(posicion, nueva_posicion), come, lista_jugadas);
 
-    return moves;
+    return lista_jugadas;
   }
 
-  clone() {
-    return new Knight(this._type_player);
+  clone()
+  {
+    return new CaballoLogica(this._tipo_jugador);
   }
 }

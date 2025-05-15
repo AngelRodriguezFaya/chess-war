@@ -1,15 +1,15 @@
-export const TypePlayer = Object.freeze({
-  WHITE: 'WHITE',
-  BLACK: 'BLACK',
-  UNKNOWN: 'UNKNOWN'
+export const TipoJugador = Object.freeze({
+  BLANCO: 'BLANCO',
+  NEGRO: 'NEGRO',
+  DESCONOCIDO: 'DESCONOCIDO'
 });
 
-export const TypePiece = Object.freeze({
-  ROOK: 'ROOK',
-  KNIGHT: 'KNIGHT',
-  BISHOP: 'BISHOP',
-  QUEEN: 'QUEEN',
-  KING: 'KING',
-  PAWN: 'PAWN',
-  BOX: 'BOX'
+export const TipoPieza = Object.freeze({
+  TORRE: 'TORRE',
+  CABALLO: 'CABALLO',
+  ALFIL: 'ALFIL',
+  REINA: 'REINA',
+  REY: 'REY',
+  PEON: 'PEON',
+  CASILLA: 'CASILLA'
 });
