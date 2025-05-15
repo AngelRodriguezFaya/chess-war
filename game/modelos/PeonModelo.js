@@ -359,6 +359,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
   crearDefensaMandibula(material, RES){
+    var evaluator = new CSG.Evaluator();
+    
     // Definimos las geometrías para la defensa de la mandíbula
     var mandibGeom = new THREE.CylinderGeometry(0.9, 0.9, 1, RES, RES, false);
     var cajaAux = new THREE.BoxGeometry(3, 1.1, 3);
