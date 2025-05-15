@@ -192,7 +192,7 @@ class MyScene extends THREE.Scene
         var picked_obj = this.findPickedObject(event, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON], this.jugador_actual);
         
         // Comprobamos si hemos seleccionado algun objeto
-        if (this.jugador_actual === picked_obj.getTipoJugador()) {
+        if (picked_obj !== null) {
           // Guardamos una referencia a la pieza seleccionada
           this.pieza_seleccionada = picked_obj;
 
