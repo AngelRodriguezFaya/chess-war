@@ -241,7 +241,7 @@ class MyScene extends THREE.Scene
 
                 this.tablero.muevePieza(current_extra_pos.getFila(), current_extra_pos.getColumna(),
                                         new_extra_pos.getFila(), new_extra_pos.getColumna());
-                extra_pieza.board_position = new_extra_pos;
+                extra_pieza.setPosicionTablero(new_extra_pos);
                 extra_pieza.position.set(new_extra_pos.getColumna() * 9, 0, new_extra_pos.getFila() * 9);
               }
 
@@ -322,7 +322,7 @@ class MyScene extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camera.position.set(33.75, 100, 100);
+    this.camera.position.set(33.75, 100, 90);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
@@ -390,9 +390,9 @@ class MyScene extends THREE.Scene
   createAxis()
   {
     // Ejes para el modelo
-    this.axis = new THREE.AxesHelper(50);
-    this.axis.translateY(0.1);
-    this.add(this.axis);
+    //this.axis = new THREE.AxesHelper(50);
+    //this.axis.translateY(0.1);
+    //this.add(this.axis);
   }
 
   /*############################################################################*/
