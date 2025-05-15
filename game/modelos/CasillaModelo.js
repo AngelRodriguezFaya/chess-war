@@ -48,7 +48,7 @@ export class CasillaModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
   }
 }

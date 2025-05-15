@@ -121,7 +121,7 @@ export class CaballoModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
   }
 }

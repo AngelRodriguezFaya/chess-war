@@ -192,9 +192,6 @@ class Escena extends THREE.Scene
 
           // Cambiamos de estado
           this.estado_aplicacion = Escena.SELECCIONANDO_CASILLA;
-
-          // Feedback
-          console.log(`Pieza seleccionada: ${objeto.getTipoPieza()} ${objeto.getTipoJugador()}}`);
         }
 
         break;
@@ -211,9 +208,6 @@ class Escena extends THREE.Scene
             // Deleccionamos la pieza y cambiamos de estado
             this.pieza_seleccionada = null;
             this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
-
-            // Feedback
-            console.log("Se ha seleccionado la misma casilla, seleccione otra pieza");
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
@@ -255,9 +249,6 @@ class Escena extends THREE.Scene
               else {
                 this.jugador_actual = TipoJugador.BLANCO;
               }
-
-              // Feedback
-              console.log(`Turno: ${this.jugador_actual}`);
             }
           }
         }
@@ -409,14 +400,14 @@ class Escena extends THREE.Scene
   /*############################################################################*/
   // Método update de la escena
 
-  update()
+  actualizar()
   {
     // Se actualizan los elementos de la escena para cada frame
     // Se actualiza la posición de la cámara según su controlador
     //this.cameraControl.update();
 
     // Se actualiza el tablero
-    this.tablero.update();
+    this.tablero.actualizar();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderizador.render(this, this.getCamara());
@@ -424,7 +415,7 @@ class Escena extends THREE.Scene
     // Este método debe ser llamado cada vez que queramos visualizar la escena de nuevo.
     // Literalmente le decimos al navegador: "La próxima vez que haya que refrescar la pantalla, llama al método que te indico".
     // Si no existiera esta línea, update() se ejecutaría solo la primera vez.
-    requestAnimationFrame(() => this.update())
+    requestAnimationFrame(() => this.actualizar())
   }
 }
 
@@ -447,6 +438,6 @@ $(
     window.addEventListener("mousemove", (event) => escena.eventoRatonMovimiento(event));
     
     // Que no se nos olvide, la primera visualización.
-    escena.update();
+    escena.actualizar();
   }
 );

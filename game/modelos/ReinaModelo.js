@@ -60,7 +60,7 @@ export class ReinaModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
   }
 }

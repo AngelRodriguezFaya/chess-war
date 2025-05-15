@@ -634,7 +634,7 @@ export class PeonModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
   }
 }
