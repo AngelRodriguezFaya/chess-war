@@ -33,10 +33,6 @@ class MyScene extends THREE.Scene
   static SELECCIONANDO_PIEZA = 0;
   static SELECCIONANDO_CASILLA = 1;
 
-
-
-
-
   /*############################################################################*/
   // Constructor
   
@@ -81,15 +77,8 @@ class MyScene extends THREE.Scene
     this.estado_aplicacion = MyScene.SELECCIONANDO_PIEZA;
   }
 
-
-
-
-
   /*############################################################################*/
   // Renderizador
-
-  /*########################################################*/
-  // Creación
 
   createRenderer(myCanvas)
   {
@@ -108,9 +97,6 @@ class MyScene extends THREE.Scene
     
     return renderer;  
   }
-
-  /*########################################################*/
-  // Callbacks
   
   setCameraAspect(ratio)
   {
@@ -132,15 +118,8 @@ class MyScene extends THREE.Scene
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-
-
-
-
   /*############################################################################*/
   // Interfaz de usuario
-
-  /*########################################################*/
-  // Creación
   
   createGUI()
   {
@@ -160,27 +139,20 @@ class MyScene extends THREE.Scene
     var folder = gui.addFolder ('Luz y Ejes');
     
     // Se le añade un control para la potencia de la luz puntual
-    folder.add (this.guiControls, 'lightPower', 0, 100000, 50)
+    folder.add(this.guiControls, 'lightPower', 0, 100000, 50)
       .name('Luz puntual : ')
-      .onChange ((value) => this.setLightPower(value));
+      .onChange((value) => this.setLightPower(value));
     
     // Otro para la intensidad de la luz ambiental
-    folder.add (this.guiControls, 'ambientIntensity', 0, 3, 0.05)
+    folder.add(this.guiControls, 'ambientIntensity', 0, 3, 0.05)
       .name('Luz ambiental: ')
-      .onChange ((value) => this.setAmbientIntensity(value));
+      .onChange((value) => this.setAmbientIntensity(value));
     
     return gui;
   }
 
-
-
-
-
   /*############################################################################*/
   // Picking
-
-  /*########################################################*/
-  // Búsqueda del objeto clicado
 
   findPickedObject(event, piece_types)
   {
@@ -209,9 +181,6 @@ class MyScene extends THREE.Scene
 
     return null;
   }
-
-  /*########################################################*/
-  // Callbacks
 
   onMouseUp(event)
   {
@@ -254,7 +223,7 @@ class MyScene extends THREE.Scene
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
             var jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), picked_obj.getPosicionTablero())
-            
+
             if (jugada !== null) {
               // Ejecutamos el movimiento
               this.tablero_logica.aplicarJugada(jugada);
@@ -282,7 +251,7 @@ class MyScene extends THREE.Scene
                 extra_pieza.position.set(new_extra_pos.getColumna() * 9, 0, new_extra_pos.getFila() * 9);
               }
 
-              // Deleccionamos la pieza y cambiamos de estado
+              // Deseleccionamos la pieza y cambiamos de estado
               this.pieza_seleccionada = null;
               this.estado_aplicacion = MyScene.SELECCIONANDO_PIEZA;
 
@@ -303,15 +272,8 @@ class MyScene extends THREE.Scene
     }
   }
 
-
-
-
-
   /*############################################################################*/
   // Cámara
-
-  /*########################################################*/
-  // Creación
   
   createCamera()
   {
@@ -345,9 +307,6 @@ class MyScene extends THREE.Scene
     this.cameraControl.target = look;*/
   }
 
-  /*########################################################*/
-  // Callbacks
-
   getCamera()
   {
     // En principio se devuelve la única cámara que tenemos
@@ -355,15 +314,8 @@ class MyScene extends THREE.Scene
     return this.camera;
   }
 
-
-
-
-
   /*############################################################################*/
   // Luces de la escena
-
-  /*########################################################*/
-  // Creación
 
   createLights()
   {
@@ -387,9 +339,6 @@ class MyScene extends THREE.Scene
     this.add(this.pointLight);
   }
 
-  /*########################################################*/
-  // Callbacks
-
   setLightPower(valor)
   {
     this.pointLight.power = valor;
@@ -399,10 +348,6 @@ class MyScene extends THREE.Scene
   {
     this.ambientLight.intensity = valor;
   }
-
-
-
-
 
   /*############################################################################*/
   // Ejes de la escena
@@ -415,22 +360,14 @@ class MyScene extends THREE.Scene
     this.add(this.axis);
   }
 
-
-
-
-
   /*############################################################################*/
   // Modelos
 
   createModels()
   {
-    this.tablero = new TableroModelo(this.gui, "Controles del tablero");
+    this.tablero = new TableroModelo();
     this.add(this.tablero);
   }
-
-
-  
-
 
   /*############################################################################*/
   // Método update de la escena
@@ -444,12 +381,6 @@ class MyScene extends THREE.Scene
     // Se actualizan los elementos de la escena para cada frame
     // Se actualiza la posición de la cámara según su controlador
     //this.cameraControl.update();
-    
-    // Se actualiza el resto del modelo
-    // this.alfil.update();
-    // this.torre.update();
-    // this.dama.update();
-    // this.caballo.update();
 
     // Se actualiza el tablero
     this.tablero.update();

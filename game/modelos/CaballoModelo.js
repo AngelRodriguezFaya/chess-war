@@ -19,52 +19,21 @@ export class CaballoModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material, board_position, type_player)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
-    super(board_position, TipoPieza.CABALLO, type_player);
+    super(posicion_en_tablero, TipoPieza.CABALLO, tipo_jugador);
 
-    // Inicialización de los parámetros
-    this.iniParam();
-    
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-    this.createGUI(gui, titleGui);
-
-    // Creación del objeto
-    this.createObject(material);
+    // Creación del modelo
+    this.crearModelo(material);
   }
 
   /*############################################################################*/
-  // Inicialización de los parámetros
-
-  iniParam()
-  {
-  }
-
-  /*############################################################################*/
-  // Interfaz de usuario
-
-  createGUI(gui, titleGui)
-  {
-  }
-
-  /*############################################################################*/
-  // Creación del objeto
-
-  /*########################################################*/
-  // Creación
+  // Creación del modelo
   
-  createObject(material)
+  crearModelo(material)
   {
     var evaluator = new CSG.Evaluator();
-
-    // // Materiales
-    // var material = new THREE.MeshNormalMaterial();
-    // material.flatShading = true;
-    // material.needsUpdate = true;
-    // this.material = material; // El material se pasa como parámetro al constructor
-
 
     /*####################################*/
     // Base

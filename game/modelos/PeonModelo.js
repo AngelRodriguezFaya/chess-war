@@ -19,42 +19,19 @@ export class PeonModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material, board_position, type_player)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
-    super(board_position, TipoPieza.PEON, type_player);
+    super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
 
-    // Inicialización de los parámetros
-    this.iniParam();
-    
-    // Se crea la parte de la interfaz de usuario
-    this.createGUI(gui, titleGui);
-
-    // Creación del objeto
-    this.createObject(material);
+    // Creación del modelo
+    this.crearModelo(material);
   }
 
   /*############################################################################*/
-  // Inicialización de los parámetros
-
-  iniParam()
-  {
-  }
-
-  /*############################################################################*/
-  // Interfaz de usuario
-
-  createGUI(gui, titleGui)
-  {
-  }
-
-  /*############################################################################*/
-  // Creación del objeto
-
-  /*########################################################*/
-  // Creación
+  // Creación del modelo
   
-  createObject(material)
+  crearModelo(material)
   {
     const RES = 20;
     const ROTACION_PIERNAS = Math.PI/50;

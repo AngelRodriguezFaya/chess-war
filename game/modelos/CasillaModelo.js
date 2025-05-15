@@ -2,7 +2,6 @@
 // Importaciones
 
 import * as THREE from '../../libs/three.module.js'
-import * as CSG from '../../libs/three-bvh-csg.js'
 
 import { TipoPieza } from '../logica/TiposUtils.js'
 import { PiezaBaseModelo } from './PiezaBaseModelo.js'
@@ -19,43 +18,19 @@ export class CasillaModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material, ancho, alto, largo, board_position, type_player)
+  constructor(material, ancho, alto, largo, board_position, type_player)
   {
     // Llamamos al constructor padre
     super(board_position, TipoPieza.CASILLA, type_player);
 
-    // Inicialización de los parámetros
-    this.iniParam();
-    
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-    this.createGUI(gui, titleGui);
-
-    // Creación del objeto
-    this.createObject(material, ancho, alto, largo);
+    // Creación del modelo
+    this.crearModelo(material, ancho, alto, largo);
   }
 
   /*############################################################################*/
-  // Inicialización de los parámetros
-
-  iniParam()
-  {
-  }
-
-  /*############################################################################*/
-  // Interfaz de usuario
-
-  createGUI(gui, titleGui)
-  {
-  }
-
-  /*############################################################################*/
-  // Creación del objeto
-
-  /*########################################################*/
-  // Creación
+  // Creación del modelo
   
-  createObject(material, ancho, alto, largo)
+  crearModelo(material, ancho, alto, largo)
   {
     // Geometria de la casilla
     var geometriaCasilla = new THREE.BoxGeometry(ancho, alto, largo);

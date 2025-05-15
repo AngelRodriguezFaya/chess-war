@@ -1,7 +1,6 @@
 /*############################################################################*/
 // Importaciones
 
-import * as THREE from '../../libs/three.module.js';
 import { OBJLoader } from '../../libs/OBJLoader.js';
 
 import { TipoPieza } from '../logica/TiposUtils.js'
@@ -19,43 +18,19 @@ export class ReinaModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, materialDama, board_position, type_player)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
-    super(board_position, TipoPieza.REINA, type_player);
+    super(posicion_en_tablero, TipoPieza.REINA, tipo_jugador);
 
-    // Inicialización de los parámetros
-    this.iniParam();
-    
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-    this.createGUI(gui, titleGui);
-
-    // Creación del objeto
-    this.createObject(materialDama);
+    // Creación del modelo
+    this.crearModelo(material);
   }
 
   /*############################################################################*/
-  // Inicialización de los parámetros
-
-  iniParam()
-  {
-  }
-
-  /*############################################################################*/
-  // Interfaz de usuario
-
-  createGUI(gui, titleGui)
-  {
-  }
-
-  /*############################################################################*/
-  // Creación del objeto
-
-  /*########################################################*/
-  // Creación
+  // Creación del modelo
   
-  createObject(materialDama)
+  crearModelo(material)
   {
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
     // this.material = material; // El material se pasa como parámetro al constructor
@@ -65,7 +40,7 @@ export class ReinaModelo extends PiezaBaseModelo
       // Utilizamos el método traverse para asignar el material a cada hijo del objeto cargado
       object.traverse((child) => {
         if (child.isMesh) {
-          child.material = materialDama;
+          child.material = material;
           child.geometry.center();
           child.userData = this;
         }

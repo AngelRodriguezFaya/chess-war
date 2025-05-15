@@ -15,7 +15,7 @@ export class PiezaBaseModelo extends THREE.Object3D
   /*############################################################################*/
   // Constructor
 
-  constructor(posicion_en_tablero, tipo_pieza, tipo_jugado)
+  constructor(posicion_en_tablero, tipo_pieza, tipo_jugador)
   {
     // Llamamos al constructor padre
     super();
@@ -23,8 +23,11 @@ export class PiezaBaseModelo extends THREE.Object3D
     // Guardamos la información relativa a la lógica del juego
     this._posicion_en_tablero = posicion_en_tablero.clone();
     this._tipo_pieza = tipo_pieza;
-    this._tipo_jugador = tipo_jugado;
+    this._tipo_jugador = tipo_jugador;
   }
+
+  /*############################################################################*/
+  // Getters/Setters
 
   getPosicionTablero()
   {

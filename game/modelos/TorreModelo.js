@@ -19,43 +19,19 @@ export class TorreModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(gui, titleGui, material, board_position, type_player)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
-    super(board_position, TipoPieza.TORRE, type_player);
+    super(posicion_en_tablero, TipoPieza.TORRE, tipo_jugador);
 
-    // Inicialización de los parámetros
-    this.iniParam();
-    
-    // Se crea la parte de la interfaz que corresponde a la caja
-    // Se crea primero porque otros métodos usan las variables que se definen para la interfaz
-    this.createGUI(gui, titleGui);
-
-    // Creación del objeto
-    this.createObject(material);
+    // Creación del modelo
+    this.crearModelo(material);
   }
 
   /*############################################################################*/
-  // Inicialización de los parámetros
-
-  iniParam()
-  {
-  }
-
-  /*############################################################################*/
-  // Interfaz de usuario
-
-  createGUI(gui, titleGui)
-  {
-  }
-
-  /*############################################################################*/
-  // Creación del objeto
-
-  /*########################################################*/
-  // Creación
+  // Creación del modelo
   
-  createObject(material)
+  crearModelo(material)
   {
     // CONSTANTE DE RESOLUCIÓN
     const RES = 4;
