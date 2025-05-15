@@ -142,7 +142,7 @@ export class TorreModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
   }
 }

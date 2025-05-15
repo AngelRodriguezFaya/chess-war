@@ -44,9 +44,9 @@ export class TableroModelo extends THREE.Object3D
   {
     this.material_casilla_blanca = new THREE.MeshStandardMaterial({ color: 0xF5F5DC });
     this.material_casilla_negra = new THREE.MeshStandardMaterial({ color: 0x562B05 });
-    this.material_casilla_verde = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
-    this.material_casilla_seleccionada = new THREE.MeshStandardMaterial({ color: 0x009900 });
-    this.material_casilla_rojo = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+    this.material_casilla_seleccionada = new THREE.MeshStandardMaterial({ color: 0x004000 });
+    this.material_casilla_libre = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    this.material_casilla_come = new THREE.MeshStandardMaterial({ color: 0xff0000 });
     this.material_piezas_negras = new THREE.MeshStandardMaterial({ color: 0x341C02 });
     this.material_piezas_blancas = new THREE.MeshStandardMaterial({ color: 0xD3B683 });
   }
@@ -220,43 +220,46 @@ export class TableroModelo extends THREE.Object3D
     this.tablero[posicion_tablero.getFila()][posicion_tablero.getColumna()].pieza = objeto_pieza;
   }
 
+  convertirEnReina(posicion)
+  {
+
+  }
+
   /*############################################################################*/
   // Acceso al tablero
 
-  getCasillaPieza(fila, columna)
+  getCasillaPieza(posicion)
   {
-    return this.tablero[fila][columna];
+    return this.tablero[posicion.getFila()][posicion.getColumna()];
   }
 
-  eliminaPieza(fila, columna)
+  eliminaPieza(posicion)
   {
-    const cell = this.getCasillaPieza(fila, columna);
-    const pieza = cell.pieza;
-    if (!pieza) return;
+    var casilla_tablero = this.getCasillaPieza(posicion);
 
-    // 1. Remover del object graph
-    this.remove(pieza);
+    if (casilla_tablero.pieza === null) {
+      return;
+    }
 
-    // 3. Limpiar referencias
-    cell.pieza = null;
+    this.remove(casilla_tablero.pieza);
+    casilla_tablero.pieza = null;
   }
 
-  muevePieza(fila1, columna1, fila2, columna2)
+  muevePieza(posicion_actual, posicion_siguiente)
   {
-    this.tablero[fila2][columna2].pieza = this.tablero[fila1][columna1].pieza;
-    this.tablero[fila1][columna1].pieza = null;
+    this.getCasillaPieza(posicion_siguiente).pieza = this.getCasillaPieza(posicion_actual).pieza;
+    this.getCasillaPieza(posicion_actual).pieza = null;
+    
+    this.getCasillaPieza(posicion_siguiente).pieza.setPosicionTablero(posicion_siguiente);
+    this.getCasillaPieza(posicion_siguiente).pieza.position.set(posicion_siguiente.getColumna() * 9, 0, posicion_siguiente.getFila() * 9);
   }
 
   /*############################################################################*/
   // Actualización de materiales
 
-  actualizaMaterialCasilla(fila, columna, material)
+  actualizaMaterialCasilla(posicion, material)
   {
-    var casilla = this.tablero[fila][columna].casilla;
-
-    casilla.traverse((obj) => {
-      obj.material = material;
-    });
+    this.getCasillaPieza(posicion).casilla.traverse((obj) => { obj.material = material; });
   }
 
   reseteaColorCasillas()
@@ -265,7 +268,7 @@ export class TableroModelo extends THREE.Object3D
       for (let col = 0; col < 8; col++) {
         var material = (fila + col) % 2 == 0 ? this.material_casilla_blanca : this.material_casilla_negra;
 
-        this.actualizaMaterialCasilla(fila, col, material);
+        this.actualizaMaterialCasilla(new Posicion(fila, col), material);
       }
     }
   }
@@ -275,26 +278,18 @@ export class TableroModelo extends THREE.Object3D
     this.reseteaColorCasillas();
 
     for (let i = 0; i < jugadas.length; i++) {
-      var posicion_actual = jugadas[i].getMovimiento().getPosicionActual();
-      var posicion_siguiente = jugadas[i].getMovimiento().getPosicionSiguiente();
-
-      this.actualizaMaterialCasilla(posicion_actual.getFila(), posicion_actual.getColumna(), this.material_casilla_seleccionada);
-      this.actualizaMaterialCasilla(posicion_siguiente.getFila(), posicion_siguiente.getColumna(), this.material_casilla_verde);
+      this.actualizaMaterialCasilla(jugadas[i].getMovimiento().getPosicionActual(), this.material_casilla_seleccionada);
+      this.actualizaMaterialCasilla(jugadas[i].getMovimiento().getPosicionSiguiente(), this.material_casilla_libre);
       
       // Hay un movimiento extra
       if (jugadas[i].getDisponibleExtra()) {
-        var posicion_actual_extra = jugadas[i].getMovimientoExtra().getPosicionActual();
-        var posicion_siguiente_extra = jugadas[i].getMovimientoExtra().getPosicionSiguiente();
-
-        this.actualizaMaterialCasilla(posicion_actual_extra.getFila(), posicion_actual_extra.getColumna(), this.material_casilla_seleccionada);
-        this.actualizaMaterialCasilla(posicion_siguiente_extra.getFila(), posicion_siguiente_extra.getColumna(), this.material_casilla_verde);
+        this.actualizaMaterialCasilla(jugadas[i].getMovimientoExtra().getPosicionActual(), this.material_casilla_seleccionada);
+        this.actualizaMaterialCasilla(jugadas[i].getMovimientoExtra().getPosicionSiguiente(), this.material_casilla_libre);
       }
 
       // Hay un movimiento para comer
       if (jugadas[i].getDisponibleCome()) {
-        var posicion_come = jugadas[i].getPosicionCome();
-
-        this.actualizaMaterialCasilla(posicion_come.getFila(), posicion_come.getColumna(), this.material_casilla_rojo);
+        this.actualizaMaterialCasilla(jugadas[i].getPosicionCome(), this.material_casilla_come);
       }
     }
   }
@@ -302,44 +297,22 @@ export class TableroModelo extends THREE.Object3D
   /*############################################################################*/
   // Método update del objeto
 
-  update()
+  actualizar()
   {
-    // Reposicionamos las piezas negras
-    this.torre_negra_1.update();
-    this.caballo_negro_1.update();
-    this.alfil_negro_1.update();
-    this.reina_negra.update();
-    this.rey_negro.update();
-    this.alfil_negro_2.update();
-    this.caballo_negro_2.update();
-    this.torre_negra_2.update();
+    for (let fila = 0; fila < 8; fila++) {
+      for (let col = 0; col < 8; col++) {
+        var casilla_tablero = this.tablero[fila][col];
+        var casilla = casilla_tablero.casilla;
+        var pieza = casilla_tablero.pieza;
 
-    this.peon_negro_1.update();
-    this.peon_negro_2.update();
-    this.peon_negro_3.update();
-    this.peon_negro_4.update();
-    this.peon_negro_5.update();
-    this.peon_negro_6.update();
-    this.peon_negro_7.update();
-    this.peon_negro_8.update();
+        if (casilla !== null) {
+          casilla.actualizar();
+        }
 
-    // Reposicionamos las piezas blancas
-    this.torre_blanca_1.update();
-    this.caballo_blanco_1.update();
-    this.alfil_blanco_1.update();
-    this.reina_blanca.update();
-    this.rey_blanco.update();
-    this.alfil_blanco_2.update();
-    this.caballo_blanco_2.update();
-    this.torre_blanca_2.update();
-
-    this.peon_blanco_1.update();
-    this.peon_blanco_2.update();
-    this.peon_blanco_3.update();
-    this.peon_blanco_4.update();
-    this.peon_blanco_5.update();
-    this.peon_blanco_6.update();
-    this.peon_blanco_7.update();
-    this.peon_blanco_8.update();
+        if (pieza !== null) {
+          pieza.actualizar();
+        }
+      }
+    }
   }
 }
