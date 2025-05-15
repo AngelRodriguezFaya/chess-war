@@ -30,7 +30,38 @@ export class PeonModelo extends PiezaBaseModelo
 
   /*############################################################################*/
   // Creación del modelo
-  
+
+  crearPieIzquierdo(material){
+    // Creamos la forma 2D del pie
+    const formaPie = new THREE.Shape();
+    formaPie.moveTo(0, 0);
+    formaPie.lineTo(2, 0);
+    formaPie.lineTo(2, 0.4);
+    formaPie.lineTo(0.8, 0.7);
+    formaPie.lineTo(0, 0.7);
+    formaPie.lineTo(0, 0);
+
+    // Definimos la geometría del pie por extrusión
+    var opciones = { depth : 0.6, steps : 2, bevelEnabled : true } ;
+    var geomPieIzq = new THREE. ExtrudeGeometry ( formaPie , opciones );
+
+    // Posicionamos y orientamos las geometrías
+    geomPieIzq.rotateY(-Math.PI/2);
+    geomPieIzq.translate(-1.1, 0, -0.4);
+
+    // Creamos el pie
+    var pieIzq = new THREE.Mesh(geomPieIzq, material);
+
+    // Añadimos el pie al peón
+    pieIzq.userData = this;
+    this.add(pieIzq);
+  }
+
+  crearPieDerecho(material){
+    // Creamos la forma 2D del pie
+    
+
+
   crearModelo(material)
   {
     const RES = 20;
