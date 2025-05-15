@@ -37,7 +37,6 @@ export class PeonModelo extends PiezaBaseModelo
     // this.material = material; // El material se pasa como parámetro al constructor
     // var material = new THREE.MeshNormalMaterial({ flatShading : true });
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
-    var evaluator = new CSG.Evaluator();
 
     // Pierna izquierda
     this.crearPiernaIzquierda(material, RES, ROTACION_PIERNAS);

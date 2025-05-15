@@ -145,7 +145,7 @@ class Escena extends THREE.Scene
   inicializarPicking()
   {
     this.lanzador_rayos = new THREE.Raycaster();
-    this.raton = new THREE.Vector2(); 
+    this.raton = new THREE.Vector2();
   }
 
   encontrarObjeto(evento, lista_tipo_piezas, tipo_jugador)
@@ -160,14 +160,14 @@ class Escena extends THREE.Scene
     this.lanzador_rayos.setFromCamera(this.raton, this.camara);
 
     // Buscamos los objetos que son intersectados por el rayo
-    var objetos_envontrados = this.lanzador_rayos.intersectObjects(this.children, true);
+    var objetos_encontrados = this.lanzador_rayos.intersectObjects(this.children, true);
 
     // Buscamos el primer objeto cuyo tipo se encuentre en la lista de piezas
-    for (let i = 0; i < objetos_envontrados.length; i++) {
-      var objeto = objetos_envontrados[i].object.userData;
+    for (let i = 0; i < objetos_encontrados.length; i++) {
+      var objeto = objetos_encontrados[i].object.userData;
 
       if (objeto instanceof PiezaBaseModelo) {
-        if (lista_tipo_piezas.includes(objeto._tipo_pieza)) {
+        if (lista_tipo_piezas.includes(objeto.getTipoPieza())) {
           if (objeto.getTipoJugador() === tipo_jugador) {
             return objeto;
           }
@@ -178,27 +178,36 @@ class Escena extends THREE.Scene
     return null;
   }
 
-  eventoRatonClicArriba(ebento)
+  eventoRatonClicArriba(evento)
   {
     switch (this.estado_aplicacion) {
       case (Escena.SELECCIONANDO_PIEZA):
         // Tratamos de seleccionar solo las fichas del juego
-        var objeto = this.encontrarObjeto(ebento, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON], this.jugador_actual);
+        var objeto = this.encontrarObjeto(evento, [TipoPieza.TORRE, TipoPieza.CABALLO, TipoPieza.ALFIL, TipoPieza.REINA, TipoPieza.REY, TipoPieza.PEON], this.jugador_actual);
         
         // Comprobamos si hemos seleccionado algun objeto
         if (objeto !== null) {
-          // Guardamos una referencia a la pieza seleccionada
-          this.pieza_seleccionada = objeto;
+          // Obtenemos la posición en el tablero
+          var posicion_tablero = objeto.getPosicionTablero();
 
-          // Cambiamos de estado
-          this.estado_aplicacion = Escena.SELECCIONANDO_CASILLA;
+          // Obtenemos las jugadas disponibles de la pieza
+          var jugadas_posibles = this.tablero_logica.getPieza(posicion_tablero).getJugadas(this.tablero_logica, posicion_tablero);
+          
+          // Solo podemos seleccionar la pieza si tiene jugadas posibles
+          if (jugadas_posibles.length > 0) {
+            // Guardamos una referencia a la pieza seleccionada
+            this.pieza_seleccionada = objeto;
+
+            // Cambiamos de estado
+            this.estado_aplicacion = Escena.SELECCIONANDO_CASILLA;
+          }
         }
 
         break;
       
       case (Escena.SELECCIONANDO_CASILLA):
         // Tratamos de seleccionar solo las fichas del juego
-        var objeto = this.encontrarObjeto(ebento, [TipoPieza.CASILLA], TipoJugador.DESCONOCIDO);
+        var objeto = this.encontrarObjeto(evento, [TipoPieza.CASILLA], TipoJugador.DESCONOCIDO);
 
         // Comprobamos si hemos seleccionado algun objeto
         if (objeto !== null) {
@@ -214,6 +223,15 @@ class Escena extends THREE.Scene
             var jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero())
 
             if (jugada !== null) {
+              var pieza_atacante = objeto;
+              var pieza_atacada = null;
+
+              // Ejecutar la animación de ataque del peón
+              if (this.tablero_logica.getPieza(jugada.getMovimiento().getPosicionActual()).getTipoPieza() === TipoPieza.PEON && jugada.getDisponibleCome() &&
+                 this.tablero_logica.getPieza(jugada.getPosicionCome()).getTipoPieza() === TipoPieza.PEON)
+              {
+              }
+
               // Ejecutamos el movimiento
               this.tablero_logica.aplicarJugada(jugada);
 
