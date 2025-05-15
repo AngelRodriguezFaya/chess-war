@@ -223,14 +223,14 @@ export class TableroModelo extends THREE.Object3D
   /*############################################################################*/
   // Acceso al tablero
 
-  getCasillaPieza(fila, columna)
+  getCasillaPieza(posicion)
   {
-    return this.tablero[fila][columna];
+    return this.tablero[posicion.getFila()][posicion.getColumna()];
   }
 
-  eliminaPieza(fila, columna)
+  eliminaPieza(posicion)
   {
-    const cell = this.getCasillaPieza(fila, columna);
+    const cell = this.getCasillaPieza(posicion);
     const pieza = cell.pieza;
     if (!pieza) return;
 
@@ -241,10 +241,13 @@ export class TableroModelo extends THREE.Object3D
     cell.pieza = null;
   }
 
-  muevePieza(fila1, columna1, fila2, columna2)
+  muevePieza(posicion_actual, posicion_siguiente)
   {
-    this.tablero[fila2][columna2].pieza = this.tablero[fila1][columna1].pieza;
-    this.tablero[fila1][columna1].pieza = null;
+    this.tablero[posicion_siguiente.getFila()][posicion_siguiente.getColumna()].pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza = null;
+    
+    this.tablero[posicion_siguiente.getFila()][posicion_siguiente.getColumna()].pieza.setPosicionTablero(posicion_siguiente);
+    this.tablero[posicion_siguiente.getFila()][posicion_siguiente.getColumna()].pieza.position.set(posicion_siguiente.getColumna() * 9, 0, posicion_siguiente.getFila() * 9);
   }
 
   /*############################################################################*/
