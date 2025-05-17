@@ -855,9 +855,21 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
   /*############################################################################*/
+  // Animación
+
+  inicializarAnimacion()
+  {
+  }
+
+  animar()
+  {
+  }
+
+  /*############################################################################*/
   // Método update del objeto
 
   actualizar()
   {
+    super.actualizar(false);
   }
 }

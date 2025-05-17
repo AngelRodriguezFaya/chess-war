@@ -32,6 +32,7 @@ class Escena extends THREE.Scene
 
   static SELECCIONANDO_PIEZA = 0;
   static SELECCIONANDO_CASILLA = 1;
+  static ANIMANDO_PIEZAS = 2;
 
   /*############################################################################*/
   // Constructor
@@ -178,6 +179,45 @@ class Escena extends THREE.Scene
     return null;
   }
 
+  aplicarJugada(jugada)
+  {
+    // Ejecutamos el movimiento
+    this.tablero_logica.aplicarJugada(jugada);
+
+    // Si en la jugada se mata a alguna pieza la borramos
+    if (jugada.getDisponibleCome()) {
+      this.tablero.eliminaPieza(jugada.getPosicionCome());
+    }
+
+    // Si hay un movimiento extra (el realizado por el enroque) movemos dicha pieza
+    if (jugada.getDisponibleExtra()) {
+      this.tablero.muevePieza(jugada.getMovimientoExtra().getPosicionActual(), jugada.getMovimientoExtra().getPosicionSiguiente());
+    }
+
+    // Movemos la pieza
+    this.tablero.muevePieza(jugada.getMovimiento().getPosicionActual(), jugada.getMovimiento().getPosicionSiguiente());
+
+    // Obtenemos la posicion y pieza de la nueva posición para comprobar
+    // si un peon se convierte en reina (solucion temporal) y actualizar
+    // la posición del rey
+    //                 IMPLEMENTAR
+
+    // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
+    this.tablero.reseteaColorCasillas();
+
+    // Deseleccionamos la pieza y cambiamos de estado
+    this.pieza_seleccionada = null;
+    this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+    // Cambiamos de turno y de estado
+    if (this.jugador_actual === TipoJugador.BLANCO) {
+      this.jugador_actual = TipoJugador.NEGRO;
+    }
+    else {
+      this.jugador_actual = TipoJugador.BLANCO;
+    }
+  }
+
   eventoRatonClicArriba(evento)
   {
     switch (this.estado_aplicacion) {
@@ -220,52 +260,39 @@ class Escena extends THREE.Scene
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
-            var jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero())
+            this.jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero())
 
-            if (jugada !== null) {
-              var pieza_atacante = objeto;
-              var pieza_atacada = null;
-
+            if (this.jugada !== null) {
               // Ejecutar la animación de ataque del peón
-              if (this.tablero_logica.getPieza(jugada.getMovimiento().getPosicionActual()).getTipoPieza() === TipoPieza.PEON && jugada.getDisponibleCome() &&
-                 this.tablero_logica.getPieza(jugada.getPosicionCome()).getTipoPieza() === TipoPieza.PEON)
+              if (this.tablero_logica.getPieza(this.jugada.getMovimiento().getPosicionActual()).getTipoPieza() === TipoPieza.PEON &&
+                  this.jugada.getDisponibleCome() &&
+                  this.tablero_logica.getPieza(this.jugada.getPosicionCome()).getTipoPieza() === TipoPieza.PEON)
               {
-              }
+                // Obtenemos las piezas
+                this.pieza_animada_atacante = this.tablero.getCasillaPieza(this.jugada.getMovimiento().getPosicionActual()).pieza;
+                this.pieza_animada_defensora = this.tablero.getCasillaPieza(this.jugada.getPosicionCome()).pieza;
 
-              // Ejecutamos el movimiento
-              this.tablero_logica.aplicarJugada(jugada);
+                // Guardamos la posición y orientación
+                this.rot_original_atacante = this.pieza_animada_atacante.rotation.clone();
+                this.rot_original_defensor = this.pieza_animada_defensora.rotation.clone();
 
-              // Si en la jugada se mata a alguna pieza la borramos
-              if (jugada.getDisponibleCome()) {
-                this.tablero.eliminaPieza(jugada.getPosicionCome());
-              }
+                // Orientamos las piezas
+                this.pieza_animada_atacante.lookAt(this.pieza_animada_defensora.position);
+                this.pieza_animada_defensora.lookAt(this.pieza_animada_atacante.position);
 
-              // Si hay un movimiento extra (el realizado por el enroque) movemos dicha pieza
-              if (jugada.getDisponibleExtra()) {
-                this.tablero.muevePieza(jugada.getMovimientoExtra().getPosicionActual(), jugada.getMovimientoExtra().getPosicionSiguiente());
-              }
+                // Inicializamos la animación
+                this.pieza_animada_atacante.inicializarAnimacion();
+                this.pieza_animada_defensora.inicializarAnimacion();
 
-              // Movemos la pieza
-              this.tablero.muevePieza(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero());
+                // Reseteamos el color del tablero para la animación
+                this.tablero.reseteaColorCasillas();
 
-              // Obtenemos la posicion y pieza de la nueva posición para comprobar
-              // si un peon se convierte en reina (solucion temporal) y actualizar
-              // la posición del rey
-              //                 IMPLEMENTAR
-
-              // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
-              this.tablero.reseteaColorCasillas();
-
-              // Deseleccionamos la pieza y cambiamos de estado
-              this.pieza_seleccionada = null;
-              this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
-
-              // Cambiamos de turno y de estado
-              if (this.jugador_actual === TipoJugador.BLANCO) {
-                this.jugador_actual = TipoJugador.NEGRO;
+                // Cambiamos de estado
+                this.estado_aplicacion = Escena.ANIMANDO_PIEZAS;
               }
               else {
-                this.jugador_actual = TipoJugador.BLANCO;
+                // Si no tenemos que realizar ninguna animación aplicamos la jugada directamente
+                this.aplicarJugada(this.jugada);
               }
             }
           }
@@ -409,10 +436,20 @@ class Escena extends THREE.Scene
 
     // Manejo de las piezas seleccionadas
     this.pieza_seleccionada = null;
+    this.pieza_animada_atacante = null;
+    this.pieza_animada_defensora = null;
     this.jugador_actual = TipoJugador.BLANCO;
 
     // Inicializamos el estado actual de la aplicación
     this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+    // Estados de la animación
+    this.animacion_atacante_terminada = false;
+    this.animacion_defensor_terminada = false;
+
+    // Rotación original de las piezas
+    this.rot_original_atacante = null;
+    this.rot_original_defensor = null;
   }
 
   /*############################################################################*/
@@ -426,6 +463,31 @@ class Escena extends THREE.Scene
 
     // Se actualiza el tablero
     this.tablero.actualizar();
+
+    // Compromabos si estamos animando
+    if (this.estado_aplicacion == Escena.ANIMANDO_PIEZAS) {
+      if (this.pieza_animada_atacante.terminaAnimacion()) {
+        this.animacion_atacante_terminada = true;
+      }
+
+      if (this.pieza_animada_defensora.terminaAnimacion()) {
+        this.animacion_defensor_terminada = true;
+      }
+
+      //if (this.animacion_atacante_terminada && this.animacion_defensor_terminada) {
+      if (!this.animacion_atacante_terminada && !this.animacion_defensor_terminada) {
+        // Orientamos las piezas
+        this.pieza_animada_atacante.rotation.copy(this.rot_original_atacante);
+        this.pieza_animada_defensora.rotation.copy(this.rot_original_defensor);
+
+        // Restauramos las variables que controlan el estado
+        this.animacion_atacante_terminada = false;
+        this.animacion_defensor_terminada = false;
+
+        // Aplicamos la jugada
+        this.aplicarJugada(this.jugada);
+      }
+    }
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderizador.render(this, this.getCamara());

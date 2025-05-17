@@ -24,6 +24,11 @@ export class PiezaBaseModelo extends THREE.Object3D
     this._posicion_en_tablero = posicion_en_tablero.clone();
     this._tipo_pieza = tipo_pieza;
     this._tipo_jugador = tipo_jugador;
+
+    // Estados de la animación
+    this.animando = false;
+    this.en_animacion = false;
+    this.termina_animacion = false;
   }
 
   /*############################################################################*/
@@ -57,5 +62,39 @@ export class PiezaBaseModelo extends THREE.Object3D
   setTipoJugador(tipo_jugador)
   {
     this._tipo_jugador = tipo_jugador;
+  }
+
+  terminaAnimacion()
+  {
+    return this.termina_animacion;
+  }
+
+  /*############################################################################*/
+  // Método update del objeto
+
+  actualizar(animando)
+  {
+    if (animando) {
+      if (this.animando) {
+        this.en_animacion = true;
+      }
+      else {
+        this.en_animacion = false;
+      }
+
+      this.animando = true;
+      this.termina_animacion = false;
+    }
+    else {
+      if (this.animando) {
+        this.termina_animacion = true;
+      }
+      else {
+        this.termina_animacion = false;
+      }
+
+      this.animando = false;
+      this.en_animacion = false;
+    }
   }
 }

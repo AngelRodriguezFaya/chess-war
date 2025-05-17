@@ -103,9 +103,17 @@ export class AlfilModelo extends PiezaBaseModelo
   }
 
   /*############################################################################*/
+  // Animación
+
+  inicializarAnimacion()
+  {
+  }
+
+  /*############################################################################*/
   // Método update del objeto
 
   actualizar()
   {
+    super.actualizar(false);
   }
 }
