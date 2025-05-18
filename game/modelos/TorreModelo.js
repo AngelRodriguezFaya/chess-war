@@ -140,17 +140,9 @@ export class TorreModelo extends PiezaBaseModelo
   }
 
   /*############################################################################*/
-  // Animación
-
-  inicializarAnimacion()
-  {
-  }
-
-  /*############################################################################*/
   // Método update del objeto
 
   actualizar()
   {
-    super.actualizar(false);
   }
 }

@@ -122,7 +122,7 @@ class Escena extends THREE.Scene
     // En este caso la intensidad de la luz y si se muestran o no los ejes
     // En el contexto de una función this alude a la función
     this.controles_gui = {
-      lightPower : 50000.0,
+      lightPower : 25000.0,
       ambientIntensity : 0.0,   
     }
 
@@ -209,11 +209,15 @@ class Escena extends THREE.Scene
     this.pieza_seleccionada = null;
     this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
 
-    // Cambiamos de turno y de estado
+    // Cambiamos el turno y posición y  de la cámara
     if (this.jugador_actual === TipoJugador.BLANCO) {
+      this.camara.position.set(31.5, 100, -27);
+      this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.NEGRO;
     }
     else {
+      this.camara.position.set(31.5, 100, 90);
+      this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.BLANCO;
     }
   }
@@ -280,9 +284,9 @@ class Escena extends THREE.Scene
                 this.pieza_animada_atacante.lookAt(this.pieza_animada_defensora.position);
                 this.pieza_animada_defensora.lookAt(this.pieza_animada_atacante.position);
 
-                // Inicializamos la animación
-                this.pieza_animada_atacante.inicializarAnimacion();
-                this.pieza_animada_defensora.inicializarAnimacion();
+                // Iniciamos la animación
+                this.pieza_animada_atacante.animar();
+                this.pieza_animada_defensora.animar();
 
                 // Reseteamos el color del tablero para la animación
                 this.tablero.reseteaColorCasillas();
@@ -344,24 +348,24 @@ class Escena extends THREE.Scene
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
     // this.camera.position.set(16, 30, 62);
-    this.camara.position.set(33.75, 100, 90);
+    this.camara.position.set(31.5, 100, 90);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    var punto_a_mirar = new THREE.Vector3(33.75, 10, 33.75); 
-    this.camara.lookAt(punto_a_mirar);
+    this.punto_a_mirar = new THREE.Vector3(31.5, 10, 31.5); 
+    this.camara.lookAt(this.punto_a_mirar);
     this.add(this.camara);
     
     // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    /*this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
+    /*this.camara_control = new TrackballControls(this.camara, this.renderizador.domElement);
 
     // Se configuran las velocidades de los movimientos
-    this.cameraControl.rotateSpeed = 1.5;
-    this.cameraControl.zoomSpeed = -1.5;
-    this.cameraControl.panSpeed = 0.5;
+    this.camara_control.rotateSpeed = 1.5;
+    this.camara_control.zoomSpeed = -1.5;
+    this.camara_control.panSpeed = 0.5;
 
     // Debe orbitar con respecto al punto de mira de la cámara
-    this.cameraControl.target = look;*/
+    this.camara_control.target = punto_a_mirar;*/
   }
 
   getCamara()
@@ -390,15 +394,33 @@ class Escena extends THREE.Scene
     // La luz focal, además tiene una posición, y un punto de mira
     // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    this.luz_puntual = new THREE.PointLight(0xffffff);
-    this.luz_puntual.power = this.controles_gui.lightPower;
-    this.luz_puntual.position.set(30, 25, 30);
-    this.add(this.luz_puntual);
+    this.luz_puntual_1 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_1.power = this.controles_gui.lightPower;
+    this.luz_puntual_1.position.set(13.5, 25, 13.5);
+    this.add(this.luz_puntual_1);
+
+    this.luz_puntual_2 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_2.power = this.controles_gui.lightPower;
+    this.luz_puntual_2.position.set(13.5, 25, 58.5);
+    this.add(this.luz_puntual_2);
+
+    this.luz_puntual_3 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_3.power = this.controles_gui.lightPower;
+    this.luz_puntual_3.position.set(58.5, 25, 13.5);
+    this.add(this.luz_puntual_3);
+
+    this.luz_puntual_4 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_4.power = this.controles_gui.lightPower;
+    this.luz_puntual_4.position.set(58.5, 25, 58.5);
+    this.add(this.luz_puntual_4);
   }
 
   setFuerzaLuzPuntual(valor)
   {
-    this.luz_puntual.power = valor;
+    this.luz_puntual_1.power = valor;
+    this.luz_puntual_2.power = valor;
+    this.luz_puntual_3.power = valor;
+    this.luz_puntual_4.power = valor;
   }
 
   setIntensidadLuzAmbiente(valor)
@@ -459,7 +481,7 @@ class Escena extends THREE.Scene
   {
     // Se actualizan los elementos de la escena para cada frame
     // Se actualiza la posición de la cámara según su controlador
-    //this.cameraControl.update();
+    //this.camara_control.update();
 
     // Se actualiza el tablero
     this.tablero.actualizar();

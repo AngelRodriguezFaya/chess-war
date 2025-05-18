@@ -58,17 +58,9 @@ export class ReinaModelo extends PiezaBaseModelo
   }
 
   /*############################################################################*/
-  // Animación
-
-  inicializarAnimacion()
-  {
-  }
-
-  /*############################################################################*/
   // Método update del objeto
 
   actualizar()
   {
-    super.actualizar(false);
   }
 }

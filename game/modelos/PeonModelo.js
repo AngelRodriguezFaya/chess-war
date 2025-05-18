@@ -857,10 +857,6 @@ export class PeonModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Animación
 
-  inicializarAnimacion()
-  {
-  }
-
   animar()
   {
   }
