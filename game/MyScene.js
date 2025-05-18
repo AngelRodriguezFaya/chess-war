@@ -5,6 +5,7 @@
 // Clases de la biblioteca
 
 import * as THREE from '../libs/three.module.js'
+import * as TWEEN from '../libs/tween.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
 
@@ -33,6 +34,7 @@ class Escena extends THREE.Scene
   static SELECCIONANDO_PIEZA = 0;
   static SELECCIONANDO_CASILLA = 1;
   static ANIMANDO_PIEZAS = 2;
+  static ANIMANDO_CAMARA = 3;
 
   /*############################################################################*/
   // Constructor
@@ -211,15 +213,14 @@ class Escena extends THREE.Scene
 
     // Cambiamos el turno y posición y  de la cámara
     if (this.jugador_actual === TipoJugador.BLANCO) {
-      this.camara.position.set(31.5, 80, -47);
-      this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.NEGRO;
     }
     else {
-      this.camara.position.set(31.5, 80, 110);
-      this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.BLANCO;
     }
+
+    // Animamos la camara
+    this.animarCamara();
   }
 
   eventoRatonClicArriba(evento)
@@ -239,6 +240,15 @@ class Escena extends THREE.Scene
           
           // Solo podemos seleccionar la pieza si tiene jugadas posibles
           if (jugadas_posibles.length > 0) {
+            // Obtenemos la posición en el tablero
+            var posicion_tablero = objeto.getPosicionTablero();
+
+            // Obtenemos las jugadas disponibles de la pieza
+            var jugadas_posibles = this.tablero_logica.getPieza(posicion_tablero).getJugadas(this.tablero_logica, posicion_tablero);
+
+            // Actualizamos los colores de las casillas
+            this.tablero.actualizaColorCasillas(jugadas_posibles);
+
             // Guardamos una referencia a la pieza seleccionada
             this.pieza_seleccionada = objeto;
 
@@ -261,6 +271,9 @@ class Escena extends THREE.Scene
             // Deleccionamos la pieza y cambiamos de estado
             this.pieza_seleccionada = null;
             this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+            // Reseteamos el color del tablero
+            this.tablero.reseteaColorCasillas();
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
@@ -338,33 +351,24 @@ class Escena extends THREE.Scene
   
   inicializarCamaras()
   {
+    this.punto_a_mirar_camara = new THREE.Object3D();
+    this.punto_a_mirar_camara.position.set(31.5, 1, 31.5);
+    this.add(this.punto_a_mirar_camara);
+
     // Para crear una cámara le indicamos:
     // El ángulo del campo de visión en grados sexagesimales
     // La razón de aspecto ancho/alto
     // Los planos de recorte cercano y lejano
     this.camara = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    //this.camera = new THREE.OrthographicCamera(10 * (window.innerWidth / window.innerHeight) / -2, 10 * (window.innerWidth / window.innerHeight) / 2, 10 / 2, 10 / -2, 0.1, 1000);
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    this.camara.position.set(31.5, 80, 110);
+    this.camara.position.set(0, 80, 80);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    this.punto_a_mirar = new THREE.Vector3(31.5, 10, 31.5); 
-    this.camara.lookAt(this.punto_a_mirar);
-    this.add(this.camara);
-    
-    // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    /*this.camara_control = new TrackballControls(this.camara, this.renderizador.domElement);
-
-    // Se configuran las velocidades de los movimientos
-    this.camara_control.rotateSpeed = 1.5;
-    this.camara_control.zoomSpeed = -1.5;
-    this.camara_control.panSpeed = 0.5;
-
-    // Debe orbitar con respecto al punto de mira de la cámara
-    this.camara_control.target = punto_a_mirar;*/
+    this.camara.lookAt(new THREE.Vector3(0, 0, 0));
+    this.punto_a_mirar_camara.add(this.camara);
   }
 
   getCamara()
@@ -373,6 +377,27 @@ class Escena extends THREE.Scene
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
     return this.camara;
   }
+
+  animarCamara()
+  {
+    // Rotación a realizar
+    var origen = { rotacion: this.punto_a_mirar_camara.rotation.y };
+    var destino = { rotacion: this.punto_a_mirar_camara.rotation.y + Math.PI };
+
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 2500)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onStart(() => { this.estado_aplicacion = Escena.ANIMANDO_CAMARA; })
+      .onUpdate(() => { this.punto_a_mirar_camara.rotation.y = origen.rotacion; })
+      .onComplete(() => { this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA; })
+      .repeat(0)
+      .start();
+  }
+
+
+
+
 
   /*############################################################################*/
   // Luces de la escena
@@ -395,22 +420,22 @@ class Escena extends THREE.Scene
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
     this.luz_puntual_1 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_1.power = this.controles_gui.lightPower;
-    this.luz_puntual_1.position.set(13.5, 25, 13.5);
+    this.luz_puntual_1.position.set(4.5, 15, 13.5);
     this.add(this.luz_puntual_1);
 
     this.luz_puntual_2 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_2.power = this.controles_gui.lightPower;
-    this.luz_puntual_2.position.set(13.5, 25, 58.5);
+    this.luz_puntual_2.position.set(58.5, 15, 13.5);
     this.add(this.luz_puntual_2);
 
     this.luz_puntual_3 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_3.power = this.controles_gui.lightPower;
-    this.luz_puntual_3.position.set(58.5, 25, 13.5);
+    this.luz_puntual_3.position.set(4.5, 15, 49.5);
     this.add(this.luz_puntual_3);
 
     this.luz_puntual_4 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_4.power = this.controles_gui.lightPower;
-    this.luz_puntual_4.position.set(58.5, 25, 58.5);
+    this.luz_puntual_4.position.set(58.5, 15, 49.5);
     this.add(this.luz_puntual_4);
   }
 
@@ -478,10 +503,6 @@ class Escena extends THREE.Scene
 
   actualizar()
   {
-    // Se actualizan los elementos de la escena para cada frame
-    // Se actualiza la posición de la cámara según su controlador
-    //this.camara_control.update();
-
     // Se actualiza el tablero
     this.tablero.actualizar();
 
@@ -509,6 +530,8 @@ class Escena extends THREE.Scene
         this.aplicarJugada(this.jugada);
       }
     }
+
+    TWEEN.update();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderizador.render(this, this.getCamara());
