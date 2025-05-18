@@ -7,7 +7,6 @@
 import * as THREE from '../libs/three.module.js'
 import * as TWEEN from '../libs/tween.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
 
 /*########################################################*/
 // Clases de mi proyecto
@@ -207,6 +206,9 @@ class Escena extends THREE.Scene
     // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
     this.tablero.reseteaColorCasillas();
 
+    // Quitamos la luz
+    this.luz_puntual_pieza.visible = false;
+
     // Deseleccionamos la pieza y cambiamos de estado
     this.pieza_seleccionada = null;
     this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
@@ -254,6 +256,10 @@ class Escena extends THREE.Scene
 
             // Cambiamos de estado
             this.estado_aplicacion = Escena.SELECCIONANDO_CASILLA;
+
+            // Iluminamos la pieza seleccionada
+            this.luz_puntual_pieza.position.set(this.pieza_seleccionada.getPosicionTablero().getColumna() * 9, 15, this.pieza_seleccionada.getPosicionTablero().getFila() * 9);
+            this.luz_puntual_pieza.visible = true;
           }
         }
 
@@ -274,6 +280,9 @@ class Escena extends THREE.Scene
 
             // Reseteamos el color del tablero
             this.tablero.reseteaColorCasillas();
+
+            // Quitamos la luz
+            this.luz_puntual_pieza.visible = false;
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
@@ -386,7 +395,7 @@ class Escena extends THREE.Scene
 
     // Animacion
     var movimiento = new TWEEN.Tween(origen)
-      .to(destino, 2500)
+      .to(destino, 1500)
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onStart(() => { this.estado_aplicacion = Escena.ANIMANDO_CAMARA; })
       .onUpdate(() => { this.punto_a_mirar_camara.rotation.y = origen.rotacion; })
@@ -418,29 +427,31 @@ class Escena extends THREE.Scene
     // La luz focal, además tiene una posición, y un punto de mira
     // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    this.luz_puntual_1 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_1 = new THREE.PointLight(0xfeed8e);
     this.luz_puntual_1.power = this.controles_gui.lightPower;
-    this.luz_puntual_1.position.set(4.5, 15, 13.5);
     this.luz_puntual_1.position.set(-4.5, 20, -4.5);
     this.add(this.luz_puntual_1);
 
-    this.luz_puntual_2 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_2 = new THREE.PointLight(0xfeed8e);
     this.luz_puntual_2.power = this.controles_gui.lightPower;
-    this.luz_puntual_2.position.set(58.5, 15, 13.5);
     this.luz_puntual_2.position.set(-4.5, 20, 67.5);
     this.add(this.luz_puntual_2);
 
-    this.luz_puntual_3 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_3 = new THREE.PointLight(0xfeed8e);
     this.luz_puntual_3.power = this.controles_gui.lightPower;
-    this.luz_puntual_3.position.set(4.5, 15, 49.5);
     this.luz_puntual_3.position.set(67.5, 20, -4.5);
     this.add(this.luz_puntual_3);
 
-    this.luz_puntual_4 = new THREE.PointLight(0xFDF3C6);
+    this.luz_puntual_4 = new THREE.PointLight(0xfeed8e);
     this.luz_puntual_4.power = this.controles_gui.lightPower;
-    this.luz_puntual_4.position.set(58.5, 15, 49.5);
     this.luz_puntual_4.position.set(67.5, 20, 67.5);
     this.add(this.luz_puntual_4);
+
+    this.luz_puntual_pieza = new THREE.PointLight(0xFFFFFF);
+    this.luz_puntual_pieza.power = 2500;
+    this.luz_puntual_pieza.position.set(31.5, 10, 31.5);
+    this.luz_puntual_pieza.visible = false;
+    this.add(this.luz_puntual_pieza);
   }
 
   setFuerzaLuzPuntual(valor)
