@@ -52,7 +52,7 @@ export class TableroModelo extends THREE.Object3D
     this.material_casilla_seleccionada = new THREE.MeshPhysicalMaterial({ color: 0x004000, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.5 });
     this.material_casilla_libre = new THREE.MeshPhysicalMaterial({ color: 0x00ff00, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.5 });
     this.material_casilla_come = new THREE.MeshPhysicalMaterial({ color: 0xff0000, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.5 });
-    this.material_piezas_negras = new THREE.MeshPhysicalMaterial({ color: 0x3B2F2F, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25,  metalness: 0.75, reflectivity: 0.5 });
+    this.material_piezas_negras = new THREE.MeshPhysicalMaterial({ color: 0x5A4545, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25,  metalness: 0.75, reflectivity: 0.5 });
     this.material_piezas_blancas = new THREE.MeshPhysicalMaterial({ color: 0xEAD9C2, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25,  metalness: 0.75, reflectivity: 0.5 });
   }
   
