@@ -1352,9 +1352,17 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
   // }
 
   /*############################################################################*/
+  // Animación
+
+  animar()
+  {
+  }
+
+  /*############################################################################*/
   // Método update del objeto
 
   actualizar()
   {
+    super.actualizar(false);
   }
 }

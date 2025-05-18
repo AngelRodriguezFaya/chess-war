@@ -5,8 +5,8 @@
 // Clases de la biblioteca
 
 import * as THREE from '../libs/three.module.js'
+import * as TWEEN from '../libs/tween.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
 
 /*########################################################*/
 // Clases de mi proyecto
@@ -32,6 +32,8 @@ class Escena extends THREE.Scene
 
   static SELECCIONANDO_PIEZA = 0;
   static SELECCIONANDO_CASILLA = 1;
+  static ANIMANDO_PIEZAS = 2;
+  static ANIMANDO_CAMARA = 3;
 
   /*############################################################################*/
   // Constructor
@@ -79,13 +81,13 @@ class Escena extends THREE.Scene
     this.renderizador = new THREE.WebGLRenderer();
     
     // Se establece un color de fondo en las imágenes que genera el render
-    this.renderizador.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
+    this.renderizador.setClearColor(new THREE.Color(0x222222), 1.0);
     
     // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     this.renderizador.setSize(window.innerWidth, window.innerHeight);
     
     // La visualización se muestra en el lienzo recibido
-    $(myCanvas).append(this.renderizador.domElement); 
+    $(myCanvas).append(this.renderizador.domElement);
   }
   
   setAspectoCamara(proporcion)
@@ -121,7 +123,7 @@ class Escena extends THREE.Scene
     // En este caso la intensidad de la luz y si se muestran o no los ejes
     // En el contexto de una función this alude a la función
     this.controles_gui = {
-      lightPower : 50000.0,
+      lightPower : 75000.0,
       ambientIntensity : 0.0,   
     }
 
@@ -178,6 +180,51 @@ class Escena extends THREE.Scene
     return null;
   }
 
+  aplicarJugada(jugada)
+  {
+    // Ejecutamos el movimiento
+    this.tablero_logica.aplicarJugada(jugada);
+
+    // Si en la jugada se mata a alguna pieza la borramos
+    if (jugada.getDisponibleCome()) {
+      this.tablero.eliminaPieza(jugada.getPosicionCome());
+    }
+
+    // Si hay un movimiento extra (el realizado por el enroque) movemos dicha pieza
+    if (jugada.getDisponibleExtra()) {
+      this.tablero.muevePieza(jugada.getMovimientoExtra().getPosicionActual(), jugada.getMovimientoExtra().getPosicionSiguiente());
+    }
+
+    // Movemos la pieza
+    this.tablero.muevePieza(jugada.getMovimiento().getPosicionActual(), jugada.getMovimiento().getPosicionSiguiente());
+
+    // Obtenemos la posicion y pieza de la nueva posición para comprobar
+    // si un peon se convierte en reina (solucion temporal) y actualizar
+    // la posición del rey
+    //                 IMPLEMENTAR
+
+    // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
+    this.tablero.reseteaColorCasillas();
+
+    // Quitamos la luz
+    this.luz_puntual_pieza.visible = false;
+
+    // Deseleccionamos la pieza y cambiamos de estado
+    this.pieza_seleccionada = null;
+    this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+    // Cambiamos el turno y posición y  de la cámara
+    if (this.jugador_actual === TipoJugador.BLANCO) {
+      this.jugador_actual = TipoJugador.NEGRO;
+    }
+    else {
+      this.jugador_actual = TipoJugador.BLANCO;
+    }
+
+    // Animamos la camara
+    this.animarCamara();
+  }
+
   eventoRatonClicArriba(evento)
   {
     switch (this.estado_aplicacion) {
@@ -195,11 +242,24 @@ class Escena extends THREE.Scene
           
           // Solo podemos seleccionar la pieza si tiene jugadas posibles
           if (jugadas_posibles.length > 0) {
+            // Obtenemos la posición en el tablero
+            var posicion_tablero = objeto.getPosicionTablero();
+
+            // Obtenemos las jugadas disponibles de la pieza
+            var jugadas_posibles = this.tablero_logica.getPieza(posicion_tablero).getJugadas(this.tablero_logica, posicion_tablero);
+
+            // Actualizamos los colores de las casillas
+            this.tablero.actualizaColorCasillas(jugadas_posibles);
+
             // Guardamos una referencia a la pieza seleccionada
             this.pieza_seleccionada = objeto;
 
             // Cambiamos de estado
             this.estado_aplicacion = Escena.SELECCIONANDO_CASILLA;
+
+            // Iluminamos la pieza seleccionada
+            this.luz_puntual_pieza.position.set(this.pieza_seleccionada.getPosicionTablero().getColumna() * 9, 15, this.pieza_seleccionada.getPosicionTablero().getFila() * 9);
+            this.luz_puntual_pieza.visible = true;
           }
         }
 
@@ -217,55 +277,48 @@ class Escena extends THREE.Scene
             // Deleccionamos la pieza y cambiamos de estado
             this.pieza_seleccionada = null;
             this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+            // Reseteamos el color del tablero
+            this.tablero.reseteaColorCasillas();
+
+            // Quitamos la luz
+            this.luz_puntual_pieza.visible = false;
           }
           else {
             // Tratamos de realizar la jugada desde la posición de la pieza seleccionada a la nueva posición
-            var jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero())
+            this.jugada = this.tablero_logica.esJudagaPosible(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero())
 
-            if (jugada !== null) {
-              var pieza_atacante = objeto;
-              var pieza_atacada = null;
-
+            if (this.jugada !== null) {
               // Ejecutar la animación de ataque del peón
-              if (this.tablero_logica.getPieza(jugada.getMovimiento().getPosicionActual()).getTipoPieza() === TipoPieza.PEON && jugada.getDisponibleCome() &&
-                 this.tablero_logica.getPieza(jugada.getPosicionCome()).getTipoPieza() === TipoPieza.PEON)
+              if (this.tablero_logica.getPieza(this.jugada.getMovimiento().getPosicionActual()).getTipoPieza() === TipoPieza.PEON &&
+                  this.jugada.getDisponibleCome() &&
+                  this.tablero_logica.getPieza(this.jugada.getPosicionCome()).getTipoPieza() === TipoPieza.PEON)
               {
-              }
+                // Obtenemos las piezas
+                this.pieza_animada_atacante = this.tablero.getCasillaPieza(this.jugada.getMovimiento().getPosicionActual()).pieza;
+                this.pieza_animada_defensora = this.tablero.getCasillaPieza(this.jugada.getPosicionCome()).pieza;
 
-              // Ejecutamos el movimiento
-              this.tablero_logica.aplicarJugada(jugada);
+                // Guardamos la posición y orientación
+                this.rot_original_atacante = this.pieza_animada_atacante.rotation.clone();
+                this.rot_original_defensor = this.pieza_animada_defensora.rotation.clone();
 
-              // Si en la jugada se mata a alguna pieza la borramos
-              if (jugada.getDisponibleCome()) {
-                this.tablero.eliminaPieza(jugada.getPosicionCome());
-              }
+                // Orientamos las piezas
+                this.pieza_animada_atacante.lookAt(this.pieza_animada_defensora.position);
+                this.pieza_animada_defensora.lookAt(this.pieza_animada_atacante.position);
 
-              // Si hay un movimiento extra (el realizado por el enroque) movemos dicha pieza
-              if (jugada.getDisponibleExtra()) {
-                this.tablero.muevePieza(jugada.getMovimientoExtra().getPosicionActual(), jugada.getMovimientoExtra().getPosicionSiguiente());
-              }
+                // Iniciamos la animación
+                this.pieza_animada_atacante.animar();
+                this.pieza_animada_defensora.animar();
 
-              // Movemos la pieza
-              this.tablero.muevePieza(this.pieza_seleccionada.getPosicionTablero(), objeto.getPosicionTablero());
+                // Reseteamos el color del tablero para la animación
+                this.tablero.reseteaColorCasillas();
 
-              // Obtenemos la posicion y pieza de la nueva posición para comprobar
-              // si un peon se convierte en reina (solucion temporal) y actualizar
-              // la posición del rey
-              //                 IMPLEMENTAR
-
-              // Reseteamos el color del tablero, puesto que la pieza ya se ha movido
-              this.tablero.reseteaColorCasillas();
-
-              // Deseleccionamos la pieza y cambiamos de estado
-              this.pieza_seleccionada = null;
-              this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
-
-              // Cambiamos de turno y de estado
-              if (this.jugador_actual === TipoJugador.BLANCO) {
-                this.jugador_actual = TipoJugador.NEGRO;
+                // Cambiamos de estado
+                this.estado_aplicacion = Escena.ANIMANDO_PIEZAS;
               }
               else {
-                this.jugador_actual = TipoJugador.BLANCO;
+                // Si no tenemos que realizar ninguna animación aplicamos la jugada directamente
+                this.aplicarJugada(this.jugada);
               }
             }
           }
@@ -307,34 +360,24 @@ class Escena extends THREE.Scene
   
   inicializarCamaras()
   {
+    this.punto_a_mirar_camara = new THREE.Object3D();
+    this.punto_a_mirar_camara.position.set(31.5, 1, 31.5);
+    this.add(this.punto_a_mirar_camara);
+
     // Para crear una cámara le indicamos:
     // El ángulo del campo de visión en grados sexagesimales
     // La razón de aspecto ancho/alto
     // Los planos de recorte cercano y lejano
     this.camara = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    //this.camera = new THREE.OrthographicCamera(10 * (window.innerWidth / window.innerHeight) / -2, 10 * (window.innerWidth / window.innerHeight) / 2, 10 / 2, 10 / -2, 0.1, 1000);
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    // this.camera.position.set(16, 30, 62);
-    this.camara.position.set(33.75, 100, 90);
+    this.camara.position.set(0, 80, 70);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
-    var punto_a_mirar = new THREE.Vector3(33.75, 10, 33.75); 
-    this.camara.lookAt(punto_a_mirar);
-    this.add(this.camara);
-    
-    // Para el control de cámara usamos una clase que ya tiene implementado los movimientos de órbita
-    /*this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
-
-    // Se configuran las velocidades de los movimientos
-    this.cameraControl.rotateSpeed = 1.5;
-    this.cameraControl.zoomSpeed = -1.5;
-    this.cameraControl.panSpeed = 0.5;
-
-    // Debe orbitar con respecto al punto de mira de la cámara
-    this.cameraControl.target = look;*/
+    this.camara.lookAt(new THREE.Vector3(0, 0, 0));
+    this.punto_a_mirar_camara.add(this.camara);
   }
 
   getCamara()
@@ -343,6 +386,27 @@ class Escena extends THREE.Scene
     // Si hubiera varias cámaras, este método decidiría qué cámara devuelve cada vez que es consultado
     return this.camara;
   }
+
+  animarCamara()
+  {
+    // Rotación a realizar
+    var origen = { rotacion: this.punto_a_mirar_camara.rotation.y };
+    var destino = { rotacion: this.punto_a_mirar_camara.rotation.y + Math.PI };
+
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 1500)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onStart(() => { this.estado_aplicacion = Escena.ANIMANDO_CAMARA; })
+      .onUpdate(() => { this.punto_a_mirar_camara.rotation.y = origen.rotacion; })
+      .onComplete(() => { this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA; })
+      .repeat(0)
+      .start();
+  }
+
+
+
+
 
   /*############################################################################*/
   // Luces de la escena
@@ -363,15 +427,39 @@ class Escena extends THREE.Scene
     // La luz focal, además tiene una posición, y un punto de mira
     // Si no se le da punto de mira, apuntará al (0,0,0) en coordenadas del mundo
     // En este caso se declara como   this.atributo   para que sea un atributo accesible desde otros métodos.
-    this.luz_puntual = new THREE.PointLight(0xffffff);
-    this.luz_puntual.power = this.controles_gui.lightPower;
-    this.luz_puntual.position.set(30, 25, 30);
-    this.add(this.luz_puntual);
+    this.luz_puntual_1 = new THREE.PointLight(0xfeed8e);
+    this.luz_puntual_1.power = this.controles_gui.lightPower;
+    this.luz_puntual_1.position.set(-4.5, 20, -4.5);
+    this.add(this.luz_puntual_1);
+
+    this.luz_puntual_2 = new THREE.PointLight(0xfeed8e);
+    this.luz_puntual_2.power = this.controles_gui.lightPower;
+    this.luz_puntual_2.position.set(-4.5, 20, 67.5);
+    this.add(this.luz_puntual_2);
+
+    this.luz_puntual_3 = new THREE.PointLight(0xfeed8e);
+    this.luz_puntual_3.power = this.controles_gui.lightPower;
+    this.luz_puntual_3.position.set(67.5, 20, -4.5);
+    this.add(this.luz_puntual_3);
+
+    this.luz_puntual_4 = new THREE.PointLight(0xfeed8e);
+    this.luz_puntual_4.power = this.controles_gui.lightPower;
+    this.luz_puntual_4.position.set(67.5, 20, 67.5);
+    this.add(this.luz_puntual_4);
+
+    this.luz_puntual_pieza = new THREE.PointLight(0xFFFFFF);
+    this.luz_puntual_pieza.power = 2500;
+    this.luz_puntual_pieza.position.set(31.5, 10, 31.5);
+    this.luz_puntual_pieza.visible = false;
+    this.add(this.luz_puntual_pieza);
   }
 
   setFuerzaLuzPuntual(valor)
   {
-    this.luz_puntual.power = valor;
+    this.luz_puntual_1.power = valor;
+    this.luz_puntual_2.power = valor;
+    this.luz_puntual_3.power = valor;
+    this.luz_puntual_4.power = valor;
   }
 
   setIntensidadLuzAmbiente(valor)
@@ -409,10 +497,20 @@ class Escena extends THREE.Scene
 
     // Manejo de las piezas seleccionadas
     this.pieza_seleccionada = null;
+    this.pieza_animada_atacante = null;
+    this.pieza_animada_defensora = null;
     this.jugador_actual = TipoJugador.BLANCO;
 
     // Inicializamos el estado actual de la aplicación
     this.estado_aplicacion = Escena.SELECCIONANDO_PIEZA;
+
+    // Estados de la animación
+    this.animacion_atacante_terminada = false;
+    this.animacion_defensor_terminada = false;
+
+    // Rotación original de las piezas
+    this.rot_original_atacante = null;
+    this.rot_original_defensor = null;
   }
 
   /*############################################################################*/
@@ -420,12 +518,35 @@ class Escena extends THREE.Scene
 
   actualizar()
   {
-    // Se actualizan los elementos de la escena para cada frame
-    // Se actualiza la posición de la cámara según su controlador
-    //this.cameraControl.update();
-
     // Se actualiza el tablero
     this.tablero.actualizar();
+
+    // Compromabos si estamos animando
+    if (this.estado_aplicacion == Escena.ANIMANDO_PIEZAS) {
+      if (this.pieza_animada_atacante.terminaAnimacion()) {
+        this.animacion_atacante_terminada = true;
+      }
+
+      if (this.pieza_animada_defensora.terminaAnimacion()) {
+        this.animacion_defensor_terminada = true;
+      }
+
+      //if (this.animacion_atacante_terminada && this.animacion_defensor_terminada) {
+      if (!this.animacion_atacante_terminada && !this.animacion_defensor_terminada) {
+        // Orientamos las piezas
+        this.pieza_animada_atacante.rotation.copy(this.rot_original_atacante);
+        this.pieza_animada_defensora.rotation.copy(this.rot_original_defensor);
+
+        // Restauramos las variables que controlan el estado
+        this.animacion_atacante_terminada = false;
+        this.animacion_defensor_terminada = false;
+
+        // Aplicamos la jugada
+        this.aplicarJugada(this.jugada);
+      }
+    }
+
+    TWEEN.update();
     
     // Le decimos al renderizador "visualiza la escena que te indico usando la cámara que te estoy pasando"
     this.renderizador.render(this, this.getCamara());
