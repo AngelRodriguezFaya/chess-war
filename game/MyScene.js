@@ -211,12 +211,12 @@ class Escena extends THREE.Scene
 
     // Cambiamos el turno y posición y  de la cámara
     if (this.jugador_actual === TipoJugador.BLANCO) {
-      this.camara.position.set(31.5, 100, -27);
+      this.camara.position.set(31.5, 80, -47);
       this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.NEGRO;
     }
     else {
-      this.camara.position.set(31.5, 100, 90);
+      this.camara.position.set(31.5, 80, 110);
       this.camara.lookAt(this.punto_a_mirar);
       this.jugador_actual = TipoJugador.BLANCO;
     }
@@ -347,8 +347,7 @@ class Escena extends THREE.Scene
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    // this.camera.position.set(16, 30, 62);
-    this.camara.position.set(31.5, 100, 90);
+    this.camara.position.set(31.5, 80, 110);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
