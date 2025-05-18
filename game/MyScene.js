@@ -80,13 +80,13 @@ class Escena extends THREE.Scene
     this.renderizador = new THREE.WebGLRenderer();
     
     // Se establece un color de fondo en las imágenes que genera el render
-    this.renderizador.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
+    this.renderizador.setClearColor(new THREE.Color(0x222222), 1.0);
     
     // Se establece el tamaño, se aprovecha la totalidad de la ventana del navegador
     this.renderizador.setSize(window.innerWidth, window.innerHeight);
     
     // La visualización se muestra en el lienzo recibido
-    $(myCanvas).append(this.renderizador.domElement); 
+    $(myCanvas).append(this.renderizador.domElement);
   }
   
   setAspectoCamara(proporcion)
