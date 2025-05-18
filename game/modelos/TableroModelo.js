@@ -47,13 +47,13 @@ export class TableroModelo extends THREE.Object3D
     var textura_pieza = loader.load('../../imgs/madera_olivo.png');
     var textura_bump_pieza = loader.load('../../imgs/madera_bump.png');
 
-    this.material_casilla_blanca = new THREE.MeshPhysicalMaterial({ color: 0xF5F5DC, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.75 });
-    this.material_casilla_negra = new THREE.MeshPhysicalMaterial({ color: 0x562B05, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.75 });
-    this.material_casilla_seleccionada = new THREE.MeshPhysicalMaterial({ color: 0x004000, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.75 });
-    this.material_casilla_libre = new THREE.MeshPhysicalMaterial({ color: 0x00ff00, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.75 });
-    this.material_casilla_come = new THREE.MeshPhysicalMaterial({ color: 0xff0000, map: textura_casilla, roughness: 0.75, metalness: 0.0, reflectivity: 0.75 });
-    this.material_piezas_negras = new THREE.MeshPhysicalMaterial({ color: 0x5A4545, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25,  metalness: 0.75, reflectivity: 0.5 });
-    this.material_piezas_blancas = new THREE.MeshPhysicalMaterial({ color: 0xEAD9C2, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25,  metalness: 0.75, reflectivity: 0.5 });
+    this.material_casilla_blanca = new THREE.MeshPhysicalMaterial({ color: 0xF5F5DC, map: textura_casilla, roughness: 0.0, metalness: 0.1 });
+    this.material_casilla_negra = new THREE.MeshPhysicalMaterial({ color: 0x562B05, map: textura_casilla, roughness: 0.0, metalness: 0.1 });
+    this.material_casilla_seleccionada = new THREE.MeshPhysicalMaterial({ color: 0x004000, map: textura_casilla, roughness: 0.0, metalness: 0.1 });
+    this.material_casilla_libre = new THREE.MeshPhysicalMaterial({ color: 0x00ff00, map: textura_casilla, roughness: 0.0, metalness: 0.1 });
+    this.material_casilla_come = new THREE.MeshPhysicalMaterial({ color: 0xff0000, map: textura_casilla, roughness: 0.0, metalness: 0.1 });
+    this.material_piezas_negras = new THREE.MeshPhysicalMaterial({ color: 0x5A4545, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25, metalness: 0.75, reflectivity: 1.0 });
+    this.material_piezas_blancas = new THREE.MeshPhysicalMaterial({ color: 0xEAD9C2, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25, metalness: 0.75, reflectivity: 1.0 });
   }
   
   crearModelo()

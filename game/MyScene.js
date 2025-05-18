@@ -124,7 +124,7 @@ class Escena extends THREE.Scene
     // En este caso la intensidad de la luz y si se muestran o no los ejes
     // En el contexto de una función this alude a la función
     this.controles_gui = {
-      lightPower : 25000.0,
+      lightPower : 75000.0,
       ambientIntensity : 0.0,   
     }
 
@@ -363,7 +363,7 @@ class Escena extends THREE.Scene
 
     // Recuerda: Todas las unidades están en metros
     // También se indica dónde se coloca
-    this.camara.position.set(0, 80, 80);
+    this.camara.position.set(0, 80, 70);
     
     // Y hacia dónde mira
     // var look = new THREE.Vector3(16, 0, 16); // Hacia el centro del tablero
@@ -421,21 +421,25 @@ class Escena extends THREE.Scene
     this.luz_puntual_1 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_1.power = this.controles_gui.lightPower;
     this.luz_puntual_1.position.set(4.5, 15, 13.5);
+    this.luz_puntual_1.position.set(-4.5, 20, -4.5);
     this.add(this.luz_puntual_1);
 
     this.luz_puntual_2 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_2.power = this.controles_gui.lightPower;
     this.luz_puntual_2.position.set(58.5, 15, 13.5);
+    this.luz_puntual_2.position.set(-4.5, 20, 67.5);
     this.add(this.luz_puntual_2);
 
     this.luz_puntual_3 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_3.power = this.controles_gui.lightPower;
     this.luz_puntual_3.position.set(4.5, 15, 49.5);
+    this.luz_puntual_3.position.set(67.5, 20, -4.5);
     this.add(this.luz_puntual_3);
 
     this.luz_puntual_4 = new THREE.PointLight(0xFDF3C6);
     this.luz_puntual_4.power = this.controles_gui.lightPower;
     this.luz_puntual_4.position.set(58.5, 15, 49.5);
+    this.luz_puntual_4.position.set(67.5, 20, 67.5);
     this.add(this.luz_puntual_4);
   }
 
