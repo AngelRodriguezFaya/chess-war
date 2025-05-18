@@ -12,7 +12,7 @@ import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 /*############################################################################*/
 // Clase Peon
 
-export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
+export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
 {
   /*############################################################################*/
   // Variables de clase
@@ -120,11 +120,11 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(material) // , posicion_en_tablero, tipo_jugador)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
     //super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
-    super();
+    super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
 
     // Creación del modelo
     this.crearModelo(material);
