@@ -12,7 +12,7 @@ import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 /*############################################################################*/
 // Clase Peon
 
-export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
+export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
 {
   /*############################################################################*/
   // Variables de clase
@@ -120,11 +120,11 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(material, posicion_en_tablero, tipo_jugador)
+  constructor(material) // , posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
     //super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
-    super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
+    super();
 
     // Creación del modelo
     this.crearModelo(material);
@@ -167,6 +167,7 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
     this.crearTrenInferior(material);
     this.crearTrenSuperior(material);
 
+    
     this.rot_Z_ParteInfBrazoIzq = 0;
     this.rot_X_ParteInfBrazoIzq = 0;
     this.rot_Z_BrazoIzq = 0;
@@ -742,6 +743,9 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
     // Creamos la mano izquierda
     var manoIzq = new CSG.Brush(manoIzqGeom, material);
 
+    // Añadimos el escudo a la mano izquierda
+    manoIzq.add(this.crearEscudo(material));
+
     // Posicionamos la mano
     manoIzq.position.y = -PeonModelo.hInfBrazo;
 
@@ -865,6 +869,9 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
     // Creamos la mano derecha
     var manoDcha = new CSG.Brush(manoDchaGeom, material);
 
+    // Añadimos la espada
+    manoDcha.add(this.crearEspada(material));
+
     // Posicionamos la mano
     manoDcha.position.y = -PeonModelo.hInfBrazo;
     manoDcha.userData = this;
@@ -958,10 +965,13 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
   crearBrazoDerecho(material){
     // Creamos el brazo derecho
     var brazoDcho = new THREE.Object3D();
+    
     // Añadimos la parte superior del brazo derecho ( y el codo y la parte inferior y la mano derecha)
     brazoDcho.add(this.crearParteSupBrazoDerecho(material));
+    
     // Añadimos la protección del hombro derecho
     brazoDcho.add(this.crearProteccionHombroDerecho(material, PeonModelo.RES));
+    
     // Posicionamos el brazo
     brazoDcho.position.set(-PeonModelo.wTorso, PeonModelo.hTorso, 0);
     brazoDcho.userData = this;
@@ -1204,153 +1214,107 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
   //   this.add(prtMunecaDcha);
   // }
 
-  // crearEspada(material, RES){
-  //       // Defino la forma 2D de la hoja de la espada
-  //       var formHojaEspada = new THREE.Shape();
-  //       formHojaEspada.moveTo(0, 0);
-  //       formHojaEspada.lineTo(0.15, 0);
-  //       formHojaEspada.lineTo(0.15, 6.5);
-  //       formHojaEspada.lineTo(0, 7);
-  //       formHojaEspada.lineTo(-0.15, 6.5);
-  //       formHojaEspada.lineTo(-0.15, 0);
-  //       formHojaEspada.lineTo(0, 0);
+  crearEspada(material, RES){
+        // Defino la forma 2D de la hoja de la espada
+        var formHojaEspada = new THREE.Shape();
+        formHojaEspada.moveTo(0, 0);
+        formHojaEspada.lineTo(0.15, 0);
+        formHojaEspada.lineTo(0.15, 6.5);
+        formHojaEspada.lineTo(0, 7);
+        formHojaEspada.lineTo(-0.15, 6.5);
+        formHojaEspada.lineTo(-0.15, 0);
+        formHojaEspada.lineTo(0, 0);
     
-  //       // Definimos las geometrías 
-  //       var mastil1EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.4, RES);
-  //       var mastil2EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.7, RES);
-  //       var opchojaEspadaGeom = { depth : 0.01, steps : RES, bevelEnabled : false } ;
-  //       var hojaEspadaGeom = new THREE.ExtrudeGeometry ( formHojaEspada , opchojaEspadaGeom );
+        // Definimos las geometrías 
+        var mastil1EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.4, RES);
+        var mastil2EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.7, RES);
+        var opchojaEspadaGeom = { depth : 0.01, steps : RES, bevelEnabled : false } ;
+        var hojaEspadaGeom = new THREE.ExtrudeGeometry ( formHojaEspada , opchojaEspadaGeom );
     
-  //       // Posicionamos y orientamos las geometrías
-  //       mastil1EspadaGeom.translate(3.55, 9, 2.85);
-  //       mastil2EspadaGeom.rotateZ(Math.PI / 2);
-  //       mastil2EspadaGeom.translate(3.55, 9.5, 2.85);
-  //       hojaEspadaGeom.translate(3.55, 9.5, 2.85);
+        // Posicionamos y orientamos las geometrías
+        mastil1EspadaGeom.translate(0, 0, 0);
+        mastil2EspadaGeom.rotateZ(Math.PI / 2);
+        mastil2EspadaGeom.translate(0, 0.5, 0);
+        hojaEspadaGeom.translate(0, 0.5, 0);
     
-  //       // Creamos la espada
-  //       var mastil1Espada = new THREE.Mesh(mastil1EspadaGeom, material);
-  //       var mastil2Espada = new THREE.Mesh(mastil2EspadaGeom, material);
-  //       var hojaEspada = new THREE.Mesh(hojaEspadaGeom, material);
+        // Creamos la espada
+        var mastil1Espada = new THREE.Mesh(mastil1EspadaGeom, material);
+        var mastil2Espada = new THREE.Mesh(mastil2EspadaGeom, material);
+        var hojaEspada = new THREE.Mesh(hojaEspadaGeom, material);
     
-  //       // Añadimos la espada al peón
-  //       mastil1Espada.userData = this;
-  //       mastil2Espada.userData = this;
-  //       hojaEspada.userData = this;
-  //       this.add(mastil1Espada);
-  //       this.add(mastil2Espada);
-  //       this.add(hojaEspada);
-  // }
+        // Añadimos la espada al peón
+        // Añadimos el mastil2 (el horizontal) y la hoja al mastil1 (el vertical, por donde se agarra)
+        mastil1Espada.userData = this;
+        mastil2Espada.userData = this;
+        hojaEspada.userData = this;
 
-  // crearEscudo(material, RES){
-  //   // Definimos la geometría del asa del escudo
-  //   var asaEscudoGeom = new THREE.TorusGeometry(0.5, 0.1, RES);
+        mastil1Espada.add(mastil2Espada);
+        mastil1Espada.add(hojaEspada);
 
-  //   // Posicionamos y orientamos la geometría
-  //   asaEscudoGeom.rotateY(Math.PI / 2);
-  //   asaEscudoGeom.translate(-3.52, 8.9, 3.35);
+        // Rotamos la espada
+        // mastil1Espada.rotation.y = Math.PI / 2;
+        mastil1Espada.rotation.x = Math.PI / 2;
+        
+        return mastil1Espada;
+  }
 
-  //   // Creamos el asa del escudo
-  //   var asaEscudo = new CSG.Brush(asaEscudoGeom, material);
+  crearEscudo(material){
+    // Definimos la geometría del asa del escudo
+    var asaEscudoGeom = new THREE.TorusGeometry(0.5, 0.1, PeonModelo.RES);
 
-  //   // Creamos un Evaluador que utilizaremos para las operaciones booleanas
-  //   var evaluator = new CSG.Evaluator();
+    // Posicionamos y orientamos la geometría
+    asaEscudoGeom.rotateY(Math.PI / 2);
+    asaEscudoGeom.translate(0, 0, 0);
 
-  //   // Realizamos una operación booleana para quedarnos con medio asa
-  //   var cajaAux = new THREE.BoxGeometry(2, 2, 1);
-  //   cajaAux.translate(-3.52, 8.9, 3.8);
-  //   var cajaAux = new CSG.Brush(cajaAux, material);
-  //   var asaFinalEscudo = evaluator.evaluate(asaEscudo, cajaAux, CSG.SUBTRACTION);
+    // Creamos el asa del escudo
+    var asaEscudo = new CSG.Brush(asaEscudoGeom, material);
 
-  //   // Añadimos el resultado al peón
-  //   asaFinalEscudo.userData = this;
-  //   this.add(asaFinalEscudo);
+    // Creamos un Evaluador que utilizaremos para las operaciones booleanas
+    var evaluator = new CSG.Evaluator();
 
-  //   // Definimos la forma 2D del escudo
-  //   var formaEscudo = new THREE.Shape();
-  //   // Dibujamos la parte superior del escudo (un arco)
-  //   formaEscudo.absarc(0, 0, 2, 0, 2 * Math.PI, true);
-  //   // Cerramos la forma
-  //   formaEscudo.lineTo(0, 0);
+    // Realizamos una operación booleana para quedarnos con medio asa
+    var cajaAux = new THREE.BoxGeometry(2, 2, 1);
+    cajaAux.translate(0, 0, 0.45);
+    var cajaAux = new CSG.Brush(cajaAux, material);
+    var asaFinalEscudo = evaluator.evaluate(asaEscudo, cajaAux, CSG.SUBTRACTION);
+
+    asaFinalEscudo.userData = this;
+    // this.add(asaFinalEscudo);
+
+    // Definimos la forma 2D del escudo
+    var formaEscudo = new THREE.Shape();
+    // Dibujamos la parte superior del escudo (un arco)
+    formaEscudo.absarc(0, 0, 2, 0, 2 * Math.PI, true);
+    // Cerramos la forma
+    formaEscudo.lineTo(0, 0);
     
-  //   // Configuramos las opciones de extrusión
-  //   var opcEscudoGeom = {
-  //       depth: 0.3, // Grosor del escudo
-  //       bevelEnabled: false, // Activar biselado
-  //       bevelThickness: 0.1, // Grosor del bisel
-  //       bevelSize: 0.1, // Tamaño del bisel
-  //       bevelSegments: 5 // Segmentos del bisel
-  //   };
+    // Configuramos las opciones de extrusión
+    var opcEscudoGeom = {
+        depth: 0.3, // Grosor del escudo
+        bevelEnabled: false, // Activar biselado
+        bevelThickness: 0.1, // Grosor del bisel
+        bevelSize: 0.1, // Tamaño del bisel
+        bevelSegments: 5 // Segmentos del bisel
+    };
     
-  //   // Creamos la geometría del escudo por extrusión
-  //   var geomEscudo = new THREE.ExtrudeGeometry(formaEscudo, opcEscudoGeom);
+    // Creamos la geometría del escudo por extrusión
+    var geomEscudo = new THREE.ExtrudeGeometry(formaEscudo, opcEscudoGeom);
 
-  //   // Posicionamos la geometría del escudo
-  //   geomEscudo.translate(-3.55, 9, 3.3);  
+    // Posicionamos la geometría del escudo
+    geomEscudo.translate(0, 0, 0);  
       
-  //   // Creamos el escudo
-  //   var escudo = new THREE.Mesh(geomEscudo, material);
+    // Creamos el escudo
+    var escudo = new THREE.Mesh(geomEscudo, material);
 
-  //   // Añadimos el escudo al peón
-  //   escudo.userData = this;
-  //   this.add(escudo);
-  // }
+    // Añadimos el asa al escudo
+    escudo.add(asaFinalEscudo);
 
-  // crearBrazoIzquierdo(material, RES){
-  //   // Creamos la protección del hombro izquierdo
-  //   this.crearProteccionHombroIzquierdo(material, RES);
+    // Rotamos el escudo
+    escudo.rotation.x = Math.PI / 2;
 
-  //   // Creamos la parte superior del brazo izquierdo
-  //   this.crearParteSupBrazoIzquierdo(material, RES);
-
-  //   // Creamos el codo izquierdo
-  //   this.crearCodoIzquierdo(material, RES);
-
-  //   // Creamos la parte inferior del brazo izquierdo
-  //   this.crearParteInfBrazoIzquierdo(material, RES);
-
-  //   // Creamos la mano izquierda
-  //   this.crearManoIzquierda(material, RES);
-
-  //   // Creamos el protector de la muñeca izquierda
-  //   this.crearProtectorMunecaIzquierda(material, RES);
-  // }
-
-  // crearBrazoDerecho(material, RES){
-  //   // Creamos la protección del hombro derecho
-  //   this.crearProteccionHombroDerecho(material, RES);
-
-  //   // Creamos la parte superior del brazo derecho
-  //   this.crearParteSupBrazoDerecho(material, RES);
-
-  //   // Creamos el codo derecho
-  //   this.crearCodoDerecho(material, RES);
-
-  //   // Creamos la parte inferior del brazo derecho
-  //   this.crearParteInfBrazoDerecho(material, RES);
-
-  //   // Creamos la mano derecha
-  //   this.crearManoDerecha(material, RES);
-
-  //   // Creamos el protector de la muñeca derecha
-  //   this.crearProtectorMunecaDerecha(material, RES);
-  // }
-
-  // crearBrazoIzquierdoEspada(material, RES){
-  //   // Creamos el brazo izquierdo
-  //   this.crearBrazoIzquierdo(material, RES);
-
-  //   // Creamos la espada
-  //   this.crearEspada(material, RES);
-  // }
-
-  // crearBrazoDerechoEscudo(material, RES){
-  //   // Creamos el brazo derecho
-  //   this.crearBrazoDerecho(material, RES);
-
-  //   // Creamos el escudo
-  //   this.crearEscudo(material, RES);
-  // }
-
+    escudo.userData = this;
+    return escudo;
+  }
   /*############################################################################*/
   // Animación
 
@@ -1363,6 +1327,6 @@ export class PeonModelo extends PiezaBaseModelo // PiezaBaseModelo
 
   actualizar()
   {
-    super.actualizar(false);
+    // super.actualizar(false);
   }
 }
