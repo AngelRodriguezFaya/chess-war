@@ -3,6 +3,7 @@
 
 import * as THREE from '../../libs/three.module.js'
 import * as CSG from '../../libs/three-bvh-csg.js'
+import * as TWEEN from '../../libs/tween.module.js' // Para las animaciones
 
 import { TipoPieza } from '../logica/TiposUtils.js'
 import { PiezaBaseModelo } from './PiezaBaseModelo.js'
@@ -109,10 +110,6 @@ export class PeonModelo extends PiezaBaseModelo
   static rIProtecHombro = 0.1; // Radio Inferior
   static hProtecHombro = 1.2; // Altura
 
-    
-  
-
-
 
 
   
@@ -185,8 +182,12 @@ export class PeonModelo extends PiezaBaseModelo
     this.rot_Y_ParteSupBrazoDcho = 0;
     this.rot_Z_ParteSupBrazoDcho = - Math.PI/10;
 
-      // Tren inferior
+      // Tren Superior
     this.rot_X_TrenSuperior = 0; 
+    
+    this.pos_X_TrenSuperior = 0; 
+    this.pos_Y_TrenSuperior = PeonModelo.hTrenInferior; 
+    this.pos_Z_TrenSuperior = 0; 
 
     this.crearTrenInferior(material);
     this.crearTrenSuperior(material);
@@ -786,7 +787,8 @@ export class PeonModelo extends PiezaBaseModelo
     this.brazoInfIzq.add(this.manoIzq);
 
     // Aplicamos las rotaciones necesarias
-    this.brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
+    // this.brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
+    this.brazoInfIzq.rotation.set (-Math.PI/2, 0, 0);
 
     // Posicionamos el antebrazo y la mano
     this.brazoInfIzq.position.y = - PeonModelo.rCodo;
@@ -835,7 +837,8 @@ export class PeonModelo extends PiezaBaseModelo
     this.brazoSupIzq.add(this.codoIzq);
 
     // Aplicamos las rotaciones necesarias
-    this.brazoSupIzq.rotation.set(this.rot_X_ParteSupBrazoIzq, this.rot_Y_ParteSupBrazoIzq, this.rot_Z_ParteSupBrazoIzq);
+    // this.brazoSupIzq.rotation.set(this.rot_X_ParteSupBrazoIzq, this.rot_Y_ParteSupBrazoIzq, this.rot_Z_ParteSupBrazoIzq);
+    this.brazoSupIzq.rotation.set(Math.PI/10, 0, 0);
 
     // Posicionamos
     this.brazoSupIzq.position.y = - PeonModelo.hProtecHombro + 0.1;
@@ -1010,31 +1013,31 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
   crearTrenSuperior(material){
-    var trenSuperior = new THREE.Object3D();
+    this.trenSuperior = new THREE.Object3D();
 
     // Añadimos el torso
-    trenSuperior.add(this.crearTorso(material));
+    this.trenSuperior.add(this.crearTorso(material));
 
     // Añadimos el cuello
-    trenSuperior.add(this.crearCuello(material));
+    this.trenSuperior.add(this.crearCuello(material));
 
     // Añadimos la cabeza
-    trenSuperior.add(this.crearCabeza(material));
+    this.trenSuperior.add(this.crearCabeza(material));
 
     // Añadimos el brazo izquierdo
-    trenSuperior.add(this.crearBrazoIzquierdo(material));
+    this.trenSuperior.add(this.crearBrazoIzquierdo(material));
 
     // Añadimos el brazo derecho
-    trenSuperior.add(this.crearBrazoDerecho(material));
+    this.trenSuperior.add(this.crearBrazoDerecho(material));
 
     // Añadimos las rotaciones necesarias
-    trenSuperior.rotation.x = this.rot_X_TrenSuperior;
+    this.trenSuperior.rotation.x = this.rot_X_TrenSuperior;
 
     // Posicionamos el tren superior
-    trenSuperior.position.y = PeonModelo.hTrenInferior;
+    this.trenSuperior.position.set(this.pos_X_TrenSuperior, this.pos_Y_TrenSuperior, this.pos_Z_TrenSuperior);
 
-    trenSuperior.userData = this;
-    this.add(trenSuperior);
+    this.trenSuperior.userData = this;
+    this.add(this.trenSuperior);
   }
 
 
@@ -1360,14 +1363,176 @@ export class PeonModelo extends PiezaBaseModelo
     this.dentro_animacion = false;
   }
 
+  // 1. Peón atacante: cuando levanta la espada (solo el brazo derecho)
+  animacionAtacar1(){
+
+    // Definimos la posición inicial y final de la animación
+    var origen = { brazoInfIzq_rot_X: -Math.PI/2, brazoInfIzq_rot_Y: 0, brazoInfIzq_rot_X: 0,       // Brazo izquierdo Parte Inferior
+                   brazoSupIzq_rot_X: 0, brazoSupIzq_rot_Y: 0, brazoSupIzq_rot_Z: Math.PI/10,       // Brazo izquierdo Parte Superior
+                   brazoInfDcho_rot_X: -Math.PI/2, brazoInfDcho_rot_Y: 0, brazoInfDcho_rot_Z: 0,    // Brazo derecho Parte Inferior
+                   brazoSupDcho_rot_X: 0, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/10};  // Brazo derecho Parte Superior
+
+    var destino = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: -1, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+                    brazoSupDcho_rot_X: -Math.PI/4, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/4};  // Brazo derecho Parte Superior
+
+    // var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 750)
+      .easing(TWEEN.Easing.Quadratic.In) // Control de velocidad: acelerado
+      .onStart(() => { this.dentro_animacion = true; })
+      .onUpdate(() => { this.brazoInfDcho.rotation.set(origen.brazoInfDcho_rot_X, origen.brazoInfDcho_rot_Y, origen.brazoInfDcho_rot_Z),
+                        this.brazoSupDcho.rotation.set(origen.brazoSupDcho_rot_X, origen.brazoSupDcho_rot_Y, origen.brazoSupDcho_rot_Z); })
+      .onComplete(() => { this.animacionAtacar2(); })
+      .repeat(0)
+      .start();
+  }
+
+  animacionAtacar2(){
+
+    // Definimos la posición inicial y final de la animación
+    var origen = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: -1, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+                    brazoSupDcho_rot_X: -Math.PI/4, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/4};  // Brazo derecho Parte Superior
+
+    var destino = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: Math.PI/9, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+                    brazoSupDcho_rot_X: -Math.PI/7, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/10};  // Brazo derecho Parte Superior
+
+    // var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 500)
+      .easing(TWEEN.Easing.Quadratic.In) // Control de velocidad: acelerado
+      .onStart(() => { this.dentro_animacion = true; })
+      .onUpdate(() => { this.brazoInfDcho.rotation.set(origen.brazoInfDcho_rot_X, origen.brazoInfDcho_rot_Y, origen.brazoInfDcho_rot_Z),
+                        this.brazoSupDcho.rotation.set(origen.brazoSupDcho_rot_X, origen.brazoSupDcho_rot_Y, origen.brazoSupDcho_rot_Z); })
+      .onComplete(() => { this.animacionAtacar3(); })
+      .repeat(0)
+      .start();
+  }
+
+  animacionAtacar3(){
+
+    // Definimos la posición inicial y final de la animación
+    var origen = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: Math.PI/9, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+                    brazoSupDcho_rot_X: -Math.PI/7, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/10};  // Brazo derecho Parte Superior
+
+    var destino = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: Math.PI/2, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+                    brazoSupDcho_rot_X: -Math.PI/4, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/8};  // Brazo derecho Parte Superior
+
+    // var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 500)
+      .easing(TWEEN.Easing.Bounce.Out) // Control de velocidad: acelerado
+      .onStart(() => { this.dentro_animacion = true; })
+      .onUpdate(() => { this.brazoInfDcho.rotation.set(origen.brazoInfDcho_rot_X, origen.brazoInfDcho_rot_Y, origen.brazoInfDcho_rot_Z),
+                        this.brazoSupDcho.rotation.set(origen.brazoSupDcho_rot_X, origen.brazoSupDcho_rot_Y, origen.brazoSupDcho_rot_Z); })
+      .onComplete(() => { this.animacionAtacar4(); })
+      .repeat(0)
+      .start();
+  }
+
+  animacionAtacar4(){
+
+    // Definimos la posición inicial y final de la animación
+    var origen = { brazoInfDcho_rot_X: 0, brazoInfDcho_rot_Y: Math.PI/2, brazoInfDcho_rot_Z: 0,                    // Brazo derecho Parte Inferior
+      brazoSupDcho_rot_X: -Math.PI/4, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/8};  // Brazo derecho Parte Superior
+
+    var destino = { brazoInfDcho_rot_X: -Math.PI/2, brazoInfDcho_rot_Y: 0, brazoInfDcho_rot_Z: 0,    // Brazo derecho Parte Inferior
+      brazoSupDcho_rot_X: 0, brazoSupDcho_rot_Y: 0, brazoSupDcho_rot_Z: -Math.PI/10};  // Brazo derecho Parte Superior
+
+    // var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 1000)
+      .easing(TWEEN.Easing.Quadratic.In) // Control de velocidad: acelerado
+      .onStart(() => { this.dentro_animacion = true; })
+      .onUpdate(() => { this.brazoInfDcho.rotation.set(origen.brazoInfDcho_rot_X, origen.brazoInfDcho_rot_Y, origen.brazoInfDcho_rot_Z),
+                        this.brazoSupDcho.rotation.set(origen.brazoSupDcho_rot_X, origen.brazoSupDcho_rot_Y, origen.brazoSupDcho_rot_Z); })
+      .onComplete(() => { this.dentro_animacion = false; })
+      .repeat(0)
+      .start();
+  }
+
+
+
+    // 2. Peón 
+    animacionDefender1(){
+
+      // Definimos la posición inicial y final de la animación
+      var origen = { brazoInfIzq_rot_X: -Math.PI/2, brazoInfIzq_rot_Y: 0, brazoInfIzq_rot_Z: 0,       // Brazo izquierdo Parte Inferior
+                     brazoSupIzq_rot_X: 0, brazoSupIzq_rot_Y: 0, brazoSupIzq_rot_Z: Math.PI/10};       // Brazo izquierdo Parte Superior
+  
+      var destino = { brazoInfIzq_rot_X: -Math.PI/1.5, brazoInfIzq_rot_Y: 0, brazoInfIzq_rot_Z:0,            // Brazo izquierdo Parte Inferior
+                      brazoSupIzq_rot_X: Math.PI/10, brazoSupIzq_rot_Y: 0, brazoSupIzq_rot_Z: Math.PI/6};      // Brazo izquierdo Parte Superior
+  
+      // var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+      
+      // Animacion
+      var movimiento = new TWEEN.Tween(origen)
+        .to(destino, 2000)
+        .easing(TWEEN.Easing.Linear.None) // Control de velocidad: acelerado
+        .onStart(() => { this.dentro_animacion = true; })
+        .onUpdate(() => { this.brazoInfIzq.rotation.set(origen.brazoInfIzq_rot_X, origen.brazoInfIzq_rot_Y, origen.brazoInfIzq_rot_Z),
+                          this.brazoSupIzq.rotation.set(origen.brazoSupIzq_rot_X, origen.brazoSupIzq_rot_Y, origen.brazoSupIzq_rot_Z); })        
+        .onComplete(() => { this.animacionDefender2(); })
+        .repeat(0)
+        .start();
+    }
+
+  animacionDefender2(){
+    // Definimos la posición inicial y final de la animación
+    var origen = { pos_X: 0, pos_Y: PeonModelo.hTrenInferior, pos_Z: 0,
+                   rot_X: 0, rot_Y: 0, rot_Z: 0};
+
+    var destino = { pos_X: 0, pos_Y: 0.5, pos_Z: -2,
+                    rot_X: -1.5, rot_Y: 0, rot_Z: 0};
+
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+    .to(destino, 2000)
+    .easing(TWEEN.Easing.Bounce.Out) // Control de velocidad: acelerado
+    .onStart(() => { this.dentro_animacion = true; })
+    .onUpdate(() => { this.trenSuperior.position.set(origen.pos_X, origen.pos_Y, origen.pos_Z),
+                      this.trenSuperior.rotation.set(origen.rot_X, origen.rot_Y, origen.rot_Z); })
+    .onComplete(() => { this.animacionDefender3(); })
+    .repeat(0)
+    .start();
+  }
+
+  animacionDefender3(){
+    // Definimos la posición inicial y final de la animación
+    var origen = { pos_X: 0, pos_Y: 0.5, pos_Z: -2,
+                  rot_X: -1.5, rot_Y: 0, rot_Z: 0};
+
+    var destino = { pos_X: 0, pos_Y: 0.5, pos_Z: -2,
+                    rot_X: -1.5, rot_Y: 0, rot_Z: 0};
+
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+    .to(destino, 500)
+    .easing(TWEEN.Easing.Quadratic.In) // Control de velocidad: acelerado
+    .onStart(() => { this.dentro_animacion = true; })
+    .onUpdate(() => { this.trenSuperior.position.set(origen.pos_X, origen.pos_Y, origen.pos_Z),
+                      this.trenSuperior.rotation.set(origen.rot_X, origen.rot_Y, origen.rot_Z); })
+    .onComplete(() => { this.dentro_animacion = false; })
+    .repeat(0)
+    .start();
+  }
 
 
   animarAtaca()
   {
+    this.animacionAtacar1();
   }
 
   animarDefiende()
   {
+    this.animacionDefender1();
   }
 
   /*############################################################################*/
@@ -1375,6 +1540,6 @@ export class PeonModelo extends PiezaBaseModelo
 
   actualizar()
   {
-    // super.actualizar(false);
+    super.actualizar(this.dentro_animacion);
   }
 }
