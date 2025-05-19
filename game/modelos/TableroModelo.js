@@ -2,6 +2,7 @@
 // Importaciones
 
 import * as THREE from '../../libs/three.module.js'
+import * as TWEEN from '../../libs/tween.module.js'
 
 import { Posicion } from '../logica/Jugada.js';
 import { TipoJugador } from '../logica/TiposUtils.js'
@@ -35,6 +36,9 @@ export class TableroModelo extends THREE.Object3D
 
     // Creación del modelo
     this.crearModelo();
+
+    // Inicializar animaciones
+    this.inicializarAnimaciones();
   }
 
   /*############################################################################*/
@@ -260,6 +264,43 @@ export class TableroModelo extends THREE.Object3D
   }
 
   /*############################################################################*/
+  // Animaciones
+
+  inicializarAnimaciones()
+  {
+    // Estados de la animación
+    this.animando = false;
+    this.en_animacion = false;
+    this.termina_animacion = false;
+
+    this.dentro_animacion = false;
+  }
+
+  animarMovimiento(jugada)
+  {
+    var posicion_actual = jugada.getMovimiento().getPosicionActual();
+    var posicion_siguiente = jugada.getMovimiento().getPosicionSiguiente();
+    var origen = { x: posicion_actual.getColumna() * 9, z: posicion_actual.getFila() * 9 };
+    var destino = { x: posicion_siguiente.getColumna() * 9, z: posicion_siguiente.getFila() * 9 };
+    this.pieza_actual_mov = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+
+    // Animacion
+    var movimiento = new TWEEN.Tween(origen)
+      .to(destino, 1000)
+      .easing(TWEEN.Easing.Quadratic.InOut)
+      .onStart(() => { this.dentro_animacion = true; })
+      .onUpdate(() => { this.pieza_actual_mov.position.x = origen.x; this.pieza_actual_mov.position.z = origen.z; })
+      .onComplete(() => { this.dentro_animacion = false; })
+      .repeat(0)
+      .start();
+  }
+
+  terminaAnimacion()
+  {
+    return this.termina_animacion;
+  }
+
+  /*############################################################################*/
   // Actualización de materiales
 
   actualizaMaterialCasilla(posicion, material)
@@ -318,6 +359,29 @@ export class TableroModelo extends THREE.Object3D
           pieza.actualizar();
         }
       }
+    }
+
+    if (this.dentro_animacion) {
+      if (this.animando) {
+        this.en_animacion = true;
+      }
+      else {
+        this.en_animacion = false;
+      }
+
+      this.animando = true;
+      this.termina_animacion = false;
+    }
+    else {
+      if (this.animando) {
+        this.termina_animacion = true;
+      }
+      else {
+        this.termina_animacion = false;
+      }
+
+      this.animando = false;
+      this.en_animacion = false;
     }
   }
 }

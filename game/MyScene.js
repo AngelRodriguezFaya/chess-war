@@ -34,6 +34,7 @@ class Escena extends THREE.Scene
   static SELECCIONANDO_CASILLA = 1;
   static ANIMANDO_PIEZAS = 2;
   static ANIMANDO_CAMARA = 3;
+  static ANIMANDO_DESPLAZAMIENTO = 4;
 
   /*############################################################################*/
   // Constructor
@@ -317,8 +318,8 @@ class Escena extends THREE.Scene
                 this.estado_aplicacion = Escena.ANIMANDO_PIEZAS;
               }
               else {
-                // Si no tenemos que realizar ninguna animación aplicamos la jugada directamente
-                this.aplicarJugada(this.jugada);
+                this.tablero.animarMovimiento(this.jugada);
+                this.estado_aplicacion = Escena.ANIMANDO_DESPLAZAMIENTO;
               }
             }
           }
@@ -542,6 +543,12 @@ class Escena extends THREE.Scene
         this.animacion_defensor_terminada = false;
 
         // Aplicamos la jugada
+        this.aplicarJugada(this.jugada);
+      }
+    }
+
+    if (this.estado_aplicacion == Escena.ANIMANDO_DESPLAZAMIENTO) {
+      if (this.tablero.terminaAnimacion()) {
         this.aplicarJugada(this.jugada);
       }
     }
