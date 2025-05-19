@@ -308,8 +308,8 @@ class Escena extends THREE.Scene
                 this.pieza_animada_defensora.lookAt(this.pieza_animada_atacante.position);
 
                 // Iniciamos la animación
-                this.pieza_animada_atacante.animar();
-                this.pieza_animada_defensora.animar();
+                this.pieza_animada_atacante.animarAtaca();
+                this.pieza_animada_defensora.animarDefiende();
 
                 // Reseteamos el color del tablero para la animación
                 this.tablero.reseteaColorCasillas();
@@ -532,8 +532,7 @@ class Escena extends THREE.Scene
         this.animacion_defensor_terminada = true;
       }
 
-      //if (this.animacion_atacante_terminada && this.animacion_defensor_terminada) {
-      if (!this.animacion_atacante_terminada && !this.animacion_defensor_terminada) {
+      if (this.animacion_atacante_terminada && this.animacion_defensor_terminada) {
         // Orientamos las piezas
         this.pieza_animada_atacante.rotation.copy(this.rot_original_atacante);
         this.pieza_animada_defensora.rotation.copy(this.rot_original_defensor);

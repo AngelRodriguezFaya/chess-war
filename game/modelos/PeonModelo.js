@@ -124,7 +124,6 @@ export class PeonModelo extends PiezaBaseModelo
   {
     // Llamamos al constructor padre
     super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
-    super();
 
     // Creación del modelo
     this.crearModelo(material);
@@ -164,33 +163,35 @@ export class PeonModelo extends PiezaBaseModelo
     // // // this.crearEspinillaIzquierda(material, RES);
     // // this.crearPiernaDerecha(material, RES);
     // // this.crearPieIzquierdo(material);
-    this.crearTrenInferior(material);
-    this.crearTrenSuperior(material);
 
     // Parámetros para las animaciones
 
       // Brazo izquierdo
     this.rot_Z_ParteInfBrazoIzq = 0;
     this.rot_Y_ParteInfBrazoIzq = 0;
-    this.rot_X_ParteInfBrazoIzq = 0;
+    this.rot_X_ParteInfBrazoIzq = -Math.PI/1.5;
 
-    this.rot_Z_ParteSupBrazoIzq = 0;
+    this.rot_Z_ParteSupBrazoIzq = Math.PI/6;
     this.rot_Y_ParteSupBrazoIzq = 0;
-    this.rot_X_ParteSupBrazoIzq = 0;
+    this.rot_X_ParteSupBrazoIzq = Math.PI/10;
 
       // Brazo derecho
     this.rot_Z_ParteInfBrazoDcho = 0;
-    this.rot_Y_ParteInfBrazoDcho = 0;
+    this.rot_Y_ParteInfBrazoDcho = -1;
     this.rot_X_ParteInfBrazoDcho = 0;
 
-    this.rot_Z_ParteSupBrazoDcho = 0;
+    this.rot_Z_ParteSupBrazoDcho = -Math.PI/4;
     this.rot_Y_ParteSupBrazoDcho = 0;
-    this.rot_X_ParteSupBrazoDcho = 0;
+    this.rot_X_ParteSupBrazoDcho = -Math.PI/4;
 
       // Tren inferior
     this.rot_X_TrenSuperior = 0; 
 
+    this.crearTrenInferior(material);
+    this.crearTrenSuperior(material);
 
+    // Inicializar animaciones
+    this.inicializarAnimaciones();
   }
 
   /*############################################################################*/
@@ -782,8 +783,7 @@ export class PeonModelo extends PiezaBaseModelo
     brazoInfIzq.add(this.crearManoIzquierda(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
-    brazoInfIzq.rotation.set(-Math.PI/1.5, 0, 0);
+    brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
 
     // Posicionamos el antebrazo y la mano
     brazoInfIzq.position.y = - PeonModelo.rCodo;
@@ -830,8 +830,7 @@ export class PeonModelo extends PiezaBaseModelo
     brazoSupIzq.add(this.crearCodoIzquierdo(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoSupIzq.rotation.set(PeonModelo.rot_X_ParteSupBrazoIzq, PeonModelo.rot_Y_ParteSupBrazoIzq, PeonModelo.rot_Z_ParteSupBrazoIzq);
-      brazoSupIzq.rotation.set(Math.PI/10, 0, Math.PI/6);
+    brazoSupIzq.rotation.set(this.rot_X_ParteSupBrazoIzq, this.rot_Y_ParteSupBrazoIzq, this.rot_Z_ParteSupBrazoIzq);
 
       // Posicionamos
       brazoSupIzq.position.y = - PeonModelo.hProtecHombro + 0.1;
@@ -904,8 +903,7 @@ export class PeonModelo extends PiezaBaseModelo
     brazoInfDcho.add(this.crearManoDerecha(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoInfDcho.rotation.set(PeonModelo.rot_X_ParteInfBrazoDcho, PeonModelo.rot_Y_ParteInfBrazoDcho, PeonModelo.rot_Z_ParteInfBrazoDcho);
-    brazoInfDcho.rotation.set(0, -1, 0);
+    brazoInfDcho.rotation.set(this.rot_X_ParteInfBrazoDcho, this.rot_Y_ParteInfBrazoDcho, this.rot_Z_ParteInfBrazoDcho);
 
     // Posicionamos el antebrazo y la mano
     brazoInfDcho.position.y = - PeonModelo.rCodo;
@@ -952,8 +950,7 @@ export class PeonModelo extends PiezaBaseModelo
     brazoSupDcho.add(this.crearCodoDerecho(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoSupDcho.rotation.set(PeonModelo.rot_X_ParteSupBrazoDcho, PeonModelo.rot_Y_ParteSupBrazoDcho, PeonModelo.rot_Z_ParteSupBrazoDcho);
-    brazoSupDcho.rotation.set(-Math.PI/4, 0, -Math.PI/4);
+    brazoSupDcho.rotation.set(this.rot_X_ParteSupBrazoDcho, this.rot_Y_ParteSupBrazoDcho, this.rot_Z_ParteSupBrazoDcho);
 
     // Posicionamos
     brazoSupDcho.position.y = - PeonModelo.hProtecHombro + 0.1;
@@ -1014,7 +1011,7 @@ export class PeonModelo extends PiezaBaseModelo
     trenSuperior.add(this.crearBrazoDerecho(material));
 
     // Añadimos las rotaciones necesarias
-    // trenSuperior.rotation.x = this.rot_X_TrenSuperior;
+    trenSuperior.rotation.x = this.rot_X_TrenSuperior;
 
     // Posicionamos el tren superior
     trenSuperior.position.y = PeonModelo.hTrenInferior;
@@ -1341,7 +1338,18 @@ export class PeonModelo extends PiezaBaseModelo
   /*############################################################################*/
   // Animación
 
-  animar()
+  inicializarAnimaciones()
+  {
+    this.dentro_animacion = false;
+  }
+
+
+
+  animarAtaca()
+  {
+  }
+
+  animarDefiende()
   {
   }
 

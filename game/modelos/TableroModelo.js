@@ -282,17 +282,31 @@ export class TableroModelo extends THREE.Object3D
     var posicion_siguiente = jugada.getMovimiento().getPosicionSiguiente();
     var origen = { x: posicion_actual.getColumna() * 9, z: posicion_actual.getFila() * 9 };
     var destino = { x: posicion_siguiente.getColumna() * 9, z: posicion_siguiente.getFila() * 9 };
-    this.pieza_actual_mov = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
+    var pieza = this.tablero[posicion_actual.getFila()][posicion_actual.getColumna()].pieza;
 
     // Animacion
     var movimiento = new TWEEN.Tween(origen)
       .to(destino, 1000)
       .easing(TWEEN.Easing.Quadratic.InOut)
       .onStart(() => { this.dentro_animacion = true; })
-      .onUpdate(() => { this.pieza_actual_mov.position.x = origen.x; this.pieza_actual_mov.position.z = origen.z; })
+      .onUpdate(() => { pieza.position.x = origen.x; pieza.position.z = origen.z; })
       .onComplete(() => { this.dentro_animacion = false; })
       .repeat(0)
       .start();
+    
+    if (jugada.getDisponibleCome()) {
+      var pieza_come = this.getCasillaPieza(jugada.getPosicionCome()).pieza;
+      var origen_come = { y: pieza_come.position.y };
+      var destino_come = { y: 100 };
+
+      // Animacion
+      var movimiento_come = new TWEEN.Tween(origen_come)
+        .to(destino_come, 1000)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onUpdate(() => { pieza_come.position.y = origen_come.y; })
+        .repeat(0)
+        .start();
+    }
   }
 
   terminaAnimacion()
