@@ -165,24 +165,25 @@ export class PeonModelo extends PiezaBaseModelo
     // // this.crearPieIzquierdo(material);
 
     // Parámetros para las animaciones
+      // Por defecto, tienen los valores de la posición inicial
 
       // Brazo izquierdo
-    this.rot_Z_ParteInfBrazoIzq = 0;
+    this.rot_X_ParteInfBrazoIzq = - Math.PI/2;  
     this.rot_Y_ParteInfBrazoIzq = 0;
-    this.rot_X_ParteInfBrazoIzq = -Math.PI/1.5;
+    this.rot_Z_ParteInfBrazoIzq = 0;
 
-    this.rot_Z_ParteSupBrazoIzq = Math.PI/6;
+    this.rot_X_ParteSupBrazoIzq = 0;
     this.rot_Y_ParteSupBrazoIzq = 0;
-    this.rot_X_ParteSupBrazoIzq = Math.PI/10;
+    this.rot_Z_ParteSupBrazoIzq = Math.PI/10;
 
       // Brazo derecho
+    this.rot_X_ParteInfBrazoDcho = - Math.PI/2;
+    this.rot_Y_ParteInfBrazoDcho = 0;
     this.rot_Z_ParteInfBrazoDcho = 0;
-    this.rot_Y_ParteInfBrazoDcho = -1;
-    this.rot_X_ParteInfBrazoDcho = 0;
 
-    this.rot_Z_ParteSupBrazoDcho = -Math.PI/4;
+    this.rot_X_ParteSupBrazoDcho = 0;
     this.rot_Y_ParteSupBrazoDcho = 0;
-    this.rot_X_ParteSupBrazoDcho = -Math.PI/4;
+    this.rot_Z_ParteSupBrazoDcho = - Math.PI/10;
 
       // Tren inferior
     this.rot_X_TrenSuperior = 0; 
@@ -756,62 +757,65 @@ export class PeonModelo extends PiezaBaseModelo
     manoIzqGeom.translate(0, -PeonModelo.hMano/2, 0);
     
     // Creamos la mano izquierda
-    var manoIzq = new CSG.Brush(manoIzqGeom, material);
+    this.manoIzq = new CSG.Brush(manoIzqGeom, material);
 
     // Añadimos el escudo a la mano izquierda
-    manoIzq.add(this.crearEscudo(material));
+    this.crearEscudo(material);
+    this.manoIzq.add(this.escudo);
 
     // Posicionamos la mano
-    manoIzq.position.y = -PeonModelo.hInfBrazo;
+    this.manoIzq.position.y = -PeonModelo.hInfBrazo;
 
-    manoIzq.userData = this;
-    return manoIzq;
+    this.manoIzq.userData = this;
+    // return manoIzq;
   }
 
-  crearParteInfBrazoIzquierdo(material, RES){
+  crearParteInfBrazoIzquierdo(material){
     // Definimos la geometría de la parte inferior del brazo
     var brazoInfIzqGeom = new THREE.CylinderGeometry(PeonModelo.rSInfBrazo, PeonModelo.rIInfBrazo,
-      PeonModelo.hInfBrazo, RES);
+      PeonModelo.hInfBrazo, PeonModelo.RES);
 
     // Posicionamos la geometría
     brazoInfIzqGeom.translate(0, -PeonModelo.hInfBrazo/2, 0);
     
     // Creamos la parte inferior del brazo
-    var brazoInfIzq = new THREE.Mesh(brazoInfIzqGeom, material);
+    this.brazoInfIzq = new THREE.Mesh(brazoInfIzqGeom, material);
 
     // Añadimos la mano izquierda al brazo
-    brazoInfIzq.add(this.crearManoIzquierda(material));
+    this.crearManoIzquierda(material);
+    this.brazoInfIzq.add(this.manoIzq);
 
     // Aplicamos las rotaciones necesarias
-    brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
+    this.brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
 
     // Posicionamos el antebrazo y la mano
-    brazoInfIzq.position.y = - PeonModelo.rCodo;
+    this.brazoInfIzq.position.y = - PeonModelo.rCodo;
 
     // Añadimos la parte inferior del brazo al peón
-    brazoInfIzq.userData = this;
-    return brazoInfIzq;
+    this.brazoInfIzq.userData = this;
+    // return brazoInfIzq;
   }
 
-  crearCodoIzquierdo(material, RES){
+  crearCodoIzquierdo(material){
       // Definimos la geometría del codo
-      var codoIzqGeom = new THREE.SphereGeometry(0.42, RES, RES);
+      var codoIzqGeom = new THREE.SphereGeometry(0.42, PeonModelo.RES, PeonModelo.RES);
   
       // Posicionamos la geometría
       codoIzqGeom.translate(0, -PeonModelo.rCodo, 0);
   
       // Creamos el codo
-      var codoIzq = new THREE.Mesh(codoIzqGeom, material);
+      this.codoIzq = new THREE.Mesh(codoIzqGeom, material);
 
       // Añadimos la parte inferior del brazo izquierdo al codo
-      codoIzq.add(this.crearParteInfBrazoIzquierdo(material, RES));
+      this.crearParteInfBrazoIzquierdo(material);
+      this.codoIzq.add(this.brazoInfIzq);
 
       // Posicionamos 
-      codoIzq.position.y = -PeonModelo.hSupBrazo + 0.3;
+      this.codoIzq.position.y = -PeonModelo.hSupBrazo + 0.3;
   
       // Añadimos el codo al peón
-      codoIzq.userData = this;
-      return codoIzq;
+      this.codoIzq.userData = this;
+      // return codoIzq;
     }
     
   crearParteSupBrazoIzquierdo(material){
@@ -824,19 +828,20 @@ export class PeonModelo extends PiezaBaseModelo
     brazoSupIzqGeom.translate(0, -PeonModelo.hSupBrazo/2, 0);
 
     // Creamos la parte superior del brazo
-    var brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
+    this.brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
 
     // Añadimos el codo izquierdo al brazo
-    brazoSupIzq.add(this.crearCodoIzquierdo(material));
+    this.crearCodoIzquierdo(material);
+    this.brazoSupIzq.add(this.codoIzq);
 
     // Aplicamos las rotaciones necesarias
-    brazoSupIzq.rotation.set(this.rot_X_ParteSupBrazoIzq, this.rot_Y_ParteSupBrazoIzq, this.rot_Z_ParteSupBrazoIzq);
+    this.brazoSupIzq.rotation.set(this.rot_X_ParteSupBrazoIzq, this.rot_Y_ParteSupBrazoIzq, this.rot_Z_ParteSupBrazoIzq);
 
-      // Posicionamos
-      brazoSupIzq.position.y = - PeonModelo.hProtecHombro + 0.1;
+    // Posicionamos
+    this.brazoSupIzq.position.y = - PeonModelo.hProtecHombro + 0.1;
 
-      brazoSupIzq.userData = this;
-      return brazoSupIzq;
+    this.brazoSupIzq.userData = this;
+    // return brazoSupIzq;
   }
 
   crearProteccionHombroIzquierdo(material){
@@ -849,21 +854,23 @@ export class PeonModelo extends PiezaBaseModelo
     prtHombroIzqGeom.translate(0, - PeonModelo.hProtecHombro/2 - 0.2, 0);
     
     // Creamos la protección del hombro
-    var prtHombroIzq = new THREE.Mesh(prtHombroIzqGeom, material);
+    this.prtHombroIzq = new THREE.Mesh(prtHombroIzqGeom, material);
     
-    prtHombroIzq.userData = this;
-    return prtHombroIzq;
+    this.prtHombroIzq.userData = this;
+    // return prtHombroIzq;
   }
 
   crearBrazoIzquierdo(material){
     // Creamos el brazo izquierdo
     var brazoIzq = new THREE.Object3D();
 
-    // Añadimos la parte superior del brazo izquierdo ( y el codo y la parte inferior y la mano izquierda)
-    brazoIzq.add(this.crearParteSupBrazoIzquierdo(material));
+    // Añadimos la parte superior del brazo izquierdo ( y el codo y la parte inferior y la mano izquierda agarrando el escudo)
+    this.crearParteSupBrazoIzquierdo(material);
+    brazoIzq.add(this.brazoSupIzq);
 
     // Añadimos la protección del hombro izquierdo
-    brazoIzq.add(this.crearProteccionHombroIzquierdo(material));
+    this.crearProteccionHombroIzquierdo(material);
+    brazoIzq.add(this.prtHombroIzq);
 
     // Posicionamos el brazo
     brazoIzq.position.set(PeonModelo.wTorso, PeonModelo.hTorso, 0);
@@ -880,58 +887,63 @@ export class PeonModelo extends PiezaBaseModelo
     manoDchaGeom.translate(0, -PeonModelo.hMano/2, 0);
 
     // Creamos la mano derecha
-    var manoDcha = new CSG.Brush(manoDchaGeom, material);
+    this.manoDcha = new CSG.Brush(manoDchaGeom, material);
 
     // Añadimos la espada
-    manoDcha.add(this.crearEspada(material));
+    this.crearEspada(material);
+    this.manoDcha.add(this.espada);
 
     // Posicionamos la mano
-    manoDcha.position.y = -PeonModelo.hInfBrazo;
-    manoDcha.userData = this;
-    return manoDcha;
+    this.manoDcha.position.y = -PeonModelo.hInfBrazo;
+    this.manoDcha.userData = this;
+    // return manoDcha;
   }
 
-  crearParteInfBrazoDerecho(material, RES){
+  crearParteInfBrazoDerecho(material){
     // Definimos la geometría de la parte inferior del brazo
     var brazoInfDchoGeom = new THREE.CylinderGeometry(PeonModelo.rSInfBrazo, PeonModelo.rIInfBrazo,
-      PeonModelo.hInfBrazo, RES);
+      PeonModelo.hInfBrazo, PeonModelo.RES);
     // Posicionamos la geometría
     brazoInfDchoGeom.translate(0, -PeonModelo.hInfBrazo/2, 0);
+
     // Creamos la parte inferior del brazo
-    var brazoInfDcho = new THREE.Mesh(brazoInfDchoGeom, material);
+    this.brazoInfDcho = new THREE.Mesh(brazoInfDchoGeom, material);
+
     // Añadimos la mano derecha al brazo
-    brazoInfDcho.add(this.crearManoDerecha(material));
+    this.crearManoDerecha(material);
+    this.brazoInfDcho.add(this.manoDcha);
 
     // Aplicamos las rotaciones necesarias
-    brazoInfDcho.rotation.set(this.rot_X_ParteInfBrazoDcho, this.rot_Y_ParteInfBrazoDcho, this.rot_Z_ParteInfBrazoDcho);
+    this.brazoInfDcho.rotation.set(this.rot_X_ParteInfBrazoDcho, this.rot_Y_ParteInfBrazoDcho, this.rot_Z_ParteInfBrazoDcho);
 
     // Posicionamos el antebrazo y la mano
-    brazoInfDcho.position.y = - PeonModelo.rCodo;
+    this.brazoInfDcho.position.y = - PeonModelo.rCodo;
     
     // Añadimos la parte inferior del brazo al peón
-    brazoInfDcho.userData = this;
-    return brazoInfDcho;
+    this.brazoInfDcho.userData = this;
+    // return brazoInfDcho;
   }
 
-  crearCodoDerecho(material, RES){
+  crearCodoDerecho(material){
     // Definimos la geometría del codo
-    var codoDchoGeom = new THREE.SphereGeometry(0.42, RES, RES);
+    var codoDchoGeom = new THREE.SphereGeometry(0.42, PeonModelo.RES, PeonModelo.RES);
 
     // Posicionamos la geometría
     codoDchoGeom.translate(0, -PeonModelo.rCodo, 0);
 
     // Creamos el codo
-    var codoDcho = new THREE.Mesh(codoDchoGeom, material);
+    this.codoDcho = new THREE.Mesh(codoDchoGeom, material);
 
     // Añadimos la parte inferior del brazo derecho al codo
-    codoDcho.add(this.crearParteInfBrazoDerecho(material, RES));
+    this.crearParteInfBrazoDerecho(material);
+    this.codoDcho.add(this.brazoInfDcho);
 
     // Posicionamos 
-    codoDcho.position.y = -PeonModelo.hSupBrazo + 0.3;
+    this.codoDcho.position.y = -PeonModelo.hSupBrazo + 0.3;
 
     // Añadimos el codo al peón
-    codoDcho.userData = this;
-    return codoDcho;
+    this.codoDcho.userData = this;
+    // return codoDcho;
   }
 
   crearParteSupBrazoDerecho(material){
@@ -944,47 +956,52 @@ export class PeonModelo extends PiezaBaseModelo
     brazoSupDchoGeom.translate(0, -PeonModelo.hSupBrazo/2, 0);
 
     // Creamos la parte superior del brazo
-    var brazoSupDcho = new THREE.Mesh(brazoSupDchoGeom, material);
+    this.brazoSupDcho = new THREE.Mesh(brazoSupDchoGeom, material);
 
     // Añadimos el codo derecho al brazo
-    brazoSupDcho.add(this.crearCodoDerecho(material));
+    this.crearCodoDerecho(material);
+    this.brazoSupDcho.add(this.codoDcho);
 
     // Aplicamos las rotaciones necesarias
-    brazoSupDcho.rotation.set(this.rot_X_ParteSupBrazoDcho, this.rot_Y_ParteSupBrazoDcho, this.rot_Z_ParteSupBrazoDcho);
+    this.brazoSupDcho.rotation.set(this.rot_X_ParteSupBrazoDcho, this.rot_Y_ParteSupBrazoDcho, this.rot_Z_ParteSupBrazoDcho);
 
     // Posicionamos
-    brazoSupDcho.position.y = - PeonModelo.hProtecHombro + 0.1;
+    this.brazoSupDcho.position.y = - PeonModelo.hProtecHombro + 0.1;
 
     // Añadimos la parte superior del brazo al peón
-    brazoSupDcho.userData = this;
-    return brazoSupDcho;
+    this.brazoSupDcho.userData = this;
+    // return brazoSupDcho;
   }
 
-  crearProteccionHombroDerecho(material, RES){
+  crearProteccionHombroDerecho(material){
     // Definimos la geometría de la protección del hombro
     var prtHombroDchoGeom = new THREE.CylinderGeometry(PeonModelo.rSHombro, PeonModelo.rIHombro,
       PeonModelo.hHombro, PeonModelo.RES);
+
     // Posicionamos y orientamos la geometría
     prtHombroDchoGeom.rotateZ(-Math.PI/4);
     prtHombroDchoGeom.translate(0, - PeonModelo.hProtecHombro/2 - 0.2, 0);
+
     // Creamos la protección del hombro
-    var prtHombroDcho = new THREE.Mesh(prtHombroDchoGeom, material);
-    // Añadimos la parte superior del brazo derecho a la protección del hombro
-    prtHombroDcho.add(this.crearParteSupBrazoDerecho(material));
+    this.prtHombroDcho = new THREE.Mesh(prtHombroDchoGeom, material);
+
+
     // Añadimos la protección del hombro al peón
-    prtHombroDcho.userData = this;
-    return prtHombroDcho;
+    this.prtHombroDcho.userData = this;
+    // return prtHombroDcho;
   }
 
   crearBrazoDerecho(material){
     // Creamos el brazo derecho
     var brazoDcho = new THREE.Object3D();
     
-    // Añadimos la parte superior del brazo derecho ( y el codo y la parte inferior y la mano derecha)
-    brazoDcho.add(this.crearParteSupBrazoDerecho(material));
+    // Añadimos la parte superior del brazo derecho ( y el codo y la parte inferior y la mano derecha con la espada)
+    this.crearParteSupBrazoDerecho(material);
+    brazoDcho.add(this.brazoSupDcho);
     
     // Añadimos la protección del hombro derecho
-    brazoDcho.add(this.crearProteccionHombroDerecho(material, PeonModelo.RES));
+    this.crearProteccionHombroDerecho(material);
+    brazoDcho.add(this.prtHombroDcho);
     
     // Posicionamos el brazo
     brazoDcho.position.set(-PeonModelo.wTorso, PeonModelo.hTorso, 0);
@@ -1228,7 +1245,7 @@ export class PeonModelo extends PiezaBaseModelo
   //   this.add(prtMunecaDcha);
   // }
 
-  crearEspada(material, RES){
+  crearEspada(material){
         // Defino la forma 2D de la hoja de la espada
         var formHojaEspada = new THREE.Shape();
         formHojaEspada.moveTo(0, 0);
@@ -1240,9 +1257,9 @@ export class PeonModelo extends PiezaBaseModelo
         formHojaEspada.lineTo(0, 0);
     
         // Definimos las geometrías 
-        var mastil1EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.4, RES);
-        var mastil2EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.7, RES);
-        var opchojaEspadaGeom = { depth : 0.01, steps : RES, bevelEnabled : false } ;
+        var mastil1EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.4, PeonModelo.RES);
+        var mastil2EspadaGeom = new THREE.CylinderGeometry(0.15, 0.15, 1.7, PeonModelo.RES);
+        var opchojaEspadaGeom = { depth : 0.01, steps : PeonModelo.RES, bevelEnabled : false } ;
         var hojaEspadaGeom = new THREE.ExtrudeGeometry ( formHojaEspada , opchojaEspadaGeom );
     
         // Posicionamos y orientamos las geometrías
@@ -1252,27 +1269,27 @@ export class PeonModelo extends PiezaBaseModelo
         hojaEspadaGeom.translate(0, 0.5, 0);
     
         // Creamos la espada
-        var mastil1Espada = new THREE.Mesh(mastil1EspadaGeom, material);
+        this.espada = new THREE.Mesh(mastil1EspadaGeom, material);
         var mastil2Espada = new THREE.Mesh(mastil2EspadaGeom, material);
         var hojaEspada = new THREE.Mesh(hojaEspadaGeom, material);
     
         // Añadimos la espada al peón
         // Añadimos el mastil2 (el horizontal) y la hoja al mastil1 (el vertical, por donde se agarra)
-        mastil1Espada.userData = this;
+        this.espada.userData = this;
         mastil2Espada.userData = this;
         hojaEspada.userData = this;
 
-        mastil1Espada.add(mastil2Espada);
-        mastil1Espada.add(hojaEspada);
+        this.espada.add(mastil2Espada);
+        this.espada.add(hojaEspada);
 
         // Rotamos la espada
         // mastil1Espada.rotation.y = Math.PI / 2;
-        mastil1Espada.rotation.x = Math.PI / 2;
+        this.espada.rotation.x = Math.PI / 2;
 
         // Posicionamos la espada
-        mastil1Espada.position.set(0, -PeonModelo.hMano +0.1, 0);
+        this.espada.position.set(0, -PeonModelo.hMano + 0.1, 0);
         
-        return mastil1Espada;
+        // return espada;
   }
 
   crearEscudo(material){
@@ -1321,19 +1338,19 @@ export class PeonModelo extends PiezaBaseModelo
     geomEscudo.translate(0, 0, 0);  
       
     // Creamos el escudo
-    var escudo = new THREE.Mesh(geomEscudo, material);
+    this.escudo = new THREE.Mesh(geomEscudo, material);
 
     // Añadimos el asa al escudo
-    escudo.add(asaFinalEscudo);
+    this.escudo.add(asaFinalEscudo);
 
     // Rotamos el escudo
-    escudo.rotation.x = Math.PI / 2;
+    this.escudo.rotation.x = Math.PI / 2;
 
     // Posicionamos el escudo
-    escudo.position.set(0, -PeonModelo.hMano - 0.2, 0);
+    this.escudo.position.set(0, -PeonModelo.hMano - 0.2, 0);
 
-    escudo.userData = this;
-    return escudo;
+    this.escudo.userData = this;
+    // return escudo;
   }
   /*############################################################################*/
   // Animación
