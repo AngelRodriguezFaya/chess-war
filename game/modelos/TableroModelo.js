@@ -294,6 +294,24 @@ export class TableroModelo extends THREE.Object3D
       .repeat(0)
       .start();
     
+    if (jugada.getDisponibleExtra()) {
+      var posicion_actual_extra = jugada.getMovimientoExtra().getPosicionActual();
+      var posicion_siguiente_extra = jugada.getMovimientoExtra().getPosicionSiguiente();
+      var origen_extra = { x: posicion_actual_extra.getColumna() * 9, z: posicion_actual_extra.getFila() * 9 };
+      var destino_extra = { x: posicion_siguiente_extra.getColumna() * 9, z: posicion_siguiente_extra.getFila() * 9 };
+      var pieza_extra = this.tablero[posicion_actual_extra.getFila()][posicion_actual_extra.getColumna()].pieza;
+
+      // Animacion
+      var movimiento_extra = new TWEEN.Tween(origen_extra)
+        .to(destino_extra, 1000)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .onStart(() => { })
+        .onUpdate(() => { pieza_extra.position.x = origen_extra.x; pieza_extra.position.z = origen_extra.z; })
+        .onComplete(() => { })
+        .repeat(0)
+        .start();
+    }
+
     if (jugada.getDisponibleCome()) {
       var pieza_come = this.getCasillaPieza(jugada.getPosicionCome()).pieza;
       var origen_come = { y: pieza_come.position.y };
