@@ -12,7 +12,7 @@ import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 /*############################################################################*/
 // Clase Peon
 
-export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
+export class PeonModelo extends PiezaBaseModelo
 {
   /*############################################################################*/
   // Variables de clase
@@ -120,10 +120,10 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
   /*############################################################################*/
   // Constructor
 
-  constructor(material) // , posicion_en_tablero, tipo_jugador)
+  constructor(material, posicion_en_tablero, tipo_jugador)
   {
     // Llamamos al constructor padre
-    //super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
+    super(posicion_en_tablero, TipoPieza.PEON, tipo_jugador);
     super();
 
     // Creación del modelo
@@ -167,13 +167,27 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
     this.crearTrenInferior(material);
     this.crearTrenSuperior(material);
 
-    
+    // Parámetros para las animaciones
+
+      // Brazo izquierdo
     this.rot_Z_ParteInfBrazoIzq = 0;
+    this.rot_Y_ParteInfBrazoIzq = 0;
     this.rot_X_ParteInfBrazoIzq = 0;
-    this.rot_Z_BrazoIzq = 0;
-    this.rot_X_BrazoIzq = 0;
+
+    this.rot_Z_ParteSupBrazoIzq = 0;
+    this.rot_Y_ParteSupBrazoIzq = 0;
+    this.rot_X_ParteSupBrazoIzq = 0;
+
+      // Brazo derecho
     this.rot_Z_ParteInfBrazoDcho = 0;
+    this.rot_Y_ParteInfBrazoDcho = 0;
     this.rot_X_ParteInfBrazoDcho = 0;
+
+    this.rot_Z_ParteSupBrazoDcho = 0;
+    this.rot_Y_ParteSupBrazoDcho = 0;
+    this.rot_X_ParteSupBrazoDcho = 0;
+
+      // Tren inferior
     this.rot_X_TrenSuperior = 0; 
 
 
@@ -768,8 +782,8 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
     brazoInfIzq.add(this.crearManoIzquierda(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoInfIzq.rotation.z = this.rot_Z_ParteInfBrazoIzq;
-    // brazoInfIzq.rotation.x = this.rot_X_ParteInfBrazoIzq;
+    // brazoInfIzq.rotation.set(this.rot_X_ParteInfBrazoIzq, this.rot_Y_ParteInfBrazoIzq, this.rot_Z_ParteInfBrazoIzq);
+    brazoInfIzq.rotation.set(-Math.PI/1.5, 0, 0);
 
     // Posicionamos el antebrazo y la mano
     brazoInfIzq.position.y = - PeonModelo.rCodo;
@@ -799,25 +813,25 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
       codoIzq.userData = this;
       return codoIzq;
     }
+    
+  crearParteSupBrazoIzquierdo(material){
+    // Definimos la geometría de la parte superior del brazo
+    var brazoSupIzqGeom = new THREE.CylinderGeometry(PeonModelo.rSSupBrazo, PeonModelo.rISupBrazo,
+    PeonModelo.hSupBrazo, PeonModelo.RES);
 
-    crearParteSupBrazoIzquierdo(material){
-      // Definimos la geometría de la parte superior del brazo
-      var brazoSupIzqGeom = new THREE.CylinderGeometry(PeonModelo.rSSupBrazo, PeonModelo.rISupBrazo,
-        PeonModelo.hSupBrazo, PeonModelo.RES);
+    // Posicionamos y orientamos la geometría
+    // brazoSupIzqGeom.rotateZ(-Math.PI/5);
+    brazoSupIzqGeom.translate(0, -PeonModelo.hSupBrazo/2, 0);
 
-      // Posicionamos y orientamos la geometría
-      // brazoSupIzqGeom.rotateZ(-Math.PI/5);
-      brazoSupIzqGeom.translate(0, -PeonModelo.hSupBrazo/2, 0);
+    // Creamos la parte superior del brazo
+    var brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
 
-      // Creamos la parte superior del brazo
-      var brazoSupIzq = new THREE.Mesh(brazoSupIzqGeom, material);
+    // Añadimos el codo izquierdo al brazo
+    brazoSupIzq.add(this.crearCodoIzquierdo(material));
 
-      // Añadimos el codo izquierdo al brazo
-      brazoSupIzq.add(this.crearCodoIzquierdo(material));
-
-      // Aplicamos las rotaciones necesarias
-      // brazoSupIzq.rotation.z = this.rot_Z_BrazoIzq;
-      // brazoSupIzq.rotation.x = this.rot_X_BrazoIzq;
+    // Aplicamos las rotaciones necesarias
+    // brazoSupIzq.rotation.set(PeonModelo.rot_X_ParteSupBrazoIzq, PeonModelo.rot_Y_ParteSupBrazoIzq, PeonModelo.rot_Z_ParteSupBrazoIzq);
+      brazoSupIzq.rotation.set(Math.PI/10, 0, Math.PI/6);
 
       // Posicionamos
       brazoSupIzq.position.y = - PeonModelo.hProtecHombro + 0.1;
@@ -888,11 +902,14 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
     var brazoInfDcho = new THREE.Mesh(brazoInfDchoGeom, material);
     // Añadimos la mano derecha al brazo
     brazoInfDcho.add(this.crearManoDerecha(material));
+
     // Aplicamos las rotaciones necesarias
-    // brazoInfDcho.rotation.z = this.rot_Z_ParteInfBrazoDcho;
-    // brazoInfDcho.rotation.x = this.rot_X_ParteInfBrazoDcho;
+    // brazoInfDcho.rotation.set(PeonModelo.rot_X_ParteInfBrazoDcho, PeonModelo.rot_Y_ParteInfBrazoDcho, PeonModelo.rot_Z_ParteInfBrazoDcho);
+    brazoInfDcho.rotation.set(0, -1, 0);
+
     // Posicionamos el antebrazo y la mano
     brazoInfDcho.position.y = - PeonModelo.rCodo;
+    
     // Añadimos la parte inferior del brazo al peón
     brazoInfDcho.userData = this;
     return brazoInfDcho;
@@ -935,8 +952,8 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
     brazoSupDcho.add(this.crearCodoDerecho(material));
 
     // Aplicamos las rotaciones necesarias
-    // brazoSupDcho.rotation.z = this.rot_Z_BrazoDcho;
-    // brazoSupDcho.rotation.x = this.rot_X_BrazoDcho;
+    // brazoSupDcho.rotation.set(PeonModelo.rot_X_ParteSupBrazoDcho, PeonModelo.rot_Y_ParteSupBrazoDcho, PeonModelo.rot_Z_ParteSupBrazoDcho);
+    brazoSupDcho.rotation.set(-Math.PI/4, 0, -Math.PI/4);
 
     // Posicionamos
     brazoSupDcho.position.y = - PeonModelo.hProtecHombro + 0.1;
@@ -1254,6 +1271,9 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
         // Rotamos la espada
         // mastil1Espada.rotation.y = Math.PI / 2;
         mastil1Espada.rotation.x = Math.PI / 2;
+
+        // Posicionamos la espada
+        mastil1Espada.position.set(0, -PeonModelo.hMano +0.1, 0);
         
         return mastil1Espada;
   }
@@ -1311,6 +1331,9 @@ export class PeonModelo extends THREE.Object3D // PiezaBaseModelo
 
     // Rotamos el escudo
     escudo.rotation.x = Math.PI / 2;
+
+    // Posicionamos el escudo
+    escudo.position.set(0, -PeonModelo.hMano - 0.2, 0);
 
     escudo.userData = this;
     return escudo;
