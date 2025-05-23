@@ -33,6 +33,7 @@ export class AlfilModelo extends PiezaBaseModelo
   // Geometrías ------------------------------------------
   static RES = 20; // Resolución de las geometrías
   static geometriaCuerpo = null;
+  static geometriaEsferaCabeza = null;
 
 
   /*############################################################################*/
@@ -59,36 +60,35 @@ export class AlfilModelo extends PiezaBaseModelo
       AlfilModelo.geometriaCuerpo = this.crearGeometriaCuerpo();
 
     // Se construye el objeto Brush que modela el cuerpo del alfil
-    this.cuerpo = new CSG.Brush(AlfilModelo.geometriaCuerpo, material);    
+    var cuerpo = new CSG.Brush(AlfilModelo.geometriaCuerpo, material);    
     
-    // Se posicio
+  
     //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
-    // Se crean las geometrías necesarias
-    var esferaGeom = new THREE.SphereGeometry(0.5, AlfilModelo.RES, AlfilModelo.RES);
-    var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
+      
+    // Se construyen los objetos Brush
 
-    // Se posicionan y se orientan
-    esferaGeom.translate(0, 14, 0);
-
-    cajaGeom.rotateX(-Math.PI / 6);
-    cajaGeom.translate(0, 13.2, -1);
+    if(AlfilModelo.geometriaEsferaCabeza == null)
+      AlfilModelo.geometriaEsferaCabeza = this.crearGeometriaEsferaCabeza();
+    
+    var esfera = new CSG.Brush(AlfilModelo.geometriaEsferaCabeza, material);
     
 
-    // Se construyen los objetos Brush
-    this.esfera = new CSG.Brush(esferaGeom, material);
-    this.caja = new CSG.Brush(cajaGeom, material);
+    if(AlfilModelo.geometriaHuecoCabeza == null)
+      AlfilModelo.geometriaHuecoCabeza = this.crearGeometriaHuecoCabeza();
+    
+    var caja = new CSG.Brush(AlfilModelo.geometriaHuecoCabeza, material);
 
     // Se construye un Evaluator que utilizaremos para las operaciones booleanas
     var evaluator = new CSG.Evaluator();
 
     // Realizamos las operaciones booleanas
-    this.result1 = evaluator.evaluate(this.cuerpo, this.esfera, CSG.ADDITION);
-    this.alfilFinal = evaluator.evaluate(this.result1, this.caja, CSG.SUBTRACTION);
+    var result1 = evaluator.evaluate(cuerpo, esfera, CSG.ADDITION);
+    var alfilFinal = evaluator.evaluate(result1, caja, CSG.SUBTRACTION);
 
     // Guardamos la userData
-    this.alfilFinal.userData = this;
+    alfilFinal.userData = this;
 
-    this.add(this.alfilFinal);
+    this.add(alfilFinal);
   }
 
 
@@ -125,6 +125,30 @@ export class AlfilModelo extends PiezaBaseModelo
 
     return cuerpoGeom;
   }
+
+  crearGeometriaEsferaCabeza(){
+    // Se crean las geometrías necesarias
+    var esferaGeom = new THREE.SphereGeometry(0.5, AlfilModelo.RES, AlfilModelo.RES);
+
+    // Se posicionan 
+    esferaGeom.translate(0, 14, 0);
+
+    return esferaGeom;
+  }
+
+  crearGeometriaHuecoCabeza(){
+    // Se define el hueco de la cabeza
+    var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
+
+    // Se orienta y se posiciona
+    cajaGeom.rotateX(-Math.PI / 6);
+    cajaGeom.translate(0, 13.2, -1);
+
+    return cajaGeom;
+  }
+
+
+
 
 
 
