@@ -1,3 +1,11 @@
+/**
+ * @file CaballoModelo.js
+ * @description Modela un caballo de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
+
 /*############################################################################*/
 // Importaciones
 
@@ -9,13 +17,26 @@ import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 
 
 
-
-
 /*############################################################################*/
 // Clase Caballo
 
+/**
+ * @class CaballoModelo
+ * @description Modelo 3D de un caballo de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
 export class CaballoModelo extends PiezaBaseModelo
 {
+  /*############################################################################*/
+  // Variables de clase
+  // Geometrías ------------------------------------------
+  static RES = 20; // Resolución de las geometrías
+  static geometriaBase = null;
+  static geometriaCuerpo = null;
+
+
   /*############################################################################*/
   // Constructor
 
@@ -27,6 +48,8 @@ export class CaballoModelo extends PiezaBaseModelo
     // Creación del modelo
     this.crearModelo(material);
   }
+  
+
 
   /*############################################################################*/
   // Creación del modelo
@@ -35,87 +58,100 @@ export class CaballoModelo extends PiezaBaseModelo
   {
     var evaluator = new CSG.Evaluator();
 
-    /*####################################*/
-    // Base
+    // ------------ Base -----------------------------------------------
 
-    // Geometría
-    var base_shape = new THREE.Shape();
-    base_shape.moveTo(0, 0);
-    base_shape.lineTo(1, 0);
-    base_shape.lineTo(0.9, 0.5);
-    base_shape.lineTo(0.75, 0.66);
-    base_shape.lineTo(0, 0.66);
-
-    var base_points = base_shape.getPoints(); 
-    var base_geometry_1 = new THREE.LatheGeometry(base_points, 64, 0, Math.PI*2);
-    var base_geometry_2 = new THREE.LatheGeometry(base_points, 64, 0, Math.PI*2);
-
-    // Aplicamos las transformaciones
-    base_geometry_2.applyMatrix4(new THREE.Matrix4().makeScale(0.75, 0.5, 0.75));
-    base_geometry_2.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0.66, 0));
+    if(CaballoModelo.geometriaBase == null)
+      CaballoModelo.geometriaBase = this.crearGeometriaBase();
 
     // Convertimos a brush
-    var base_geometry_1_brush = new CSG.Brush(base_geometry_1, material);
-    var base_geometry_2_brush = new CSG.Brush(base_geometry_2, material);
+    var base1 = new CSG.Brush(CaballoModelo.geometriaBase, material);
+    var base2 = new CSG.Brush(CaballoModelo.geometriaBase, material);
+
+    // Posicionamos la segunda base
+    base2.scale.set(0.75, 0.5, 0.75);
+    base2.position.set(0, 0.66, 0);
 
     // Hacemos las operaciones lógicas
-    this.model = evaluator.evaluate(base_geometry_1_brush, base_geometry_2_brush, CSG.ADDITION);
+    this.caballo = evaluator.evaluate(base1, base2, CSG.ADDITION);
 
-    /*####################################*/
-    // Body
+    // ------------ Cuerpo -----------------------------------------------
 
     // Geometría
-    var body_shape = new THREE.Shape();
-    body_shape.moveTo(0, 0);
-    body_shape.lineTo(1, 0);
-    body_shape.lineTo(1.2, 1.1);
-    body_shape.lineTo(1.1, 1.5);
-    body_shape.lineTo(0.5, 2.25);
-    body_shape.lineTo(0.75, 2.4);
-    body_shape.lineTo(0.85, 2.25);
-    body_shape.lineTo(1, 2.2);
-    body_shape.lineTo(1.5, 2.35);
-    body_shape.lineTo(1.6, 2.75);
-    body_shape.lineTo(1.5, 3);
-    body_shape.lineTo(1.4, 3.1);
-    body_shape.lineTo(0.8, 4);
-    body_shape.lineTo(0, 4);
-    body_shape.lineTo(-0.4, 4.5);
-    body_shape.lineTo(-0.45, 4);
-    body_shape.lineTo(-1.2, 3);
-    body_shape.lineTo(-0.85, 1.25);
-    body_shape.lineTo(-1.25, 0.35);
-    body_shape.lineTo(-1, 0);
-
-    var eye_chape = new THREE.Shape();
-    eye_chape.absellipse(0.7, 3.25, 0.2, 0.2, 0, Math.PI*2);
-    body_shape.holes.push(eye_chape);
-
-    var extrusion_config = {curveSegments: 100, steps: 100, depth: 1, bevelEnabled: true, bevelThickness: 0.2, bevelSize: 0.05, bevelSegments: 100}
-    var body_geometry = new THREE.ExtrudeGeometry(body_shape, extrusion_config);
-
-    // Aplicamos las transformaciones
-    body_geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0, -0.5));
-    body_geometry.applyMatrix4(new THREE.Matrix4().makeScale(0.45, 0.5, 0.45));
-    body_geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0.99, 0));
+    if(CaballoModelo.geometriaCuerpo == null)
+      CaballoModelo.geometriaCuerpo = this.crearGeometriaCuerpo();
 
     // Convertimos a brush
-    var body_geometry_brush = new CSG.Brush(body_geometry, material);
+    var cuerpo = new CSG.Brush(CaballoModelo.geometriaCuerpo, material);
 
     // Hacemos las operaciones lógicas
-    this.model = evaluator.evaluate(this.model, body_geometry_brush, CSG.ADDITION);
+    this.caballo = evaluator.evaluate(this.caballo, cuerpo, CSG.ADDITION);
 
     // Escalado final
-    this.model.scale.set(4, 4, 4);
-
-    /*####################################*/
-    // Mesh
+    this.caballo.scale.set(4, 4, 4);
 
     // UserData
-    this.model.userData = this;
+    this.caballo.userData = this;
 
     // Terminamos añadiendo el resultado final
-    this.add(this.model);
+    this.add(this.caballo);
+  }
+
+
+
+  /*############################################################################*/
+  // Métodos para crear las geometrías de las partes del modelo
+  
+  crearGeometriaBase(){
+    var baseShape = new THREE.Shape();
+    baseShape.moveTo(0, 0);
+    baseShape.lineTo(1, 0);
+    baseShape.lineTo(0.9, 0.5);
+    baseShape.lineTo(0.75, 0.66);
+    baseShape.lineTo(0, 0.66);
+
+    var basePoints = baseShape.getPoints(); 
+    var baseGeom = new THREE.LatheGeometry(basePoints, CaballoModelo.RES, 0, Math.PI*2);
+
+    return baseGeom;
+  }
+
+  crearGeometriaCuerpo(){
+    var cuerpoShape = new THREE.Shape();
+    cuerpoShape.moveTo(0, 0);
+    cuerpoShape.lineTo(1, 0);
+    cuerpoShape.lineTo(1.2, 1.1);
+    cuerpoShape.lineTo(1.1, 1.5);
+    cuerpoShape.lineTo(0.5, 2.25);
+    cuerpoShape.lineTo(0.75, 2.4);
+    cuerpoShape.lineTo(0.85, 2.25);
+    cuerpoShape.lineTo(1, 2.2);
+    cuerpoShape.lineTo(1.5, 2.35);
+    cuerpoShape.lineTo(1.6, 2.75);
+    cuerpoShape.lineTo(1.5, 3);
+    cuerpoShape.lineTo(1.4, 3.1);
+    cuerpoShape.lineTo(0.8, 4);
+    cuerpoShape.lineTo(0, 4);
+    cuerpoShape.lineTo(-0.4, 4.5);
+    cuerpoShape.lineTo(-0.45, 4);
+    cuerpoShape.lineTo(-1.2, 3);
+    cuerpoShape.lineTo(-0.85, 1.25);
+    cuerpoShape.lineTo(-1.25, 0.35);
+    cuerpoShape.lineTo(-1, 0);
+
+    var ojosChape = new THREE.Shape();
+    ojosChape.absellipse(0.7, 3.25, 0.2, 0.2, 0, Math.PI*2);
+    cuerpoShape.holes.push(ojosChape);
+
+    var extrusionConfig = {curveSegments: CaballoModelo.RES, steps: CaballoModelo.RES, depth: 1, bevelEnabled: true, bevelThickness: 0.2, bevelSize: 0.05, bevelSegments: 100}
+    var cuerpoGeom = new THREE.ExtrudeGeometry(cuerpoShape, extrusionConfig);
+
+    // Posicionamos la geometría
+    cuerpoGeom.translate(0, 0, -0.5);
+    cuerpoGeom.scale(0.45, 0.5, 0.45);
+    cuerpoGeom.translate(0, 0.99, 0);
+
+
+    return cuerpoGeom;
   }
 
   /*############################################################################*/

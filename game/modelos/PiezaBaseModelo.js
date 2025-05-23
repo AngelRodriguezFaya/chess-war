@@ -1,3 +1,11 @@
+/**
+ * @file PiezaBaseModelo.js
+ * @description Clase padre de las piezas. 
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
+
 /*############################################################################*/
 // Importaciones
 
@@ -5,11 +13,16 @@ import * as THREE from '../../libs/three.module.js'
 
 
 
-
-
 /*############################################################################*/
 // Clase Base para la creación de las piezas
 
+/**
+ * @class PiezaBaseModelo
+ * @description Clase base para la creación de las piezas del ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
 export class PiezaBaseModelo extends THREE.Object3D
 {
   /*############################################################################*/
@@ -31,44 +44,27 @@ export class PiezaBaseModelo extends THREE.Object3D
     this.termina_animacion = false;
   }
 
+
+
   /*############################################################################*/
-  // Getters/Setters
+  // Getters y Setters
 
-  getPosicionTablero()
-  {
-    return this._posicion_en_tablero;
-  }
+  getPosicionTablero(){ return this._posicion_en_tablero; }
 
-  getTipoPieza()
-  {
-    return this._tipo_pieza;
-  }
+  getTipoPieza(){ return this._tipo_pieza; }
 
-  getTipoJugador()
-  {
-    return this._tipo_jugador;
-  }
+  getTipoJugador(){ return this._tipo_jugador; }
 
-  setPosicionTablero(posicion_en_tablero)
-  {
-    this._posicion_en_tablero = posicion_en_tablero;
-  }
+  setPosicionTablero(posicion_en_tablero){ this._posicion_en_tablero = posicion_en_tablero;}
 
-  setTipoPieza(tipo_pieza)
-  {
-    this._tipo_pieza = tipo_pieza;
-  }
+  setTipoPieza(tipo_pieza){ this._tipo_pieza = tipo_pieza; }
 
-  setTipoJugador(tipo_jugador)
-  {
-    this._tipo_jugador = tipo_jugador;
-  }
+  setTipoJugador(tipo_jugador){ this._tipo_jugador = tipo_jugador; }
 
-  terminaAnimacion()
-  {
-    return this.termina_animacion;
-  }
+  terminaAnimacion(){ return this.termina_animacion; }
 
+
+  
   /*############################################################################*/
   // Método update del objeto
 

@@ -178,7 +178,13 @@ export class PeonModelo extends PiezaBaseModelo
     this.pos_Y_TrenSuperior = PeonModelo.hTrenInferior; 
     this.pos_Z_TrenSuperior = 0; 
 
+
+    // Creamos el peón
+
+      // Creamos el tren inferior
     this.crearTrenInferior(material);
+
+      // Creamos el tren superior
     this.crearTrenSuperior(material);
 
     // Inicializar animaciones
@@ -552,6 +558,8 @@ export class PeonModelo extends PiezaBaseModelo
   // ---------------------  Tren Inferior  -------------------------------------
   // ---------------------------------------------------------------------------
   
+  // ---------------------  Pie Izquierdo  -------------------------------------
+
   crearPieIzquierdo(material){
     // Usamos la variable de clase para la geometría del pie
     if (PeonModelo.geometriaPie == null)
@@ -569,6 +577,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  
+  // ---------------------  Pie Derecho  -------------------------------------
 
   crearPieDerecho(material){
     // Usamos la variable de clase para la geometría del pie
@@ -588,6 +598,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Espinilla Izquierda y Derecha  ---------------------
+
   // Espinilla izquierda y derecha
   crearEspinilla(material){
     // Usamos la variable de clase para la geometría de la espinilla
@@ -604,6 +616,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Rodilla Izquierda y Derecha  ---------------------
 
   // Rodilla izquierda y derecha
   crearRodilla(material){
@@ -626,6 +640,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Muslo Izquierdo ----------------------------------
+
   crearMusloIzquierdo(material){
     // Usamos la variable de clase para la geometría del muslo
     if (PeonModelo.geometriaMuslo == null)
@@ -646,6 +662,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Muslo Derecho ----------------------------------
+
   crearMusloDerecho(material, RES, ROTACION_PIERNAS){
     // Usamos la variable de clase para la geometría del muslo
     if (PeonModelo.geometriaMuslo == null)
@@ -665,6 +683,7 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // ---------------------  Pierna Izquierda -------------------------------
 
   crearPiernaIzquierda(material){
     var piernaIzq = new THREE.Object3D();
@@ -684,6 +703,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Pierna Derecha -------------------------------
+
   crearPiernaDerecha(material){
     var piernaDer = new THREE.Object3D();
 
@@ -702,6 +723,8 @@ export class PeonModelo extends PiezaBaseModelo
   
 
 
+  // ---------------------  Cadera ----------------------------------
+
   crearCadera(material){
     // Usamos la variable de clase para la geometría del cadera
     if (PeonModelo.geometriaCadera == null)
@@ -715,6 +738,7 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // ---------------------  Tren Inferior ----------------------------------
 
   crearTrenInferior(material){
     var trenInferior = new THREE.Object3D();
@@ -741,6 +765,8 @@ export class PeonModelo extends PiezaBaseModelo
   // ---------------------  Tren Superior  -------------------------------------
   // ---------------------------------------------------------------------------
 
+  // ---------------------  Torso ----------------------------------
+
   crearTorso(material){
     // Usamos la variable de clase para la geometría del torso
     if (PeonModelo.geometriaTorso == null)
@@ -754,6 +780,8 @@ export class PeonModelo extends PiezaBaseModelo
   } 
 
 
+
+  // ---------------------  Cuello ----------------------------------
 
   crearCuello(material){
     // Usamos la variable de clase para la geometría del cuello
@@ -771,6 +799,7 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // ---------------------  Cabeza ----------------------------------
 
   crearFormaCabeza(material){
     // Usamos la variable de clase para la geometría de la forma de lacabeza
@@ -785,6 +814,7 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // ---------------------  Apertura para los ojos ------------------
 
   crearOjos(material){
     // Usamos la variable de clase para la geometría de la apertura del casco para los ojos
@@ -809,6 +839,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Filo del casco ----------------------------
+
   crearFiloCasco(material, RES){
     // Usamos la variable de clase para la geometría del filo del casco
     if (PeonModelo.geometriaFiloCasco == null)
@@ -822,6 +854,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Defensa de la mandíbula ------------------
 
   crearDefensaMandibula(material, RES){
     var evaluator = new CSG.Evaluator();
@@ -875,6 +909,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Cabeza ----------------------------------
+
   crearCabeza(material){
     var cabeza = new THREE.Object3D();
 
@@ -894,8 +930,11 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
   
-
+  // -----------------------------------------------------------------
   // ------------------------ Brazo Izquierdo ------------------------
+  // -----------------------------------------------------------------
+
+  // ---------------------  Mano Izquierda ---------------------------
 
   crearManoIzquierda(material){
     // Usamos la variable de clase para la geometría de la mano.
@@ -916,6 +955,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Parte Inferior del Brazo Izquierdo ---------
 
   crearParteInfBrazoIzquierdo(material){
     // Usamos la variable de clase para la geometría de la parte inferior del brazo
@@ -941,6 +982,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Codo Izquierdo ----------------------------
+
   crearCodoIzquierdo(material){
     // Usamos la variable de clase para la geometría del codo
     if (PeonModelo.geometriaCodo == null)
@@ -962,6 +1005,8 @@ export class PeonModelo extends PiezaBaseModelo
     
 
 
+  // ---------------------  Parte Superior del Brazo Izquierdo ---------
+  
   crearParteSupBrazoIzquierdo(material){
     // Usamos la variable de clase para la geometría de la parte superior del brazo
     if (PeonModelo.geometriaParteSupBrazo == null)
@@ -986,6 +1031,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Protección del Hombro Izquierdo ------------
+
   crearProteccionHombroIzquierdo(material){
     // Usamos la variable de clase para la geometría de la protección del hombro
     if (PeonModelo.geometriaProtecHombroIzq == null)
@@ -1000,6 +1047,7 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // ---------------------  Brazo Izquierdo ----------------------------
 
   crearBrazoIzquierdo(material){
     // Creamos el brazo izquierdo
@@ -1020,8 +1068,11 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+  // -----------------------------------------------------------------
+  // ------------------------ Brazo Derecho --------------------------
+  // -----------------------------------------------------------------
 
-  // ------------------------ Brazo Derecho ------------------------
+  // ---------------------  Mano Derecha -----------------------------
 
   crearManoDerecha(material){
     // Usamos la variable de clase para la geometría de la mano.
@@ -1042,6 +1093,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Parte Inferior del Brazo Derecho ---------
 
   crearParteInfBrazoDerecho(material){
     // Usamos la variable de clase para la geometría de la parte inferior del brazo
@@ -1066,6 +1119,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Codo Derecho -----------------------------
+
   crearCodoDerecho(material){
     // Usamos la variable de clase para la geometría del codo
     if (PeonModelo.geometriaCodo == null)
@@ -1086,6 +1141,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Parte Superior del Brazo Derecho ---------
 
   crearParteSupBrazoDerecho(material){
     // Usamos la variable de clase para la geometría de la parte superior del brazo
@@ -1110,6 +1167,8 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
+  // ---------------------  Protección del Hombro Derecho ------------
+
   crearProteccionHombroDerecho(material){
     // Usamos la variable de clase para la geometría de la protección del hombro
     if (PeonModelo.geometriaProtecHombroDcho == null)
@@ -1123,6 +1182,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Brazo Derecho -----------------------------
 
   crearBrazoDerecho(material){
     // Creamos el brazo derecho
@@ -1143,6 +1204,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
   
+
+  // --------------------------- Tren Superior -----------------------------
 
   crearTrenSuperior(material){
     this.trenSuperior = new THREE.Object3D();
@@ -1176,6 +1239,8 @@ export class PeonModelo extends PiezaBaseModelo
   // ---------------------------------------------------------------------------
   // ---------------------  Espada y Escudo  ----------------------------------
   // ---------------------------------------------------------------------------
+
+  // ---------------------  Espada ----------------------------------
 
   crearEspada(material){
     // Usamos la variable de clase para la geometría de la espada
@@ -1214,6 +1279,8 @@ export class PeonModelo extends PiezaBaseModelo
   }
 
 
+
+  // ---------------------  Escudo ----------------------------------
 
   crearEscudo(material){
     // Usamos la variable de clase para la geometría del escudo
@@ -1257,7 +1324,6 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-
   
   /*############################################################################*/
   // Animación
@@ -1267,11 +1333,11 @@ export class PeonModelo extends PiezaBaseModelo
     this.dentro_animacion = false;
   }
 
-  // ----------------------------------------------------------------------------
-  // ----------------------  Animaciones del ataque  ----------------------------
-  // ----------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------------
+  // ----------------------  Animaciones del ataque  ------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------------
 
-  // 1. Peón atacante: cuando levanta la espada (solo el brazo derecho)
+  // ----- 1. Peón atacante: cuando levanta la espada (solo el brazo derecho) -----------------------------
   animacionAtacar1(){
 
     // Definimos la posición inicial y final de la animación
@@ -1296,7 +1362,7 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // 2. Peón atacante: cuando baja la espada y esta toca al otro peón (solo el brazo derecho)
+  // - 2. Peón atacante: cuando baja la espada y esta toca al otro peón (solo el brazo derecho) ------------
   animacionAtacar2(){
 
     // Definimos la posición inicial y final de la animación
@@ -1320,7 +1386,7 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // 3. Peón atacante: cuando ha atacado y ha terminado de cortar al otro peón (solo el brazo derecho)
+  // - 3. Peón atacante: cuando ha atacado y ha terminado de cortar al otro peón (solo el brazo derecho) --
   animacionAtacar3(){
 
     // Definimos la posición inicial y final de la animación
@@ -1344,7 +1410,7 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // 4. Peón atacante: regresa a la posición inicial (solo el brazo derecho)
+  // ------ 4. Peón atacante: regresa a la posición inicial (solo el brazo derecho) ---------------------
   animacionAtacar4(){
 
     // Definimos la posición inicial y final de la animación
@@ -1368,11 +1434,11 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // ----------------------------------------------------------------------------
-  // ----------------------  Animaciones de la defensa  -------------------------
-  // ----------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------
+  // ----------------------  Animaciones de la defensa  -------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------
 
-  // 1. Peón atacado: mueve el escudo para defenderse (brazo izquierdo)
+  // ------ 1. Peón atacado: mueve el escudo para defenderse (brazo izquierdo) --------------------------
   animacionDefender1(){
 
     // Definimos la posición inicial y final de la animación
@@ -1397,7 +1463,7 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // 2. Peón atacado: se parte por la mitad, cayendo el tren superior hacia atrás 
+  // ----- 2. Peón atacado: se parte por la mitad, cayendo el tren superior hacia atrás ----------------
   animacionDefender2(){
     // Definimos la posición inicial y final de la animación
     var origen = { pos_X: 0, pos_Y: PeonModelo.hTrenInferior, pos_Z: 0,
@@ -1420,7 +1486,7 @@ export class PeonModelo extends PiezaBaseModelo
 
 
 
-  // 3. Peón atacado: se mantiene medio segundo en la posición anterior antes de desaparecer del juego.
+  // ---- 3. Peón atacado: se mantiene medio segundo en la posición anterior antes de desaparecer del juego. 
   animacionDefender3(){
     // Definimos la posición inicial y final de la animación
     var origen = { pos_X: 0, pos_Y: 0.5, pos_Z: -2,

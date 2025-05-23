@@ -1,3 +1,11 @@
+/**
+ * @file AlfilModelo.js
+ * @description Modela un alfil de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
+
 /*############################################################################*/
 // Importaciones
 
@@ -8,14 +16,25 @@ import { TipoPieza } from '../logica/TiposUtils.js'
 import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 
 
-
-
-
 /*############################################################################*/
 // Clase Alfil
 
+/**
+ * @class AlfilModelo
+ * @description Modelo 3D de un alfil de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
 export class AlfilModelo extends PiezaBaseModelo
 {
+  /*############################################################################*/
+  // Variables de clase
+  // Geometrías ------------------------------------------
+  static RES = 20; // Resolución de las geometrías
+  static geometriaCuerpo = null;
+
+
   /*############################################################################*/
   // Constructor
 
@@ -28,22 +47,56 @@ export class AlfilModelo extends PiezaBaseModelo
     this.crearModelo(material);
   }
 
+
+
   /*############################################################################*/
   // Creación del modelo
   
   crearModelo(material)
   {
-    // CONSTANTE DE RESOLUCIÓN
-    const RES = 4;
-
-    // // Creamos el material
-    // var material = new THREE.MeshNormalMaterial({ flatShading : true });
-    var materialAlfil = material; // El material se pasa como parámetro al constructor
-
-
-    // La construcción del alfil 
-
     //------------ Definimos el cuerpo del alfil  -----------------
+    if(AlfilModelo.geometriaCuerpo == null)
+      AlfilModelo.geometriaCuerpo = this.crearGeometriaCuerpo();
+
+    // Se construye el objeto Brush que modela el cuerpo del alfil
+    this.cuerpo = new CSG.Brush(AlfilModelo.geometriaCuerpo, material);    
+    
+    // Se posicio
+    //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
+    // Se crean las geometrías necesarias
+    var esferaGeom = new THREE.SphereGeometry(0.5, AlfilModelo.RES, AlfilModelo.RES);
+    var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
+
+    // Se posicionan y se orientan
+    esferaGeom.translate(0, 14, 0);
+
+    cajaGeom.rotateX(-Math.PI / 6);
+    cajaGeom.translate(0, 13.2, -1);
+    
+
+    // Se construyen los objetos Brush
+    this.esfera = new CSG.Brush(esferaGeom, material);
+    this.caja = new CSG.Brush(cajaGeom, material);
+
+    // Se construye un Evaluator que utilizaremos para las operaciones booleanas
+    var evaluator = new CSG.Evaluator();
+
+    // Realizamos las operaciones booleanas
+    this.result1 = evaluator.evaluate(this.cuerpo, this.esfera, CSG.ADDITION);
+    this.alfilFinal = evaluator.evaluate(this.result1, this.caja, CSG.SUBTRACTION);
+
+    // Guardamos la userData
+    this.alfilFinal.userData = this;
+
+    this.add(this.alfilFinal);
+  }
+
+
+
+  /*############################################################################*/
+  // Método para crear la geometría del cuerpo del modelo
+
+  crearGeometriaCuerpo(){
     // Lo haremos por revolución, definiendo los objetos con un Shape
     var shape = new THREE.Shape();
     shape.moveTo(0, 0);
@@ -68,39 +121,12 @@ export class AlfilModelo extends PiezaBaseModelo
 
     // Una vez definido el shape, se crea la geometría
     var points = shape.getPoints(); 
-    var cuerpoGeom = new THREE.LatheGeometry(points, RES*20, 0, Math.PI * 2);
+    var cuerpoGeom = new THREE.LatheGeometry(points, AlfilModelo.RES*4, 0, Math.PI * 2);
 
-    // Se construye el objeto Brush que modela el cuerpo del alfil
-    this.cuerpo = new CSG.Brush(cuerpoGeom, materialAlfil);    
-    
-    //------------ Damos los últimos detalles a la cabeza del alfil  -----------------
-    // Se crean las geometrías necesarias
-    var esferaGeom = new THREE.SphereGeometry(0.5, RES*5, RES*5);
-    var cajaGeom = new THREE.BoxGeometry(3, 3, 0.3);
-
-    // Se posicionan y se orientan
-    esferaGeom.translate(0, 14, 0);
-
-    cajaGeom.rotateX(-Math.PI / 6);
-    cajaGeom.translate(0, 13.2, -1);
-    
-
-    // Se construyen los objetos Brush
-    this.esfera = new CSG.Brush(esferaGeom, materialAlfil);
-    this.caja = new CSG.Brush(cajaGeom, materialAlfil);
-
-    // Se construye un Evaluator que utilizaremos para las operaciones booleanas
-    var evaluator = new CSG.Evaluator();
-
-    // Realizamos las operaciones booleanas
-    this.result1 = evaluator.evaluate(this.cuerpo, this.esfera, CSG.ADDITION);
-    this.final = evaluator.evaluate(this.result1, this.caja, CSG.SUBTRACTION);
-
-    // Guardamos la userData
-    this.final.userData = this;
-
-    this.add(this.final);
+    return cuerpoGeom;
   }
+
+
 
   /*############################################################################*/
   // Método update del objeto

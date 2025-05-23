@@ -1,3 +1,11 @@
+/**
+ * @file ReinaModelo.js
+ * @description Modela una reina (o dama) de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
+
 /*############################################################################*/
 // Importaciones
 
@@ -8,11 +16,16 @@ import { PiezaBaseModelo } from './PiezaBaseModelo.js'
 
 
 
-
-
 /*############################################################################*/
-// Clase Dama
+// Clase Reina
 
+/**
+ * @class ReinaModelo
+ * @description Modelo 3D de una reina (o dama) de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
 export class ReinaModelo extends PiezaBaseModelo
 {
   /*############################################################################*/
@@ -27,13 +40,13 @@ export class ReinaModelo extends PiezaBaseModelo
     this.crearModelo(material);
   }
 
+
+
   /*############################################################################*/
   // Creación del modelo
   
   crearModelo(material)
   {
-    // var material = new THREE.MeshNormalMaterial({ flatShading : true });
-    // this.material = material; // El material se pasa como parámetro al constructor
     var objectLoader = new OBJLoader();
 
     objectLoader.load('../models/dama/dama.obj', (object) => {
@@ -56,6 +69,8 @@ export class ReinaModelo extends PiezaBaseModelo
         
     }, null, null);
   }
+
+
 
   /*############################################################################*/
   // Método update del objeto

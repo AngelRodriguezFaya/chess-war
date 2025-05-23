@@ -1,3 +1,11 @@
+/**
+ * @file TableroModelo.js
+ * @description Modela un tablero de ajedrez.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
+
 /*############################################################################*/
 // Importaciones
 
@@ -16,11 +24,16 @@ import { ReyModelo } from './ReyModelo.js'
 
 
 
-
-
 /*############################################################################*/
 // Clase Tablero
 
+/**
+ * @class TableroModelo
+ * @description Modelo 3D de un tablero de ajedrez. Además se crean y posicionan las piezas.
+ * @author Francisco Victoriano Pérez Morales
+ * @author Ángel Rodríguez Faya
+ * @date Última modificación: 23/05/2025
+ */
 export class TableroModelo extends THREE.Object3D
 {
   /*############################################################################*/
@@ -41,6 +54,8 @@ export class TableroModelo extends THREE.Object3D
     this.inicializarAnimaciones();
   }
 
+
+
   /*############################################################################*/
   // Creación del modelo
 
@@ -60,15 +75,22 @@ export class TableroModelo extends THREE.Object3D
     this.material_piezas_blancas = new THREE.MeshPhysicalMaterial({ color: 0xEAD9C2, map: textura_pieza, bumpMap: textura_bump_pieza, roughness: 0.25, metalness: 0.75, reflectivity: 1.0 });
   }
   
+
+
   crearModelo()
-  {
+  { 
+    // ------------------------------------------------------------------------------------------------------------------------
+    // ---------------------------------- Tablero -----------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+
     // Creamos el tablero, esta variable mantendrá referenciadas las piezas y casillas
     this.tablero = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => ({ casilla: null, pieza: null })));
 
-    // Constantes
-    var ancho = 9;
-    var alto = 2;
-    var largo = 9;
+    // Constantes. 
+    // Se definen las dimensiones de las casillas del tablero
+    const ANCHO = 9;
+    const ALTO = 2;
+    const LARGO = 9;
 
     // La construcción de las 64 casillas que forman el tablero (8x8)
     for (let fila = 0; fila < 8; fila++) {
@@ -77,10 +99,10 @@ export class TableroModelo extends THREE.Object3D
         var material = (fila + col) % 2 == 0 ? this.material_casilla_blanca : this.material_casilla_negra;
 
         // Se crea la casilla
-        var casilla = new CasillaModelo(material, ancho, alto, largo, new Posicion(fila, col), TipoJugador.DESCONOCIDO);
+        var casilla = new CasillaModelo(material, ANCHO, ALTO, LARGO, new Posicion(fila, col), TipoJugador.DESCONOCIDO);
 
         // Se posiciona la casilla
-        casilla.position.set(col * ancho, -(alto/2), fila * largo);
+        casilla.position.set(col * ANCHO, -(ALTO/2), fila * LARGO);
 
         // Se añade la casilla al tablero
         this.add(casilla);
@@ -90,131 +112,170 @@ export class TableroModelo extends THREE.Object3D
       }
     }
 
-    // Crear las torres negras
-    this.torre_negra_1 = new TorreModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.torre_negra_2 = new TorreModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+    // ------------------------------------------------------------------------------------------------------------------------
+    // ---------------------------------- Piezas ------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------------------------------
+    
+    // Creamos las piezas negras
+    this.crearPiezasNegras();
 
-    // Crear los caballos negros
-    this.caballo_negro_1 = new CaballoModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.caballo_negro_1.rotateY(-Math.PI/2);
-    this.caballo_negro_2 = new CaballoModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.caballo_negro_2.rotateY(-Math.PI/2);
+    // Creamos las piezas blancas
+    this.crearPiezasBlancas();
 
-    // Crear los alfiles negros
-    this.alfil_negro_1 = new AlfilModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.alfil_negro_1.rotateY(Math.PI);
-    this.alfil_negro_2 = new AlfilModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.alfil_negro_2.rotateY(Math.PI);
-
-    // Crear la reina negra
-    this.reina_negra = new ReinaModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-
-    // Crear el rey negro
-    this.rey_negro = new ReyModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-
-    // Crear los peones
-    this.peon_negro_1 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_2 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_3 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_4 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_5 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_6 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_7 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-    this.peon_negro_8 = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
-
-    // Crear las torres blancas
-    this.torre_blanca_1 = new TorreModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.torre_blanca_2 = new TorreModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-
-    // Crear los caballos blancos
-    this.caballo_blanco_1 = new CaballoModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.caballo_blanco_1.rotateY(-Math.PI/2);
-    this.caballo_blanco_1.rotateY(Math.PI);
-    this.caballo_blanco_2 = new CaballoModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.caballo_blanco_2.rotateY(-Math.PI/2);
-    this.caballo_blanco_2.rotateY(Math.PI);
-
-    // Crear los alfiles blancos
-    this.alfil_blanco_1 = new AlfilModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.alfil_blanco_2 = new AlfilModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-
-    // Crear la reina blanca
-    this.reina_blanca = new ReinaModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.reina_blanca.rotateY(Math.PI);
-
-    // Crear el rey
-    this.rey_blanco = new ReyModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.rey_blanco.rotateY(Math.PI);
-
-    // Crear los peones
-    this.peon_blanco_1 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_1.rotateY(Math.PI);
-    this.peon_blanco_2 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_2.rotateY(Math.PI);
-    this.peon_blanco_3 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_3.rotateY(Math.PI);
-    this.peon_blanco_4 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_4.rotateY(Math.PI);
-    this.peon_blanco_5 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_5.rotateY(Math.PI);
-    this.peon_blanco_6 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_6.rotateY(Math.PI);
-    this.peon_blanco_7 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_7.rotateY(Math.PI);
-    this.peon_blanco_8 = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
-    this.peon_blanco_8.rotateY(Math.PI);
-
-    // Posicionamos las piezas
+    // Posicionamos las piezas, para ello llamamos al método para resetearlas
     this.resetearPiezas();
   }
 
+
+
+  // ----------------------------- Creación de las piezas negras -----------------------------------
+
+  crearPiezasNegras(){
+    // Declaramos las piezas de las que sólo hay una unidad por jugador, es decir, el rey y la reina
+
+    // Creamos la reina
+    this.reina_negra = new ReinaModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+
+    // Creamos el rey
+    this.rey_negro = new ReyModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+
+
+    // Declaramos los arrays de las piezas que hay 2 o más unidades por jugador
+    this.torres_negras = [];    // 2 torres
+    this.caballos_negros = [];  // 2 caballos
+    this.alfiles_negros = [];   // 2 alfiles
+    this.peones_negros = [];    // 8 peones
+
+
+    // Creamos las torres, caballos y alfiles
+    for(let i = 0; i < 2; i++){
+      let torre = new TorreModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+      this.torres_negras.push(torre);
+
+      let caballo = new CaballoModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+      caballo.rotateY(-Math.PI/2);
+      this.caballos_negros.push(caballo);
+
+      let alfil = new AlfilModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+      alfil.rotateY(Math.PI);
+      this.alfiles_negros.push(alfil);
+    }
+
+    // Creamos los peones.
+    for(let i = 0; i < 8; i++){
+      let peon = new PeonModelo(this.material_piezas_negras, new Posicion(-1, -1), TipoJugador.NEGRO);
+      this.peones_negros.push(peon);
+    }
+
+  }
+
+
+
+  // ----------------------------- Creación de las piezas blancas -----------------------------------
+
+  crearPiezasBlancas(){
+    // Declaramos las piezas de las que sólo hay una unidad por jugador, es decir, el rey y la reina
+
+    // Creamos la reina
+    this.reina_blanca = new ReinaModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.reina_blanca.rotateY(Math.PI);
+
+    // Creamos el rey
+    this.rey_blanco = new ReyModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+    this.rey_blanco.rotateY(Math.PI);
+
+
+    // Declaramos los arrays de las piezas que hay 2 o más unidades por jugador
+    this.torres_blancas = [];    // 2 torres
+    this.caballos_blancos = [];  // 2 caballos
+    this.alfiles_blancos = [];   // 2 alfiles
+    this.peones_blancos = [];    // 8 peones
+
+
+    // Creamos las torres, caballos y alfiles
+    for(let i = 0; i < 2; i++){
+      let torre = new TorreModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+      this.torres_blancas.push(torre);
+
+      let caballo = new CaballoModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+      caballo.rotateY(Math.PI/2);
+      this.caballos_blancos.push(caballo);
+
+      let alfil = new AlfilModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+      this.alfiles_blancos.push(alfil);
+    }
+
+    // Creamos los peones.
+    for(let i = 0; i < 8; i++){
+      let peon = new PeonModelo(this.material_piezas_blancas, new Posicion(-1, -1), TipoJugador.BLANCO);
+      peon.rotateY(Math.PI);
+      this.peones_blancos.push(peon);
+    }
+
+  }
+
+
+
   resetearPiezas()
   {
-    // Resetamos el tablero
+    // -----------------------------  Resetamos el tablero ---------------------------------
     for (let fila = 0; fila < 8; fila++){
       for (let col = 0; col < 8; col++){
         this.tablero[fila][col].pieza = null;
       }
     }
 
-    // Reposicionamos las piezas negras
-    this.reposicionarPieza(this.torre_negra_1, new Posicion(0, 0));
-    this.reposicionarPieza(this.caballo_negro_1, new Posicion(0, 1));
-    this.reposicionarPieza(this.alfil_negro_1, new Posicion(0, 2));
+
+    // ----------------------- Reposicionamos las piezas negras -----------------------------
+
+    // Reposicionamos la reina y el rey
     this.reposicionarPieza(this.reina_negra, new Posicion(0, 3));
     this.reposicionarPieza(this.rey_negro, new Posicion(0, 4));
-    this.reposicionarPieza(this.alfil_negro_2, new Posicion(0, 5));
-    this.reposicionarPieza(this.caballo_negro_2, new Posicion(0, 6));
-    this.reposicionarPieza(this.torre_negra_2, new Posicion(0, 7));
 
-    this.reposicionarPieza(this.peon_negro_1, new Posicion(1, 0));
-    this.reposicionarPieza(this.peon_negro_2, new Posicion(1, 1));
-    this.reposicionarPieza(this.peon_negro_3, new Posicion(1, 2));
-    this.reposicionarPieza(this.peon_negro_4, new Posicion(1, 3));
-    this.reposicionarPieza(this.peon_negro_5, new Posicion(1, 4));
-    this.reposicionarPieza(this.peon_negro_6, new Posicion(1, 5));
-    this.reposicionarPieza(this.peon_negro_7, new Posicion(1, 6));
-    this.reposicionarPieza(this.peon_negro_8, new Posicion(1, 7));
+    // Reposicionamos las torres
+    this.reposicionarPieza(this.torres_negras[0], new Posicion(0, 0));
+    this.reposicionarPieza(this.torres_negras[1], new Posicion(0, 7));
 
-    // Reposicionamos las piezas blancas
-    this.reposicionarPieza(this.torre_blanca_1, new Posicion(7, 0));
-    this.reposicionarPieza(this.caballo_blanco_1, new Posicion(7, 1));
-    this.reposicionarPieza(this.alfil_blanco_1, new Posicion(7, 2));
+    // Reposicionamos los caballos
+    this.reposicionarPieza(this.caballos_negros[0], new Posicion(0, 1));
+    this.reposicionarPieza(this.caballos_negros[1], new Posicion(0, 6));
+
+    // Reposicionamo los alfiles
+    this.reposicionarPieza(this.alfiles_negros[0], new Posicion(0, 2));
+    this.reposicionarPieza(this.alfiles_negros[1], new Posicion(0, 5));
+
+    // Reposicionamos los peones
+    for(let i = 0; i < 8; i++){
+      this.reposicionarPieza(this.peones_negros[i], new Posicion(1, i));
+    }
+
+
+    // ----------------------- Reposicionamos las piezas blancas -----------------------------
+
+    // Reposicionamos la reina y el rey
     this.reposicionarPieza(this.reina_blanca, new Posicion(7, 3));
     this.reposicionarPieza(this.rey_blanco, new Posicion(7, 4));
-    this.reposicionarPieza(this.alfil_blanco_2, new Posicion(7, 5));
-    this.reposicionarPieza(this.caballo_blanco_2, new Posicion(7, 6));
-    this.reposicionarPieza(this.torre_blanca_2, new Posicion(7, 7));
 
-    this.reposicionarPieza(this.peon_blanco_1, new Posicion(6, 0));
-    this.reposicionarPieza(this.peon_blanco_2, new Posicion(6, 1));
-    this.reposicionarPieza(this.peon_blanco_3, new Posicion(6, 2));
-    this.reposicionarPieza(this.peon_blanco_4, new Posicion(6, 3));
-    this.reposicionarPieza(this.peon_blanco_5, new Posicion(6, 4));
-    this.reposicionarPieza(this.peon_blanco_6, new Posicion(6, 5));
-    this.reposicionarPieza(this.peon_blanco_7, new Posicion(6, 6));
-    this.reposicionarPieza(this.peon_blanco_8, new Posicion(6, 7));
+    // Reposicionamos las torres
+    this.reposicionarPieza(this.torres_blancas[0], new Posicion(7, 0));
+    this.reposicionarPieza(this.torres_blancas[1], new Posicion(7, 7));
+
+    // Reposicionamos los caballos
+    this.reposicionarPieza(this.caballos_blancos[0], new Posicion(7, 1));
+    this.reposicionarPieza(this.caballos_blancos[1], new Posicion(7, 6));
+
+    // Reposicionamos los alfiles  
+    this.reposicionarPieza(this.alfiles_blancos[0], new Posicion(7, 2));
+    this.reposicionarPieza(this.alfiles_blancos[1], new Posicion(7, 5));
+    
+    // Reposicionamos los peones
+    for(let i = 0; i < 8; i++){
+      this.reposicionarPieza(this.peones_blancos[i], new Posicion(6, i));
+    }
+
   }
+
+
 
   reposicionarPieza(objeto_pieza, posicion_tablero)
   {
@@ -229,18 +290,21 @@ export class TableroModelo extends THREE.Object3D
     this.tablero[posicion_tablero.getFila()][posicion_tablero.getColumna()].pieza = objeto_pieza;
   }
 
+
+
   convertirEnReina(posicion)
   {
 
   }
 
+
+
   /*############################################################################*/
   // Acceso al tablero
 
-  getCasillaPieza(posicion)
-  {
-    return this.tablero[posicion.getFila()][posicion.getColumna()];
-  }
+  getCasillaPieza(posicion){ return this.tablero[posicion.getFila()][posicion.getColumna()]; }
+
+
 
   eliminaPieza(posicion)
   {
@@ -254,6 +318,8 @@ export class TableroModelo extends THREE.Object3D
     casilla_tablero.pieza = null;
   }
 
+
+
   muevePieza(posicion_actual, posicion_siguiente)
   {
     this.getCasillaPieza(posicion_siguiente).pieza = this.getCasillaPieza(posicion_actual).pieza;
@@ -262,6 +328,8 @@ export class TableroModelo extends THREE.Object3D
     this.getCasillaPieza(posicion_siguiente).pieza.setPosicionTablero(posicion_siguiente);
     this.getCasillaPieza(posicion_siguiente).pieza.position.set(posicion_siguiente.getColumna() * 9, 0, posicion_siguiente.getFila() * 9);
   }
+
+
 
   /*############################################################################*/
   // Animaciones
@@ -275,6 +343,8 @@ export class TableroModelo extends THREE.Object3D
 
     this.dentro_animacion = false;
   }
+
+
 
   animarMovimiento(jugada)
   {
@@ -327,10 +397,11 @@ export class TableroModelo extends THREE.Object3D
     }
   }
 
-  terminaAnimacion()
-  {
-    return this.termina_animacion;
-  }
+
+
+  terminaAnimacion(){ return this.termina_animacion; }
+
+
 
   /*############################################################################*/
   // Actualización de materiales
@@ -339,6 +410,8 @@ export class TableroModelo extends THREE.Object3D
   {
     this.getCasillaPieza(posicion).casilla.traverse((obj) => { obj.material = material; });
   }
+
+
 
   reseteaColorCasillas()
   {
@@ -350,6 +423,8 @@ export class TableroModelo extends THREE.Object3D
       }
     }
   }
+
+
 
   actualizaColorCasillas(jugadas)
   {
@@ -371,6 +446,8 @@ export class TableroModelo extends THREE.Object3D
       }
     }
   }
+
+
 
   /*############################################################################*/
   // Método update del objeto
@@ -416,4 +493,5 @@ export class TableroModelo extends THREE.Object3D
       this.en_animacion = false;
     }
   }
+
 }
