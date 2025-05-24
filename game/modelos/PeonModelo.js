@@ -841,7 +841,7 @@ export class PeonModelo extends PiezaBaseModelo
 
   // ---------------------  Filo del casco ----------------------------
 
-  crearFiloCasco(material, RES){
+  crearFiloCasco(material){
     // Usamos la variable de clase para la geometría del filo del casco
     if (PeonModelo.geometriaFiloCasco == null)
       PeonModelo.geometriaFiloCasco = this.crearGeometriaFiloCasco();
@@ -857,11 +857,11 @@ export class PeonModelo extends PiezaBaseModelo
 
   // ---------------------  Defensa de la mandíbula ------------------
 
-  crearDefensaMandibula(material, RES){
+  crearDefensaMandibula(material){
     var evaluator = new CSG.Evaluator();
     
     // Definimos las geometrías para la defensa de la mandíbula
-    var mandibGeom = new THREE.CylinderGeometry(0.9, 0.9, 1, RES, RES, false);
+    var mandibGeom = new THREE.CylinderGeometry(0.9, 0.9, 1, PeonModelo.RES, PeonModelo.RES, false);
     var cajaAux = new THREE.BoxGeometry(3, 1.1, 3);
 
     // Posicionamos y orientamos las geometrías
@@ -882,8 +882,8 @@ export class PeonModelo extends PiezaBaseModelo
     // Cilindros de la defensa de la mandíbula
 
     // Definimos la geometría de los cilindros
-    var cilindro1 = new THREE.CylinderGeometry(0.2, 0.2, 0.1, RES);
-    var cilindro2 = new THREE.CylinderGeometry(0.2, 0.2, 0.1, RES); 
+    var cilindro1 = new THREE.CylinderGeometry(0.2, 0.2, 0.1, PeonModelo.RES);
+    var cilindro2 = new THREE.CylinderGeometry(0.2, 0.2, 0.1, PeonModelo.RES); 
 
     // Posicionamos y orientamos los cilindros
     cilindro1.rotateZ(Math.PI / 2);

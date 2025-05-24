@@ -34,6 +34,7 @@ export class AlfilModelo extends PiezaBaseModelo
   static RES = 20; // Resolución de las geometrías
   static geometriaCuerpo = null;
   static geometriaEsferaCabeza = null;
+  static geometriaHuecoCabeza = null;
 
 
   /*############################################################################*/

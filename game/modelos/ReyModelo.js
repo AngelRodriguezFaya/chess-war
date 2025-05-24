@@ -58,7 +58,7 @@ export class ReyModelo extends PiezaBaseModelo
 
 
   // Transformaciones ------------------------------------
-  static ROT_PIERNAS = Math.PI/50;
+  static rotacionPiernas = Math.PI/50;
 
   
   /*############################################################################*/
@@ -393,10 +393,10 @@ export class ReyModelo extends PiezaBaseModelo
     var espinillaDer = new THREE.Mesh(ReyModelo.geometriaEspinilla , material);
 
     // Orientamos y posicionamos las espinillas
-    espinillaIzq.rotateZ(-ReyModelo.ROT_PIERNAS);
+    espinillaIzq.rotateZ(-ReyModelo.rotacionPiernas);
     espinillaIzq.position.set(-1.3, 2.3, 0);
     
-    espinillaDer.rotateZ(ReyModelo.ROT_PIERNAS);
+    espinillaDer.rotateZ(ReyModelo.rotacionPiernas);
     espinillaDer.position.set(1.3, 2.3, 0);
     
     // Las añadimos al rey
@@ -441,10 +441,10 @@ export class ReyModelo extends PiezaBaseModelo
     var musloDer = new THREE.Mesh(ReyModelo.geometriaMuslo, material);
 
     // Posicionamos y orientamos los muslos
-    musloIzq.rotateZ(-ReyModelo.ROT_PIERNAS);
+    musloIzq.rotateZ(-ReyModelo.rotacionPiernas);
     musloIzq.position.set(-1.13, 5.15, 0);
 
-    musloDer.rotateZ(ReyModelo.ROT_PIERNAS);
+    musloDer.rotateZ(ReyModelo.rotacionPiernas);
     musloDer.position.set(1.13, 5.15, 0); 
 
     // Añadimos los muslos al rey
@@ -912,10 +912,10 @@ export class ReyModelo extends PiezaBaseModelo
 
     // Añadimos la espada al rey
     mastil1Espada.userData = this;
-    mastil1Espada.userData = this;
+    mastil2Espada.userData = this;
     hojaEspada.userData = this;
     this.add(mastil1Espada);
-    this.add(mastil1Espada);
+    this.add(mastil2Espada);
     this.add(hojaEspada);
   }
 
