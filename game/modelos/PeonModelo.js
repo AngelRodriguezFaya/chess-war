@@ -1502,7 +1502,9 @@ export class PeonModelo extends PiezaBaseModelo
     .onStart(() => { this.dentro_animacion = true; })
     .onUpdate(() => { this.trenSuperior.position.set(origen.pos_X, origen.pos_Y, origen.pos_Z),
                       this.trenSuperior.rotation.set(origen.rot_X, origen.rot_Y, origen.rot_Z); })
-    .onComplete(() => { this.dentro_animacion = false; })
+    .onComplete(() => { this.dentro_animacion = false;
+                        this.trenSuperior.position.set(0, PeonModelo.hTrenInferior, 0),
+                        this.trenSuperior.rotation.set(0, 0, 0); })
     .repeat(0)
     .start();
   }
