@@ -338,7 +338,6 @@ export class TableroModelo extends THREE.Object3D
   {
     // Estados de la animación
     this.animando = false;
-    this.en_animacion = false;
     this.termina_animacion = false;
 
     this.dentro_animacion = false;
@@ -471,13 +470,6 @@ export class TableroModelo extends THREE.Object3D
     }
 
     if (this.dentro_animacion) {
-      if (this.animando) {
-        this.en_animacion = true;
-      }
-      else {
-        this.en_animacion = false;
-      }
-
       this.animando = true;
       this.termina_animacion = false;
     }
@@ -490,7 +482,6 @@ export class TableroModelo extends THREE.Object3D
       }
 
       this.animando = false;
-      this.en_animacion = false;
     }
   }
 
