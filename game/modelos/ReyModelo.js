@@ -502,7 +502,7 @@ export class ReyModelo extends PiezaBaseModelo
       ReyModelo.geometriaCabeza = this.crearGeometriaCabeza();
 
     // Creamos la cabeza
-    this.cabeza = new CSG.Brush(ReyModelo.geometriaCabeza, material);
+    var cabeza = new CSG.Brush(ReyModelo.geometriaCabeza, material);
     
     // La cabeza la añadimos mas tarde, después de hacer las operaciones booleanas con la boca
 
@@ -546,7 +546,7 @@ export class ReyModelo extends PiezaBaseModelo
     var boca = new CSG.Brush(ReyModelo.geometriaBoca, material);
 
     // Hacemos una operación booleana para hacer el hueco de la boca
-    var cabezaFinal = evaluator.evaluate(this.cabeza, boca, CSG.SUBTRACTION);
+    var cabezaFinal = evaluator.evaluate(cabeza, boca, CSG.SUBTRACTION);
 
     // Añadimos la boca al rey
     cabezaFinal.userData = this;

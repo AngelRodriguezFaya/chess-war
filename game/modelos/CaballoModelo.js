@@ -68,7 +68,7 @@ export class CaballoModelo extends PiezaBaseModelo
     var base2 = new CSG.Brush(CaballoModelo.geometriaBase, material);
 
     // Posicionamos la segunda base
-    base2.scale.set(0.75, 0.5, 0.75);
+    base2.scale.set(0.75, 0.75, 0.75);
     base2.position.set(0, 0.66, 0);
 
     // Hacemos las operaciones lógicas
@@ -146,9 +146,9 @@ export class CaballoModelo extends PiezaBaseModelo
     var cuerpoGeom = new THREE.ExtrudeGeometry(cuerpoShape, extrusionConfig);
 
     // Posicionamos la geometría
-    cuerpoGeom.translate(0, 0, -0.5);
+    // cuerpoGeom.translate(0, 0, -0.5);
     cuerpoGeom.scale(0.45, 0.5, 0.45);
-    cuerpoGeom.translate(0, 0.99, 0);
+    cuerpoGeom.translate(0, 0.66, -0.2);
 
 
     return cuerpoGeom;

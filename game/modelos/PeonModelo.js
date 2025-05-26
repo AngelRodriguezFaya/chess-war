@@ -664,7 +664,7 @@ export class PeonModelo extends PiezaBaseModelo
 
   // ---------------------  Muslo Derecho ----------------------------------
 
-  crearMusloDerecho(material, RES, ROTACION_PIERNAS){
+  crearMusloDerecho(material){
     // Usamos la variable de clase para la geometría del muslo
     if (PeonModelo.geometriaMuslo == null)
       PeonModelo.geometriaMuslo = this.crearGeometriaMuslo();
