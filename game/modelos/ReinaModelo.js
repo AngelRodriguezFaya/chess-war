@@ -3,7 +3,7 @@
  * @description Modela una reina (o dama) de ajedrez.
  * @author Francisco Victoriano Pérez Morales
  * @author Ángel Rodríguez Faya
- * @date Última modificación: 23/05/2025
+ * @date Última modificación: 27/10/2026
  */
 
 /*############################################################################*/
@@ -49,7 +49,7 @@ export class ReinaModelo extends PiezaBaseModelo
   {
     var objectLoader = new OBJLoader();
 
-    objectLoader.load('../models/dama/dama.obj', (object) => {
+    objectLoader.load('../../models/dama/dama.obj', (object) => {
       // Utilizamos el método traverse para asignar el material a cada hijo del objeto cargado
       object.traverse((child) => {
         if (child.isMesh) {
