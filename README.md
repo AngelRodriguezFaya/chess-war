@@ -35,7 +35,7 @@
 ***Chess War*** es un juego basado en *Battle Chess.* Se trata de un juego de ajedrez 3D donde las piezas cobran vida y luchan entre ellas, mezclando así el clásico juego de ajedrez con elementos de acción y estrategia en un entorno 3D.
 
 <div style="text-align: center;">
-	<img src="docs/recursos/imagenes/icono-chess-war.png" width="50%" alt="Icono chess War" />
+	<img src="docs/recursos/imagenes/icono-chess-war.png" width="30%" alt="Icono chess War" />
 </div>
 
 Está desarrollado utilizando **Three.js**, que es una librería y API de JavaScript que nos permite crear y mostrar gráficos animados 3D en un navegador web. Fue creada y liberada por Ricardo Cabello en 2010. La podemos eccontrar en su repositorio de GitHub: [Three.js en GitHub](https://github.com/mrdoob/three.js.git)
@@ -44,12 +44,11 @@ El **objetivo de este proyecto** es sintetizar los conocimientos adquiridos en l
 
 ## 2. Demo.
 
-En los siguientes enlaces podemos ver demostraciones del juego.
-
-▶️ [Ver demostración online, alojada en GitHub Pages](enlace)
+En el siguiente enlace podemos ver una demostración del juego.
 
 🎥 [Ver vídeo de demostración de ejecución](docs/recursos/videos/ejemplo-de-ejecucion.mp4)
 
+También podemos descargar el proyecto y ejecutarlo en nuestro propio ordenador. Para ello, consultar el apartado [10. Instalación y ejecución del juego](#10-instalación-y-ejecución-del-juego).
 
 ## 3. Características del juego.
 
@@ -217,6 +216,7 @@ Respecto a las animaciones de los peones, encontramos que:
 - **La segunda animación simula un movimiento de muerte**, donde el peón enemigo (el cual ha sido atacado) se parte en dos de forma horizontal, cayendo su tronco o parte superior del cuerpo al suelo, mientras que la parte inferior del cuerpo (piernas) se queda en pie. Tras esto, el peón enemigo desaparece del tablero y el peón atacante se mueve a la posición del peón enemigo.
 
 Ambas animaciones se pueden ver por separado tras ejecutar el juego y abir el directorio `animacion/`, o durante la ejecución del propio juego (directorio `game/`). Para ver como se incia el juego, consultar el apartado [10. Instalación y ejecución del juego](#10-instalación-y-ejecución-del-juego).
+
 También se puede ver un vídeo de demostración de las animaciones en el siguiente enlace: [Vídeo de demostración de las animaciones](docs/recursos/videos/animacion-peon_jaque-pastor.mp4)
 
 Para el resto de piezas, tenemos la tercera animación que se activa cuando son eliminadas, se desplazan hacia arriba y desaparecen, simulando que han sido eliminadas del tablero, y la pieza que las reemplaza se coloca en su posición.
@@ -317,4 +317,4 @@ Uno de los principales retos fue sincronizar tres estados diferentes: el estado 
 
 ## 12. Licencia.
 
-La licencia del proyecto está pendiente de definirse. Hasta que se añada una licencia explícita al repositorio, el código, los modelos y los recursos incluidos no deben reutilizarse, modificarse ni redistribuirse fuera de los usos permitidos por sus respectivos autores.
+La licencia del proyecto es **MIT License**, lo que significa que es de código abierto y se puede utilizar, modificar y distribuir libremente, siempre que se incluya la licencia original y los avisos de copyright. Para más información, consulta el archivo `LICENSE` incluido en el repositorio del proyecto.
